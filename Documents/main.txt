@@ -1,0 +1,9 @@
+python Gurux.DLMS.Client.Example.python\main.py 
+-S COM10:19200:8None1 -r sn -c 16 -s 1
+-S COM10:19200:8None1 -c 16 -s 1  ===> -r ln and -a None
+-S COM10:19200:8None1 -c 16 -s 1 -a Low
+
+-S COM10:19200:8None1 -t Verbose -a Low -P 44444444 -C Authentication
+-S COM10:19200:8None1 -g "0.0.41.0.0.255:2"
+ 
+-S COM10:19200:8None1 -t Verbose -a Low -P 44444444 -C HighGMac

@@ -60,20 +60,20 @@ class GXDLMSReader:
         self.client = client
         if self.trace > TraceLevel.WARNING:
             print("Authentication: " + str(self.client.authentication))
-            print("ClientAddress: " + hex(self.client.clientAddress))
-            print("ServerAddress: " + hex(self.client.serverAddress))
+            # print("ClientAddress: " + hex(self.client.clientAddress))
+            # print("ServerAddress: " + hex(self.client.serverAddress))
 
     def disconnect(self):
         #pylint: disable=broad-except
         if self.media and self.media.isOpen():
-            print("DisconnectRequest")
+            print("DisconnectRequest-disconnect")
             reply = GXReplyData()
             self.readDLMSPacket(self.client.disconnectRequest(), reply)
 
     def release(self):
         #pylint: disable=broad-except
         if self.media and self.media.isOpen():
-            print("DisconnectRequest")
+            print("DisconnectRequest-release")
             reply = GXReplyData()
             try:
                 #Release is call only for secured connections.
@@ -88,7 +88,7 @@ class GXDLMSReader:
     def close(self):
         #pylint: disable=broad-except
         if self.media and self.media.isOpen():
-            print("DisconnectRequest")
+            print("DisconnectRequest-close")
             reply = GXReplyData()
             try:
                 #Release is call only for secured connections.

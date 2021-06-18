@@ -48,6 +48,9 @@ from gurux_dlms.GXDateTime import GXDateTime
 from gurux_dlms.internal._GXCommon import _GXCommon
 from gurux_dlms import GXDLMSException, GXDLMSExceptionResponse, GXDLMSConfirmedServiceError
 
+#data = b'\x7e\xa0\x0a\x00\x02\x10\xab\x03\x93\x14\x68\x7e'
+# ser = serial.Serial(temp[0].device, baudrate=19200, bytesize=8, timeout=2, parity=serial.PARITY_NONE, rtscts=0)
+
 try:
     import pkg_resources
     #pylint: disable=broad-except
@@ -60,9 +63,10 @@ class sampleclient():
     @classmethod
     def main(cls, args):
         try:
-            print("gurux_dlms version: " + pkg_resources.get_distribution("gurux_dlms").version)
-            print("gurux_net version: " + pkg_resources.get_distribution("gurux_net").version)
-            print("gurux_serial version: " + pkg_resources.get_distribution("gurux_serial").version)
+            pass
+            # print("gurux_dlms version: " + pkg_resources.get_distribution("gurux_dlms").version)
+            # print("gurux_net version: " + pkg_resources.get_distribution("gurux_net").version)
+            # print("gurux_serial version: " + pkg_resources.get_distribution("gurux_serial").version)
         except Exception:
             #It's OK if this fails.
             print("pkg_resources not found")
@@ -120,5 +124,7 @@ class sampleclient():
                     traceback.print_exc()
             print("Ended. Press any key to continue.")
 
+
 if __name__ == '__main__':
+
     sampleclient.main(sys.argv)

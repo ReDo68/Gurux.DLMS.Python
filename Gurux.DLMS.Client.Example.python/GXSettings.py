@@ -62,42 +62,42 @@ class GXSettings:
     #
     @classmethod
     def showHelp(cls):
-        print("GuruxDlmsSample reads data from the DLMS/COSEM device.")
-        print("GuruxDlmsSample -h [Meter IP Address] -p [Meter Port No] -c 16 -s 1 -r SN")
-        print(" -h \t host name or IP address.")
-        print(" -p \t port number or name (Example: 1000).")
-        print(" -S \t serial port. (Example: COM1 or COM1:9600:8None1)")
-        print(" -i IEC is a start protocol.")
-        print(" -a \t Authentication (None, Low, High).")
-        print(" -P \t ASCII password for authentication. Use 0x prefix if hex value is used. Ex. 0x00000000.")
-        print(" -c \t Client address. (Default: 16)")
-        print(" -s \t Server address. (Default: 1)")
-        print(" -n \t Server address as serial number.")
-        print(" -l \t Logical Server address.")
-        print(" -r [sn, ln]\t Short name or Logical Name (default) referencing is used.")
-        print(" -w WRAPPER profile is used. HDLC is default.")
-        print(" -t [Error, Warning, Info, Verbose] Trace messages.")
-        print(" -g \"0.0.1.0.0.255:1; 0.0.1.0.0.255:2\" Get selected object(s) with given attribute index.")
-        print(" -C Security Level. (None, Authentication, Encrypted, AuthenticationEncryption)")
-        print(" -v Invocation counter data object Logical Name. Ex. 0.0.43.1.0.255")
-        print(" -I \t Auto increase invoke ID")
-        print(" -o \t Cache association view to make reading faster. Ex. -o C:\\device.xml")
-        print(" -T \t System title that is used with chiphering. Ex. -T 4775727578313233")
-        print(" -A \t Authentication key that is used with chiphering. Ex. -A D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF")
-        print(" -B \t Block cipher key that is used with chiphering. Ex. -B 000102030405060708090A0B0C0D0E0F")
-        print(" -D \t Dedicated key that is used with chiphering. Ex. -D 00112233445566778899AABBCCDDEEFF")
-        print(" -d \t Used DLMS standard. Ex. -d India (DLMS, India, Italy, Saudi_Arabia, IDIS)")
-        print("Example:")
-        print("Read LG device using TCP/IP connection.")
-        print("GuruxDlmsSample -r SN -c 16 -s 1 -h [Meter IP Address] -p [Meter Port No]")
-        print("Read LG device using serial port connection.")
-        print("GuruxDlmsSample -r SN -c 16 -s 1 -sp COM1 -i")
-        print("Read Indian device using serial port connection.")
-        print("GuruxDlmsSample -S COM1 -c 16 -s 1 -a Low -P [password]")
-        print("------------------------------------------------------")
-        print("Available serial ports:")
-        print(GXSerial.getPortNames())
-
+        # print("GuruxDlmsSample reads data from the DLMS/COSEM device.")
+        # print("GuruxDlmsSample -h [Meter IP Address] -p [Meter Port No] -c 16 -s 1 -r SN")
+        # print(" -h \t host name or IP address.")
+        # print(" -p \t port number or name (Example: 1000).")
+        # print(" -S \t serial port. (Example: COM1 or COM1:9600:8None1)")
+        # print(" -i IEC is a start protocol.")
+        # print(" -a \t Authentication (None, Low, High).")
+        # print(" -P \t ASCII password for authentication. Use 0x prefix if hex value is used. Ex. 0x00000000.")
+        # print(" -c \t Client address. (Default: 16)")
+        # print(" -s \t Server address. (Default: 1)")
+        # print(" -n \t Server address as serial number.")
+        # print(" -l \t Logical Server address.")
+        # print(" -r [sn, ln]\t Short name or Logical Name (default) referencing is used.")
+        # print(" -w WRAPPER profile is used. HDLC is default.")
+        # print(" -t [Error, Warning, Info, Verbose] Trace messages.")
+        # print(" -g \"0.0.1.0.0.255:1; 0.0.1.0.0.255:2\" Get selected object(s) with given attribute index.")
+        # print(" -C Security Level. (None, Authentication, Encrypted, AuthenticationEncryption)")
+        # print(" -v Invocation counter data object Logical Name. Ex. 0.0.43.1.0.255")
+        # print(" -I \t Auto increase invoke ID")
+        # print(" -o \t Cache association view to make reading faster. Ex. -o C:\\device.xml")
+        # print(" -T \t System title that is used with chiphering. Ex. -T 4775727578313233")
+        # print(" -A \t Authentication key that is used with chiphering. Ex. -A D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF")
+        # print(" -B \t Block cipher key that is used with chiphering. Ex. -B 000102030405060708090A0B0C0D0E0F")
+        # print(" -D \t Dedicated key that is used with chiphering. Ex. -D 00112233445566778899AABBCCDDEEFF")
+        # print(" -d \t Used DLMS standard. Ex. -d India (DLMS, India, Italy, Saudi_Arabia, IDIS)")
+        # print("Example:")
+        # print("Read LG device using TCP/IP connection.")
+        # print("GuruxDlmsSample -r SN -c 16 -s 1 -h [Meter IP Address] -p [Meter Port No]")
+        # print("Read LG device using serial port connection.")
+        # print("GuruxDlmsSample -r SN -c 16 -s 1 -sp COM1 -i")
+        # print("Read Indian device using serial port connection.")
+        # print("GuruxDlmsSample -S COM1 -c 16 -s 1 -a Low -P [password]")
+        # print("------------------------------------------------------")
+        # print("Available serial ports:")
+        # print(GXSerial.getPortNames())
+        pass
     # Returns command line parameters.
     #
     # @param args
@@ -129,6 +129,8 @@ class GXSettings:
                     if len(args) <= index:
                         c.missing = True
                     c.value = args[1 + index]
+        for l in list_:
+            print(l.tag, l.value)
         return list_
 
 

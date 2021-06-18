@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<Objects>
+  <GXDLMSData>
+    <LN>0.0.42.0.0.255</LN>
+    <Description>Ch. 0 COSEM Logical device name</Description>
+    <Value Type="9" UIType="10">TFC0070721000020</Value>
+  </GXDLMSData>
+  <GXDLMSData>
+    <LN>0.0.43.1.0.255</LN>
+    <Description>Ch. 0 Invocation counter  #0</Description>
+    <Value Type="6">0</Value>
+  </GXDLMSData>
+  <GXDLMSData>
+    <LN>0.0.43.1.1.255</LN>
+    <Description>Ch. 0 Invocation counter  #1</Description>
+    <Value Type="6">0</Value>
+  </GXDLMSData>
+  <GXDLMSData>
+    <LN>0.0.43.1.2.255</LN>
+    <Description>Ch. 0 Invocation counter  #2</Description>
+    <Value Type="6">0</Value>
+  </GXDLMSData>
+  <GXDLMSData>
+    <LN>0.0.96.1.0.255</LN>
+    <Description>Ch. 0 Device ID 1, manufacturing number</Description>
+    <Value Type="9" UIType="10">21000020</Value>
+  </GXDLMSData>
+  <GXDLMSAssociationLogicalName>
+    <LN>0.0.40.0.0.255</LN>
+    <Version>1</Version>
+    <Description>Ch. 0 Current association</Description>
+    <ClientSAP>16</ClientSAP>
+    <ServerSAP>1</ServerSAP>
+    <ApplicationContextName>
+      <JointIsoCtt>0</JointIsoCtt>
+      <Country>0</Country>
+      <CountryName>0</CountryName>
+      <IdentifiedOrganization>5</IdentifiedOrganization>
+      <DlmsUA>8</DlmsUA>
+      <ApplicationContext>1</ApplicationContext>
+      <ContextId>1</ContextId>
+    </ApplicationContextName>
+    <XDLMSContextInfo>
+      <Conformance>526336</Conformance>
+      <MaxReceivePduSize>509</MaxReceivePduSize>
+      <MaxSendPduSize>509</MaxSendPduSize>
+      <DlmsVersionNumber>6</DlmsVersionNumber>
+      <QualityOfService>0</QualityOfService>
+      <CypheringInfo/>
+    </XDLMSContextInfo>
+    <AuthenticationMechanismName>
+      <JointIsoCtt>0</JointIsoCtt>
+      <Country>0</Country>
+      <CountryName>0</CountryName>
+      <IdentifiedOrganization>5</IdentifiedOrganization>
+      <DlmsUA>8</DlmsUA>
+      <AuthenticationMechanismName>2</AuthenticationMechanismName>
+      <MechanismId>0</MechanismId>
+    </AuthenticationMechanismName>
+    <Secret/>
+    <AssociationStatus>2</AssociationStatus>
+    <SecuritySetupReference>0.0.43.0.0.255</SecuritySetupReference>
+  </GXDLMSAssociationLogicalName>
+  <GXDLMSSapAssignment>
+    <LN>0.0.41.0.0.255</LN>
+    <Description>Ch. 0 SAP Assignment</Description>
+    <SapAssignmentList>
+      <Item>
+        <SAP>1</SAP>
+        <LDN>TFC0070721000020</LDN>
+      </Item>
+    </SapAssignmentList>
+  </GXDLMSSapAssignment>
+</Objects>
