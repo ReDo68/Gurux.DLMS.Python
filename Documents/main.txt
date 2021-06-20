@@ -28,7 +28,9 @@ Flag Frame format Dest. address Src. address Control HCS Information FCS Flag --
 -c 16(publicCl) -s 1          ---->  7E  A0    07       03                 21(16)   93    0F 01     7E
 -c 1            -s 17493      ---->  7E  A0    0A       00 02 10 AB        03(1)    93    14 68     7E
 
+
 ---------------------------------------------------- Address field structure (four bytes G112)
+LDN: TFC00707  21000020 --->
 Lower HDLC: 17493 --bit--> 1000100 01010101  --G113-2bytes--> 1000100 0 01010101 1 = 100010000 10101011 --> 0x 10 AB (device detail)
 Uper HDLC:   Management Logical Device(G113) --> 0x0001 -> 00000000 0 00000001 0 --> 0x00 02 (server detail)
                                                  100001000010101011
