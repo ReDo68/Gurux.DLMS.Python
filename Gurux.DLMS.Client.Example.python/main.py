@@ -101,6 +101,7 @@ class sampleclient():
                 if not read:
                     reader.getAssociationView()
                 for k, v in settings.readObjects:
+                    print("--------------------------------------------------------------->",k, v)
                     obj = settings.client.objects.findByLN(ObjectType.NONE, k)
                     if obj is None:
                          raise Exception("Unknown logical name:" + k)

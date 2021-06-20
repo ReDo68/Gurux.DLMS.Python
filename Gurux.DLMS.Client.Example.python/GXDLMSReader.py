@@ -111,6 +111,7 @@ class GXDLMSReader:
         if self.trace >= level:
             print(line)
         self.logFile.write(line + "\n")
+        # print(line + "\n")
 
     def readDLMSPacket(self, data, reply=None):
         if not reply:

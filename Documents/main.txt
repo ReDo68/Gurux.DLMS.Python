@@ -7,3 +7,33 @@ python Gurux.DLMS.Client.Example.python\main.py
 -S COM10:19200:8None1 -g "0.0.41.0.0.255:2"
  
 -S COM10:19200:8None1 -t Verbose -a Low -P 44444444 -C HighGMac
+
+
+python3 Gurux.DLMS.Client.Example.python/main.py
+
+-S /dev/ttyUSB0:19200:8None1 -g "0.0.41.0.0.255:2"
+
+
+
+DLMS-Green Book
+                                              G115
+Flag Frame format Dest. address Src. address Control HCS Information FCS Flag ---> HDLC frame format type 3 - G111
+--------------------------------------------------
+
+
+
+
+---------------------------------------------------- SNRM
+                                        type length des/server address    client  SNRM  checkSeq
+-c 16(publicCl) -s 1          ---->  7E  A0    07       03                 21(16)   93    0F 01     7E
+-c 1            -s 17493      ---->  7E  A0    0A       00 02 10 AB        03(1)    93    14 68     7E
+
+---------------------------------------------------- Address field structure (four bytes G112)
+Lower HDLC: 17493 --bit--> 1000100 01010101  --G113-2bytes--> 1000100 0 01010101 1 = 100010000 10101011 --> 0x 10 AB (device detail)
+Uper HDLC:   Management Logical Device(G113) --> 0x0001 -> 00000000 0 00000001 0 --> 0x00 02 (server detail)
+                                                 100001000010101011
+
+----------------------------------------------------  Release
+                            DISConnect
+TX: 7E A0 0A 00 02 10 AB 03   53     18 AE 7E
+RX: 7E A0 23 03 00 02 10 AB 73 59 8F 81 80 14 05 02 02 00 06 02 02 00 07 04 00 00 00 01 08 04 00 00 00 01 6F EF 7E
