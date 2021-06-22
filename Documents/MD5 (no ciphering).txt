@@ -1,0 +1,56 @@
+Pass 1 (AARQ):
+
+0001003000010040: Wrapper
+60: Tag of AARQ APDU
+3E: length of the AARQ’s content’s field
+A109060760857405080101: last "01" means "LN + no ciphering"
+8A0207808B
+07: length
+60857405080203: 03 means MD5
+AC
+12: length
+80
+10: length of CtoS
+32303136313131373131313832393030: CtoS (2016111711182900)
+BE10040E
+01000000065F1F0400001C1FFFFF: xDLMS InitiateRequest APDU 
+--------------------------------------------------------------------
+Pass 2 (AARE):
+
+0001000100300044: Wrapper
+61: Tag of AARE APDU
+42: length of the AARE’s content’s field
+A109060760857405080101
+A203020100A305A10302010E
+88020780890760857405080203
+AA0A80
+08: length of StoC
+3332363531333433: StoC (32651343)
+BE10040E
+0800065F1F0400001C1F02000007: xDLMS InitiateResponse
+--------------------------------------------------------------------
+Pass 3:
+
+000100300001001E: Wrapper
+C3: Action request
+01: action-request-normal
+81: invoke-id-and-priority
+000F: IC 15 (current association)
+0000280000FF: 0-0:40.0.0.255 
+01: Method 1: reply_to_HLS_authentication
+0910: Octet_String[16]
+3946B13C57478FF1F4A586CEFE3E855D: f(StoC) or MD5(32651343||87654321) 
+--------------------------------------------------------------------
+Pass 4:
+
+0001000100300018: Wrapper
+C7: Action response
+01: action-response-normal
+81: invoke-id-and-priority
+00: action result (success)
+0100:data access result (success) 
+0910: Octet_String[16]
+72D186811147DBAF921898DE8F3640F8: f(CtoS) or MD5(2016111711182900||87654321) 
+
+C7018100010009103E17EE4B04B319D9698B8EDAE07EBE0E
+--------------------------------------------------------------------

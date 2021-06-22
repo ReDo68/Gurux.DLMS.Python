@@ -60,8 +60,9 @@ class GXDLMSReader:
         self.client = client
         if self.trace > TraceLevel.WARNING:
             print("Authentication: " + str(self.client.authentication))
-            # print("ClientAddress: " + hex(self.client.clientAddress))
-            # print("ServerAddress: " + hex(self.client.serverAddress))
+            print("invocationCounter: " + str(invocationCounter))
+            print("ClientAddress: " + hex(self.client.clientAddress))
+            print("ServerAddress: " + hex(self.client.serverAddress))
 
     def disconnect(self):
         #pylint: disable=broad-except

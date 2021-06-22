@@ -78,7 +78,7 @@ class GXSettings:
         # print(" -w WRAPPER profile is used. HDLC is default.")
         # print(" -t [Error, Warning, Info, Verbose] Trace messages.")
         # print(" -g \"0.0.1.0.0.255:1; 0.0.1.0.0.255:2\" Get selected object(s) with given attribute index.")
-        # print(" -C Security Level. (None, Authentication, Encrypted, AuthenticationEncryption)")
+        # print(" -C Security Level. (None, Authentication, Encryption, AuthenticationEncryption)")
         # print(" -v Invocation counter data object Logical Name. Ex. 0.0.43.1.0.255")
         # print(" -I \t Auto increase invoke ID")
         # print(" -o \t Cache association view to make reading faster. Ex. -o C:\\device.xml")
