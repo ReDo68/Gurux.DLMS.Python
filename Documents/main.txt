@@ -3,10 +3,13 @@ python Gurux.DLMS.Client.Example.python\main.py -S COM10:19200:8None1 -g "0.0.41
 
 
 Ubuntu:
-python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1
--g "0.0.96.50.0.255:2" -c 1 -s 17493 -a Low -P 12345678 -t Info
+python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1 -g "0.0.96.50.0.255:2" -c 1 -s 17493 -a Low -P 12345678 -t Info
 
+python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -C AuthenticationEncryption
 
+python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -B 000102030405060708090A0B0C0D0E0F -A D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF -C AuthenticationEncryption
+// GMac+P3 using Cached Association View
+python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -C AuthenticationEncryption -o /home/reza/Documents/Project/dlms/device.xml
 
 DLMS-Green Book
                                               G115
@@ -38,3 +41,93 @@ RX: 7E A0 23 03 00 02 10 AB 73 59 8F 81 80 14 05 02 02 00 06 02 02 00 07 04 00 0
 -S /dev/ttyUSB0:19200:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a Low -P 12345678 -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -B 000102030405060708090A0B0C0D0E0F -A D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF -C AuthenticationEncryption
 
 python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -B 000102030405060708090A0B0C0D0E0F -A D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF -C AuthenticationEncryption
+
+
+E6E600// LLC bytes
+E6E700// LLC bytes-resp
+
+93// frame type SNRM (Set Normal Response Mode)
+73// frame type UA (Unnumbered acknowledge)
+
+60 1D// AARQ tag and length
+61 29// AARE tag and length
+
+62 // RLRQ
+63 // RLRE
+
+C0 01// GET.request.normal
+C4 01// GET.response.normal
+
+C0 03// GET.request.with list
+C4 03// GET.response.with list
+
+C0 02// GET.request.ForNextDataBlock
+C4 02// GET.response.withDataBlock
+
+C1 01// SET.normal request
+C5 01// SET.response normal, success
+
+C3 01// Action.request normal
+C7 01// Action.response normal
+
+CB 31// ????   f(StoC) - Action.request ciphered
+CF 2A// ????   f(CtoS) - Action.response ciphered
+
+DB 08// Get Ciphered
+
+53// Disconnect request ????
+73// frame type UA (Unnumbered acknowledge)
+
+54// Rel ???
+74// Rel ???
+
+D9// Access-Request
+DA// Access-Response
+
+///////////////////////////////////////// conformance block
+5F1F// tag for conformance block
+04// length of the conformance block
+00// encoding the number of unused bits in the bit string
+00301D//negotiated conformance block
+
+
+
+
+
+AARQ GMac+Policy3 -->
+7E A0 6E
+00 02 10 AB  //phisical addr
+03 10 74 15
+E6 E6 00
+60 5D        // AARQ tag + len
+A1 09 06 07 60 85 74 05 08 01
+03 LN + ...
+A6 0A 04 08
+4D 4D 4D 00 00 00 00 01 Cl-sys title
+8A 02 07 80 8B 07
+60 85 74 05 08 02 //  05 //GMac
+AC
+12
+80
+10 // CtoS-len
+19 34 46 40 78 82 38 65 CE E5 C7 F0 BC FB A8 BE
+BE 23 04 21 21 1F 30 00 00 19 81 0C 36 44 49 2A B9 A1 D7 63 C4 DE 36 AE 61 05 5E D5 86 3B D0 FB 05 31 91 17 CC 6E C6 7E
+
+AARE GMac+Policy3 -->
+7E A0 72
+03
+00 02 10 AB
+30 DC 12
+E6 E7 00
+61 61
+A1 09 06 07 60 85 74 05 08 01
+03
+A2 03 02 01 00 A3 05 A1 03 02 01 0E A4 0A 04 08
+54 46 43 // TFC   01 7     1 40 6F 54 // right(SN,8)
+88 02 07 80 89 07
+60 85 74 05 08 02 //   05 //GMac
+AA 0A 80
+08
+32 43 33 31 36 36 41 33
+BE 23 04 21
+28 1F 30 00 00 02 85 48 D1 DA 6C 5F 14 72 3A 71 BF 05 E3 5B 2A D2 02 DF 5E 17 0D B6 BE 86 40 D4 12 17 AA 7E

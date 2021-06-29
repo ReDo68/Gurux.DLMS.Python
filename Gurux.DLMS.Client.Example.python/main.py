@@ -99,6 +99,7 @@ class sampleclient():
                     except Exception:
                         read = False
                 if not read:
+                    pass
                     reader.getAssociationView()
                 for k, v in settings.readObjects:
                     print("--------------------------------------------------------------->",k, v)

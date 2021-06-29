@@ -45,11 +45,13 @@ from gurux_dlms.objects import GXDLMSObject, GXDLMSObjectCollection, GXDLMSData,
     GXDLMSDemandRegister, GXDLMSProfileGeneric, GXDLMSExtendedRegister
 from gurux_net import GXNet
 from gurux_serial import GXSerial
+from gwTransFunc import calCrc, gwWrap, gwUnwrap
 
 class GXDLMSReader:
     #pylint: disable=too-many-public-methods, too-many-instance-attributes
     def __init__(self, client, media, trace, invocationCounter, useOpticalHead):
         #pylint: disable=too-many-arguments
+        self.gwWrapper = True
         self.replyBuff = bytearray(8 + 1024)
         self.waitTime = 5000
         self.logFile = open("logFile.txt", "w")
@@ -89,7 +91,7 @@ class GXDLMSReader:
     def close(self):
         #pylint: disable=broad-except
         if self.media and self.media.isOpen():
-            print("DisconnectRequest-close")
+            print("DisconnectRequest-close(RL+DISC)")
             reply = GXReplyData()
             try:
                 #Release is call only for secured connections.
@@ -144,8 +146,14 @@ class GXDLMSReader:
         rd = GXByteBuffer()
         with self.media.getSynchronous():
             if not reply.isStreaming():
-                self.writeTrace("TX: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)
-                self.media.send(data)
+                if self.gwWrapper:                     # R374-change it to gw
+                    self.writeTrace("TXgw: " + self.now() + "\t" + GXByteBuffer.hex(gwWrap(data)), TraceLevel.VERBOSE)
+                    self.writeTrace("TXm: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)
+                    self.media.send(gwWrap(data))
+                else:
+                    # print(gwWrap(data))
+                    self.writeTrace("TXm: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)
+                    self.media.send(data)
             pos = 0
             try:
                 while not self.client.getData(rd, reply, notify):
@@ -167,9 +175,11 @@ class GXDLMSReader:
                     rd.set(p.reply)
                     p.reply = None
             except Exception as e:
-                self.writeTrace("RX: " + self.now() + "\t" + str(rd), TraceLevel.ERROR)
+                self.writeTrace("RXm: " + self.now() + "\t" + str(rd), TraceLevel.ERROR)
                 raise e
-            self.writeTrace("RX: " + self.now() + "\t" + str(rd), TraceLevel.VERBOSE)
+            print("rd: "+str(rd))
+            print("rd-unwrap: "+str(gwUnwrap(rd)))
+            self.writeTrace("RXm: " + self.now() + "\t" + str(rd), TraceLevel.VERBOSE)
             if reply.error != 0:
                 raise GXDLMSException(reply.error)
 
