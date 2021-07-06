@@ -10,14 +10,14 @@ python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1 -g
 python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -B 000102030405060708090A0B0C0D0E0F -A D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF -C AuthenticationEncryption
 // GMac+P3 using Cached Association View
 python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -C AuthenticationEncryption -o /home/reza/Documents/Project/dlms/device.xml
+// GMac+P3 using Cached Association View + Read from GW-serial
+python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8Even1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -C AuthenticationEncryption -o /home/reza/Documents/Project/dlms/device.xml -G sepanta
 
-DLMS-Green Book
-                                              G115
+
+>---------------------------------------------DLMS-Green Book-------------------------------------------<
+G115
 Flag Frame format Dest. address Src. address Control HCS Information FCS Flag ---> HDLC frame format type 3 - G111
 --------------------------------------------------
-
-
-
 
 ---------------------------------------------------- SNRM
                                         type length des/server address    client  SNRM  checkSeq

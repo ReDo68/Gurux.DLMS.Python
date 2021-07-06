@@ -49,9 +49,9 @@ from gwTransFunc import calCrc, gwWrap, gwUnwrap
 
 class GXDLMSReader:
     #pylint: disable=too-many-public-methods, too-many-instance-attributes
-    def __init__(self, client, media, trace, invocationCounter, useOpticalHead):
+    def __init__(self, client, media, trace, invocationCounter, useOpticalHead, gwWrapper):
         #pylint: disable=too-many-arguments
-        self.gwWrapper = True
+        self.gwWrapper = gwWrapper
         self.replyBuff = bytearray(8 + 1024)
         self.waitTime = 5000
         self.logFile = open("logFile.txt", "w")
@@ -146,7 +146,7 @@ class GXDLMSReader:
         rd = GXByteBuffer()
         with self.media.getSynchronous():
             if not reply.isStreaming():
-                if self.gwWrapper:                     # R374-change it to gw
+                if self.gwWrapper:                     # R374-changed it to gw
                     self.writeTrace("TXgw: " + self.now() + "\t" + GXByteBuffer.hex(gwWrap(data)), TraceLevel.VERBOSE)
                     self.writeTrace("TXm: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)
                     self.media.send(gwWrap(data))
@@ -175,11 +175,15 @@ class GXDLMSReader:
                     rd.set(p.reply)
                     p.reply = None
             except Exception as e:
-                self.writeTrace("RXm: " + self.now() + "\t" + str(rd), TraceLevel.ERROR)
+                self.writeTrace("RXgw: " + self.now() + "\t" + str(rd), TraceLevel.ERROR)  # R374-change it to gw
                 raise e
-            print("rd: "+str(rd))
-            print("rd-unwrap: "+str(gwUnwrap(rd)))
-            self.writeTrace("RXm: " + self.now() + "\t" + str(rd), TraceLevel.VERBOSE)
+
+            if self.gwWrapper:      # R374-changed it to gw
+                self.writeTrace("RXgw: " + self.now() + "\t" + str(rd), TraceLevel.VERBOSE)
+                self.writeTrace("RXm: " + self.now() + "\t" + str(rd)[19*3:], TraceLevel.VERBOSE)
+            else:
+                self.writeTrace("RXm: " + self.now() + "\t" + str(rd), TraceLevel.VERBOSE)
+
             if reply.error != 0:
                 raise GXDLMSException(reply.error)
 

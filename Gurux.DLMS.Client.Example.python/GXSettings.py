@@ -51,6 +51,7 @@ class GXSettings:
         self.media = None
         self.trace = TraceLevel.INFO
         self.iec = False
+        self.gwWrapper = False
         self.invocationCounter = None
         self.client = GXDLMSSecureClient(True)
         #  Objects to read.
@@ -135,7 +136,7 @@ class GXSettings:
 
 
     def getParameters(self, args):
-        parameters = GXSettings.__getParameters(args, "h:p:c:s:r:iIt:a:p:wP:g:S:n:C:v:o:T:A:B:D:d:l:")
+        parameters = GXSettings.__getParameters(args, "h:p:c:s:r:iIt:a:p:wP:g:S:n:C:v:o:T:A:B:D:d:l:G:")
         defaultBaudRate = True
         for it in parameters:
             if it.tag == 'w':
@@ -179,6 +180,11 @@ class GXSettings:
                     self.client.password = GXByteBuffer.hexToBytes(it.value[2:])
                 else:
                     self.client.password = it.value
+            elif it.tag == 'G':
+                if it.value == "sepanta":
+                    self.gwWrapper = True
+                else:
+                    self.gwWrapper = False
             elif it.tag == 'i':
                 #  IEC.
                 self.iec = True

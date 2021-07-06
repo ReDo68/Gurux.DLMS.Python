@@ -48,9 +48,6 @@ from gurux_dlms.GXDateTime import GXDateTime
 from gurux_dlms.internal._GXCommon import _GXCommon
 from gurux_dlms import GXDLMSException, GXDLMSExceptionResponse, GXDLMSConfirmedServiceError
 
-#data = b'\x7e\xa0\x0a\x00\x02\x10\xab\x03\x93\x14\x68\x7e'
-# ser = serial.Serial(temp[0].device, baudrate=19200, bytesize=8, timeout=2, parity=serial.PARITY_NONE, rtscts=0)
-
 try:
     import pkg_resources
     #pylint: disable=broad-except
@@ -77,6 +74,7 @@ class sampleclient():
         try:
             # //////////////////////////////////////
             #  Handle command line parameters.
+            print(args)
             ret = settings.getParameters(args)
             if ret != 0:
                 return
@@ -85,7 +83,7 @@ class sampleclient():
             if not isinstance(settings.media, (GXSerial, GXNet)):
                 raise Exception("Unknown media type.")
             # //////////////////////////////////////
-            reader = GXDLMSReader(settings.client, settings.media, settings.trace, settings.invocationCounter, settings.iec)
+            reader = GXDLMSReader(settings.client, settings.media, settings.trace, settings.invocationCounter, settings.iec, settings.gwWrapper)
             settings.media.open()
             if settings.readObjects:
                 read = False
@@ -99,10 +97,9 @@ class sampleclient():
                     except Exception:
                         read = False
                 if not read:
-                    pass
                     reader.getAssociationView()
                 for k, v in settings.readObjects:
-                    print("--------------------------------------------------------------->",k, v)
+                    print("--------------------------------------------------------------->", k, v)
                     obj = settings.client.objects.findByLN(ObjectType.NONE, k)
                     if obj is None:
                          raise Exception("Unknown logical name:" + k)
@@ -127,6 +124,11 @@ class sampleclient():
             print("Ended. Press any key to continue.")
 
 
-if __name__ == '__main__':
-
-    sampleclient.main(sys.argv)
+# if __name__ == '__main__':
+    # arg_reza = ['Gurux.DLMS.Client.Example.python/main.py', '-S', '/dev/ttyUSB0:19200:8Even1', '-g', '1.0.1.8.0.255:2',
+    #             '-c', '1', '-s', '17493', '-a', 'HighGMac', '-t', 'Verbose', '-T', '4D4D4D0000000001', '-v',
+    #             '0.0.43.1.0.255', '-C', 'AuthenticationEncryption', '-o',
+    #             '/home/reza/Documents/Project/dlms/device.xml', '-G', 'sepanta']
+    #
+    # sampleclient.main(arg_reza)
+    # # sampleclient.main(sys.argv)
