@@ -119,3 +119,5 @@ dmypy.json
 Gurux.DLMS.Client.Example.python/logFile.txt
 Gurux.DLMS.Push.Listener.Example.python/.vs/Gurux.DLMS.Push.Listener.Example.python/v16/.suo
 *.testlog
+/Documents/logFile.txt
+/.idea/inspectionProfiles/Project_Default.xml
