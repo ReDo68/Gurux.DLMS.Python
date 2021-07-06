@@ -84,8 +84,7 @@ class sampleclient():
                 raise Exception("Unknown media type.")
             # //////////////////////////////////////
             reader = GXDLMSReader(settings.client, settings.media, settings.trace, settings.invocationCounter, settings.iec, settings.gwWrapper)
-
-            # ----settings.media.open()
+            settings.media.isOpen()
             if settings.readObjects:
                 read = False
                 reader.initializeConnection()
