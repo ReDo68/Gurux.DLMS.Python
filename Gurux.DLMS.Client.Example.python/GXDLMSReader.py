@@ -167,6 +167,7 @@ class GXDLMSReader:
                 if not p.eop:
                     p.count = self.client.getFrameSize(rd)
                 # while not self.media.receive(p):
+                print(self.media.recv(1450))
                 while not self.media.recv(1450):
                     pos += 1
                     if pos == 3:
