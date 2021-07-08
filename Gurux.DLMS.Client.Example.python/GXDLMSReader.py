@@ -167,7 +167,7 @@ class GXDLMSReader:
                 if not p.eop:
                     p.count = self.client.getFrameSize(rd)
                 # while not self.media.receive(p):
-                while not self.media.recv():
+                while not self.media.recv(1450):
                     pos += 1
                     if pos == 3:
                         raise TimeoutException("Failed to receive reply from the device in given time.")
