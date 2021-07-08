@@ -214,7 +214,7 @@ class GXDLMSReader:
                 self.writeTrace("TX: " + self.now() + "\t" + data, TraceLevel.VERBOSE)
                 self.media.send(data)
                 # if not self.media.receive(p):
-                if not self.media.recv():
+                if not self.media.recv(1450):
                     raise Exception("Failed to received reply from the media.")
 
                 self.writeTrace("RX: " + self.now() + "\t" + str(p.reply), TraceLevel.VERBOSE)
@@ -223,7 +223,7 @@ class GXDLMSReader:
                 if data == replyStr:
                     p.reply = None
                     # if not self.media.receive(p):
-                    if not self.media.recv():
+                    if not self.media.recv(1450):
                         raise Exception("Failed to received reply from the media.")
                     self.writeTrace("RX: " + self.now() + "\t" + str(p.reply), TraceLevel.VERBOSE)
                     replyStr = str(p.reply)
@@ -264,7 +264,7 @@ class GXDLMSReader:
                 self.writeTrace("TX: " + self.now() + "\t" + GXCommon.toHex(tmp), TraceLevel.VERBOSE)
                 p.waitTime = 200
                 # if self.media.receive(p):
-                if self.media.recv():
+                if self.media.recv(1450):
                     self.writeTrace("RX: " + self.now() + "\t" + str(p.reply), TraceLevel.VERBOSE)
                 self.media.close()
                 self.media.dataBits = 8
