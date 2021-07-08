@@ -166,7 +166,8 @@ class GXDLMSReader:
                     continue
                 if not p.eop:
                     p.count = self.client.getFrameSize(rd)
-                while not self.media.receive(p):
+                # while not self.media.receive(p):
+                while not self.media.recv(p):
                     pos += 1
                     if pos == 3:
                         raise TimeoutException("Failed to receive reply from the device in given time.")
@@ -212,7 +213,8 @@ class GXDLMSReader:
                 data = "/?!\r\n"
                 self.writeTrace("TX: " + self.now() + "\t" + data, TraceLevel.VERBOSE)
                 self.media.send(data)
-                if not self.media.receive(p):
+                # if not self.media.receive(p):
+                if not self.media.recv(p):
                     raise Exception("Failed to received reply from the media.")
 
                 self.writeTrace("RX: " + self.now() + "\t" + str(p.reply), TraceLevel.VERBOSE)
@@ -220,7 +222,8 @@ class GXDLMSReader:
                 replyStr = str(p.reply)
                 if data == replyStr:
                     p.reply = None
-                    if not self.media.receive(p):
+                    # if not self.media.receive(p):
+                    if not self.media.recv(p):
                         raise Exception("Failed to received reply from the media.")
                     self.writeTrace("RX: " + self.now() + "\t" + str(p.reply), TraceLevel.VERBOSE)
                     replyStr = str(p.reply)
@@ -260,7 +263,8 @@ class GXDLMSReader:
                 self.media.send(tmp)
                 self.writeTrace("TX: " + self.now() + "\t" + GXCommon.toHex(tmp), TraceLevel.VERBOSE)
                 p.waitTime = 200
-                if self.media.receive(p):
+                # if self.media.receive(p):
+                if self.media.recv(p):
                     self.writeTrace("RX: " + self.now() + "\t" + str(p.reply), TraceLevel.VERBOSE)
                 self.media.close()
                 self.media.dataBits = 8
