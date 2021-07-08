@@ -167,12 +167,12 @@ class GXDLMSReader:
                 if not p.eop:
                     p.count = self.client.getFrameSize(rd)
                 # while not self.media.receive(p):
-                while not self.media.recv(p):
-                    pos += 1
-                    if pos == 3:
-                        raise TimeoutException("Failed to receive reply from the device in given time.")
-                    print("Data send failed.  Try to resend " + str(pos) + "/3")
-                    self.media.send(data, None)
+                # while not self.media.recv():
+                #     pos += 1
+                #     if pos == 3:
+                #         raise TimeoutException("Failed to receive reply from the device in given time.")
+                #     print("Data send failed.  Try to resend " + str(pos) + "/3")
+                #     self.media.send(data, None)
                 rd.set(p.reply)
                 p.reply = None
         except Exception as e:
@@ -214,7 +214,7 @@ class GXDLMSReader:
                 self.writeTrace("TX: " + self.now() + "\t" + data, TraceLevel.VERBOSE)
                 self.media.send(data)
                 # if not self.media.receive(p):
-                if not self.media.recv(p):
+                if not self.media.recv():
                     raise Exception("Failed to received reply from the media.")
 
                 self.writeTrace("RX: " + self.now() + "\t" + str(p.reply), TraceLevel.VERBOSE)
@@ -223,7 +223,7 @@ class GXDLMSReader:
                 if data == replyStr:
                     p.reply = None
                     # if not self.media.receive(p):
-                    if not self.media.recv(p):
+                    if not self.media.recv():
                         raise Exception("Failed to received reply from the media.")
                     self.writeTrace("RX: " + self.now() + "\t" + str(p.reply), TraceLevel.VERBOSE)
                     replyStr = str(p.reply)
@@ -264,7 +264,7 @@ class GXDLMSReader:
                 self.writeTrace("TX: " + self.now() + "\t" + GXCommon.toHex(tmp), TraceLevel.VERBOSE)
                 p.waitTime = 200
                 # if self.media.receive(p):
-                if self.media.recv(p):
+                if self.media.recv():
                     self.writeTrace("RX: " + self.now() + "\t" + str(p.reply), TraceLevel.VERBOSE)
                 self.media.close()
                 self.media.dataBits = 8
