@@ -58,7 +58,7 @@ except Exception:
 #pylint: disable=too-few-public-methods,broad-except
 class sampleclient():
     @classmethod
-    def main(cls, args,s):
+    def main(cls, args, gwSocket):
         try:
             pass
             # print("gurux_dlms version: " + pkg_resources.get_distribution("gurux_dlms").version)
@@ -83,8 +83,9 @@ class sampleclient():
             if not isinstance(settings.media, (GXSerial, GXNet)):
                 raise Exception("Unknown media type.")
             # //////////////////////////////////////
+            settings.media = gwSocket
             reader = GXDLMSReader(settings.client, settings.media, settings.trace, settings.invocationCounter, settings.iec, settings.gwWrapper)
-            settings.media.open()
+            # settings.media.open()
             if settings.readObjects:
                 read = False
                 reader.initializeConnection()
