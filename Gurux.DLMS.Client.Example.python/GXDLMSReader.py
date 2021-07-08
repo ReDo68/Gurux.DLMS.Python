@@ -142,50 +142,50 @@ class GXDLMSReader:
             p.Count = 8
         else:
             p.Count = 5
-        self.media.eop = eop
+        # self.media.eop = eop
         rd = GXByteBuffer()
-        with self.media.getSynchronous():
-            if not reply.isStreaming():
-                if self.gwWrapper:                     # R374-changed it to gw
-                    self.writeTrace("TXgw: " + self.now() + "\t" + GXByteBuffer.hex(gwWrap(data)), TraceLevel.VERBOSE)
-                    self.writeTrace("TXm: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)
-                    self.media.send(gwWrap(data))
-                else:
-                    # print(gwWrap(data))
-                    self.writeTrace("TXm: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)
-                    self.media.send(data)
-            pos = 0
-            try:
-                while not self.client.getData(rd, reply, notify):
-                    if notify.data.size != 0:
-                        if not notify.isMoreData():
-                            t = GXDLMSTranslator()
-                            xml = t.dataToXml(notify.data)
-                            print(xml)
-                            notify.clear()
-                        continue
-                    if not p.eop:
-                        p.count = self.client.getFrameSize(rd)
-                    while not self.media.receive(p):
-                        pos += 1
-                        if pos == 3:
-                            raise TimeoutException("Failed to receive reply from the device in given time.")
-                        print("Data send failed.  Try to resend " + str(pos) + "/3")
-                        self.media.send(data, None)
-                    rd.set(p.reply)
-                    p.reply = None
-            except Exception as e:
-                self.writeTrace("RXgw: " + self.now() + "\t" + str(rd), TraceLevel.ERROR)  # R374-change it to gw
-                raise e
-
-            if self.gwWrapper:      # R374-changed it to gw
-                self.writeTrace("RXgw: " + self.now() + "\t" + str(rd), TraceLevel.VERBOSE)
-                self.writeTrace("RXm: " + self.now() + "\t" + str(rd)[19*3:], TraceLevel.VERBOSE)
+        # with self.media.getSynchronous():
+        if not reply.isStreaming():
+            if self.gwWrapper:                     # R374-changed it to gw
+                self.writeTrace("TXgw: " + self.now() + "\t" + GXByteBuffer.hex(gwWrap(data)), TraceLevel.VERBOSE)
+                self.writeTrace("TXm: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)
+                self.media.send(gwWrap(data))
             else:
-                self.writeTrace("RXm: " + self.now() + "\t" + str(rd), TraceLevel.VERBOSE)
+                # print(gwWrap(data))
+                self.writeTrace("TXm: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)
+                self.media.send(data)
+        pos = 0
+        try:
+            while not self.client.getData(rd, reply, notify):
+                if notify.data.size != 0:
+                    if not notify.isMoreData():
+                        t = GXDLMSTranslator()
+                        xml = t.dataToXml(notify.data)
+                        print(xml)
+                        notify.clear()
+                    continue
+                if not p.eop:
+                    p.count = self.client.getFrameSize(rd)
+                while not self.media.receive(p):
+                    pos += 1
+                    if pos == 3:
+                        raise TimeoutException("Failed to receive reply from the device in given time.")
+                    print("Data send failed.  Try to resend " + str(pos) + "/3")
+                    self.media.send(data, None)
+                rd.set(p.reply)
+                p.reply = None
+        except Exception as e:
+            self.writeTrace("RXgw: " + self.now() + "\t" + str(rd), TraceLevel.ERROR)  # R374-change it to gw
+            raise e
 
-            if reply.error != 0:
-                raise GXDLMSException(reply.error)
+        if self.gwWrapper:      # R374-changed it to gw
+            self.writeTrace("RXgw: " + self.now() + "\t" + str(rd), TraceLevel.VERBOSE)
+            self.writeTrace("RXm: " + self.now() + "\t" + str(rd)[19*3:], TraceLevel.VERBOSE)
+        else:
+            self.writeTrace("RXm: " + self.now() + "\t" + str(rd), TraceLevel.VERBOSE)
+
+        if reply.error != 0:
+            raise GXDLMSException(reply.error)
 
     def readDataBlock(self, data, reply):
         if data:
