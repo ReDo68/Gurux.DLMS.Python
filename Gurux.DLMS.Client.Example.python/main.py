@@ -58,7 +58,7 @@ except Exception:
 #pylint: disable=too-few-public-methods,broad-except
 class sampleclient():
     @classmethod
-    def main(cls, args):
+    def main(cls, args,s):
         try:
             pass
             # print("gurux_dlms version: " + pkg_resources.get_distribution("gurux_dlms").version)
