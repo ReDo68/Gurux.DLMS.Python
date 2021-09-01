@@ -3,13 +3,13 @@ python Gurux.DLMS.Client.Example.python\main.py -S COM10:19200:8None1 -g "0.0.41
 
 
 Ubuntu:
-python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1 -g "0.0.96.50.0.255:2" -c 1 -s 17493 -a Low -P 12345678 -t Info
+python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:9600:8None1 -g "0.0.96.50.0.255:2" -c 1 -s 17493 -a Low -P 12345678 -t Info
 
-python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -C AuthenticationEncryption
+python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:9600:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -C AuthenticationEncryption
 
-python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -B 000102030405060708090A0B0C0D0E0F -A D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF -C AuthenticationEncryption
+python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:9600:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -B 000102030405060708090A0B0C0D0E0F -A D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF -C AuthenticationEncryption
 // GMac+P3 using Cached Association View
-python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -C AuthenticationEncryption -o /home/reza/Documents/Project/dlms/device.xml
+python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:9600:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -C AuthenticationEncryption -o /home/reza/Documents/Project/dlms/device.xml
 // GMac+P3 using Cached Association View + Read from GW-serial
 python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8Even1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -C AuthenticationEncryption -o /home/reza/Documents/Project/dlms/device.xml -G sepanta
 
@@ -23,13 +23,19 @@ Flag Frame format Dest. address Src. address Control HCS Information FCS Flag --
                                         type length des/server address    client  SNRM  checkSeq
 -c 16(publicCl) -s 1          ---->  7E  A0    07       03                 21(16)   93    0F 01     7E
 -c 1            -s 17493      ---->  7E  A0    0A       00 02 10 AB        03(1)    93    14 68     7E
-
+                   19369                                00 02 2E 53
+                    2985                                00 02 2E 53
 
 ---------------------------------------------------- Address field structure (four bytes G112)
 LDN: TFC00707  21000020 --->
-Lower HDLC: 17493 --bit--> 1000100 01010101  --G113-2bytes--> 1000100 0 01010101 1 = 100010000 10101011 --> 0x 10 AB (device detail)
-Uper HDLC:   Management Logical Device(G113) --> 0x0001 -> 00000000 0 00000001 0 --> 0x00 02 (server detail)
+Lower HDLC: 17493 --bit--> 100010001010101  --G113-2bytes--> 10001000 0 1010101 1 = 100010000 10101011 --> 0x 10 AB (device detail)
+Upper HDLC:   Management Logical Device(G113) --> 0x0001 -> 00000000 0 00000001 0 --> 0x00 02 (server detail)
                                                  100001000010101011
+
+            2985              101110101001  --> 10111 0101001 --> 10111 0 0101001 1  -->    101110 01010011 --> 0x 2E 53
+            19369          100101110101001  -->                                         1 00101110 01010011 --> 0x 2E 53
+
+Server address = physical + 16384 or 4+(pysical-HEX)
 
 ----------------------------------------------------  Release
                             DISConnect
