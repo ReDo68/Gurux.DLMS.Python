@@ -99,7 +99,7 @@ class sampleclient():
                 if not read:
                     reader.getAssociationView()
                 for k, v in settings.readObjects:
-                    print("--------------------------------------------------------------->", k, v)
+                    print("------------>", k, v)
                     obj = settings.client.objects.findByLN(ObjectType.NONE, k)
                     if obj is None:
                          raise Exception("Unknown logical name:" + k)
@@ -118,7 +118,8 @@ class sampleclient():
         finally:
             if reader:
                 try:
-                    reader.close()
+                    # reader.close()
+                    reader.disconnect()
                 except Exception:
                     traceback.print_exc()
             print("Ended. Press any key to continue.")

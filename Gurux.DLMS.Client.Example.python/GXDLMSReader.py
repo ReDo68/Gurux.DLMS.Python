@@ -565,3 +565,4 @@ class GXDLMSReader:
             raise
         finally:
             self.close()
+
