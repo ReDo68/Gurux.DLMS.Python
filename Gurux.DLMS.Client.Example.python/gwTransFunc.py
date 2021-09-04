@@ -35,7 +35,7 @@ def gwWrap(data):
     totLen += 3
     port = 1
     # 0: 300, 3: 2400, 4: 4800, 5: 9600, 6: 19200
-    initBd = 6
+    initBd = 5
     # In ms
     waitTime = 700
     bitNum = 8
