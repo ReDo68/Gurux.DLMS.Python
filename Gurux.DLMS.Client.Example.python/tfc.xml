@@ -206,9 +206,9 @@
   <GXDLMSRegister>
     <LN>1.0.1.8.0.255</LN>
     <Description>Ch. 0 Sum Li Active power+ (QI+QIV) Time integral 1 Rate 0 (0 is total)</Description>
-    <Unit>0</Unit>
+    <Unit>30</Unit>
     <Scaler>1.0</Scaler>
-    <Value Type="6">3581</Value>
+    <Value Type="6">55</Value>
   </GXDLMSRegister>
   <GXDLMSRegister>
     <LN>1.0.1.8.1.255</LN>

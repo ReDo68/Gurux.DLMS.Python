@@ -104,6 +104,7 @@ class sampleclient():
                     if obj is None:
                          raise Exception("Unknown logical name:" + k)
                     val = reader.read(obj, v)
+                    print("value is: ", val)
                     reader.showValue(v, val)
                 if settings.outputFile:
                     settings.client.objects.save(settings.outputFile)

@@ -53,7 +53,7 @@ class GXDLMSReader:
         #pylint: disable=too-many-arguments
         self.gwWrapper = gwWrapper
         self.replyBuff = bytearray(8 + 1024)
-        self.waitTime = 20000
+        self.waitTime = 5000
         self.logFile = open("logFile.txt", "w")
         self.trace = trace
         self.media = media
@@ -157,6 +157,7 @@ class GXDLMSReader:
             pos = 0
             try:
                 while not self.client.getData(rd, reply, notify):
+                    print(str(rd))  # to print anything that gw send
                     if notify.data.size != 0:
                         if not notify.isMoreData():
                             t = GXDLMSTranslator()

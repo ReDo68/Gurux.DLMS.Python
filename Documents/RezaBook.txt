@@ -137,3 +137,48 @@ AA 0A 80
 32 43 33 31 36 36 41 33
 BE 23 04 21
 28 1F 30 00 00 02 85 48 D1 DA 6C 5F 14 72 3A 71 BF 05 E3 5B 2A D2 02 DF 5E 17 0D B6 BE 86 40 D4 12 17 AA 7E
+
+
+
+
+
+
+GATEWAY --------------------------
+
+# 7E
+# 00 23 length
+# 00 05 format transparent
+# 00 18 data length
+# 32 F7 Inok id
+# 01 port num
+# 00 00 reserved
+# 05 baudrate
+# 02 BC wait time
+# 08 bit num
+# 00 parity
+# 01 F4 rcv length
+
+
+# 7E A0 0A 00 02 2E 53 21 93 D1 D0 7E  date
+
+# 00 00 00 00  z-fill
+#
+# B2 27 CRC
+# 7E
+
+
+
+# 7E
+# 00 43 lenght
+# 00 04 transparent resp = 06
+# 00 2D data lenght
+# 32 F7 invokid
+# 01 port num
+# 00
+# FF FF rcv time
+# 00 00 00 00 00 00 reserved
+# 7E A0 23 21 00 02 2E 53 73 12 26 81 80 14 05 02 01 00 06 02 01 00 07 04 00 00 00 01 08 04 00 00 00 01 69 6D 7E
+#             FF 02 2E 53 73 12 26 81 80 14 05 02 01 00 06 02 01 00 07 04 00 00 00 01 08 04 00 00 00 01 69 6D 7E
+# 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+# 7C 65 CRC
+# 7E
