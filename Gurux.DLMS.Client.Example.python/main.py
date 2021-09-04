@@ -118,8 +118,8 @@ class sampleclient():
         finally:
             if reader:
                 try:
-                    # reader.close()
-                    reader.disconnect()
+                    reader.close()
+                    # reader.disconnect()
                 except Exception:
                     traceback.print_exc()
             print("Ended. Press any key to continue.")
