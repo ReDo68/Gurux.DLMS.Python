@@ -166,11 +166,11 @@ class GXDLMSReader:
                         continue
                     if not p.eop:
                         p.count = self.client.getFrameSize(rd)
-                    # while not self.media.receive(p):
-                    #     pos += 1
-                    #     if pos == 3:
-                    #         raise TimeoutException("Failed to receive reply from the device in given time.")
-                    #     print("Data send failed.  Try to resend " + str(pos) + "/3")
+                    while not self.media.receive(p):
+                        pos += 1
+                        if pos == 3:
+                            raise TimeoutException("Failed to receive reply from the device in given time.")
+                        print("Data send failed.  Try to resend " + str(pos) + "/3")
                         # self.gwWrapper SHOULD BE ADDED HERE
                         # self.media.send(data, None)
                     rd.set(p.reply)
