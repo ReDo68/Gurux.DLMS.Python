@@ -53,7 +53,7 @@ class GXDLMSReader:
         #pylint: disable=too-many-arguments
         self.gwWrapper = gwWrapper
         self.replyBuff = bytearray(8 + 1024)
-        self.waitTime = 15000
+        self.waitTime = 20000
         self.logFile = open("logFile.txt", "w")
         self.trace = trace
         self.media = media
