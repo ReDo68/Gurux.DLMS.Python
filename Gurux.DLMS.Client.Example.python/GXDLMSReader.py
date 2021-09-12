@@ -172,7 +172,8 @@ class GXDLMSReader:
                         if pos == 3:
                             raise TimeoutException("Failed to receive reply from the device in given time.")
                         print("Data send failed.  Try to resend " + str(pos) + "/3")
-                        self.media.send(data, None)
+                        # self.gwWrapper SHOULD BE ADDED HERE
+                        # self.media.send(data, None)
                     rd.set(p.reply)
                     p.reply = None
             except Exception as e:
@@ -260,7 +261,7 @@ class GXDLMSReader:
             with self.media.getSynchronous():
                 self.media.send(tmp)
                 self.writeTrace("TX: " + self.now() + "\t" + GXCommon.toHex(tmp), TraceLevel.VERBOSE)
-                # p.waitTime = 500 #200
+                p.waitTime = 200
                 if self.media.receive(p):
                     self.writeTrace("RX: " + self.now() + "\t" + str(p.reply), TraceLevel.VERBOSE)
                 self.media.close()
