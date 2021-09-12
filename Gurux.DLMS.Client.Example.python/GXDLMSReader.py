@@ -119,6 +119,7 @@ class GXDLMSReader:
     def readDLMSPacket(self, data, reply=None):
         if not reply:
             reply = GXReplyData()
+            print("reply is:", reply)
         if isinstance(data, bytearray):
             self.readDLMSPacket2(data, reply)
         elif data:
@@ -130,6 +131,7 @@ class GXDLMSReader:
         if not data:
             return
         notify = GXReplyData()
+        print("notify is:", notify)
         reply.error = 0
         eop = 0x7E
         #In network connection terminator is not used.
@@ -138,7 +140,6 @@ class GXDLMSReader:
         p = ReceiveParameters()
         p.eop = eop
         p.waitTime = self.waitTime
-        print(p)
         print(str(p.eop), p.waitTime)
         if eop is None:
             p.Count = 8
