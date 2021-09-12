@@ -260,7 +260,7 @@ class GXDLMSReader:
             with self.media.getSynchronous():
                 self.media.send(tmp)
                 self.writeTrace("TX: " + self.now() + "\t" + GXCommon.toHex(tmp), TraceLevel.VERBOSE)
-                p.waitTime = 200
+                p.waitTime = 500 #200
                 if self.media.receive(p):
                     self.writeTrace("RX: " + self.now() + "\t" + str(p.reply), TraceLevel.VERBOSE)
                 self.media.close()
