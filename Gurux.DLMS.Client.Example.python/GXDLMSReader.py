@@ -138,6 +138,7 @@ class GXDLMSReader:
         p = ReceiveParameters()
         p.eop = eop
         p.waitTime = self.waitTime
+        print(p.waitTime)
         if eop is None:
             p.Count = 8
         else:
