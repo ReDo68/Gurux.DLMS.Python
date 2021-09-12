@@ -157,7 +157,6 @@ class GXDLMSReader:
             pos = 0
             try:
                 while not self.client.getData(rd, reply, notify):
-                    print(str(rd))  # to print anything that gw send
                     if notify.data.size != 0:
                         if not notify.isMoreData():
                             t = GXDLMSTranslator()
@@ -167,14 +166,15 @@ class GXDLMSReader:
                         continue
                     if not p.eop:
                         p.count = self.client.getFrameSize(rd)
-                    while not self.media.receive(p):
-                        pos += 1
-                        if pos == 3:
-                            raise TimeoutException("Failed to receive reply from the device in given time.")
-                        print("Data send failed.  Try to resend " + str(pos) + "/3")
+                    # while not self.media.receive(p):
+                    #     pos += 1
+                    #     if pos == 3:
+                    #         raise TimeoutException("Failed to receive reply from the device in given time.")
+                    #     print("Data send failed.  Try to resend " + str(pos) + "/3")
                         # self.gwWrapper SHOULD BE ADDED HERE
                         # self.media.send(data, None)
                     rd.set(p.reply)
+                    print(str(rd))  # to print anything that gw send
                     p.reply = None
             except Exception as e:
                 self.writeTrace("RXgw: " + self.now() + "\t" + str(rd), TraceLevel.ERROR)  # R374-change it to gw
