@@ -95,7 +95,6 @@ DA// Access-Response
 00// encoding the number of unused bits in the bit string
 00301D//negotiated conformance block
 
-
 SNRM Public --->
 7E
 A0 07   // type + length
