@@ -140,7 +140,7 @@ class GXDLMSReader:
         p = ReceiveParameters()
         p.eop = eop
         p.waitTime = self.waitTime
-        print(str(p.eop), p.waitTime)
+        # print(str(p.eop), p.waitTime)
         if eop is None:
             p.Count = 8
         else:
@@ -179,8 +179,9 @@ class GXDLMSReader:
                         # self.media.send(data, None)
                     # rd._data = rd._data[1:]
                     rd.set(p.reply)
-                    print(rd._data)  # to print anything that gw send
-                    print(str(rd))  # to print anything that gw send
+                    print("rd: ", GXByteBuffer.hex(rd._data))  # to print anything that gw send
+                    print("p.reply: ", p.reply)
+                    # print(str(rd))  # to print anything that gw send
                     p.reply = None
             except Exception as e:
                 self.writeTrace("RXgw: " + self.now() + "\t" + str(rd), TraceLevel.ERROR)  # R374-change it to gw
