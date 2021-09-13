@@ -13,6 +13,10 @@ python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:9600:8None1 -g 
 // GMac+P3 using Cached Association View + Read from GW-serial
 python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8Even1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -C AuthenticationEncryption -o /home/reza/Documents/Project/dlms/device.xml -G sepanta
 
+-S /dev/ttyUSB0:19200:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a Low -P 12345678 -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -B 000102030405060708090A0B0C0D0E0F -A D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF -C AuthenticationEncryption
+
+python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -B 000102030405060708090A0B0C0D0E0F -A D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF -C AuthenticationEncryption
+
 
 >---------------------------------------------DLMS-Green Book-------------------------------------------<
 G115
@@ -43,12 +47,7 @@ TX: 7E A0 0A 00 02 10 AB 03   53     18 AE 7E
 RX: 7E A0 23 03 00 02 10 AB 73 59 8F 81 80 14 05 02 02 00 06 02 02 00 07 04 00 00 00 01 08 04 00 00 00 01 6F EF 7E
 
 
-
--S /dev/ttyUSB0:19200:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a Low -P 12345678 -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -B 000102030405060708090A0B0C0D0E0F -A D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF -C AuthenticationEncryption
-
-python3 Gurux.DLMS.Client.Example.python/main.py -S /dev/ttyUSB0:19200:8None1 -g "1.0.1.8.0.255:2" -c 1 -s 17493 -a HighGMac -t Verbose -T 4D4D4D0000000001 -v 0.0.43.1.0.255 -B 000102030405060708090A0B0C0D0E0F -A D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF -C AuthenticationEncryption
-
-
+---------------------------------------------------   Ctrl Byte
 E6E600// LLC bytes
 E6E700// LLC bytes-resp
 
@@ -97,7 +96,36 @@ DA// Access-Response
 00301D//negotiated conformance block
 
 
+SNRM Public --->
+7E
+A0 07   // type + length
+03      // des/server address (3 -- > 1)
+21      // client address (21-->16 public)
+93      // SNRM tag
+0F 01   // checkSeq
+7E
 
+UA public ---> Green(p120)
+7E
+A0 23  // type + length
+21     // client address
+00 02  //
+2E 53  // Server  --->  19369 - 0x4000 = 2908 - 1000 --> 1908 last 4 digits of afzar
+73     // UA Ctrl tag
+12 26
+
+81 80 14
+05 02 max transmit field lenght + par length
+01 00 max transmit value --> 256
+06 02 max receive field lenght + par length
+01 00 max receive value --> 256
+07 04 transmit window size + par length
+00 00 00 01
+08 04 receive window size + par length
+00 00 00 01
+
+69 6D
+7E
 
 
 AARQ GMac+Policy3 -->
@@ -143,7 +171,7 @@ BE 23 04 21
 
 
 
-GATEWAY --------------------------
+-----------------------------------------   GATEWAY
 
 # 7E
 # 00 23 length
