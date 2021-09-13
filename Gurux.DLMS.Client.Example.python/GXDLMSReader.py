@@ -177,7 +177,7 @@ class GXDLMSReader:
                         # self.gwWrapper SHOULD BE ADDED HERE
                         # self.media.send(data, None)
                     rd.set(p.reply)
-                    print(type(rd))  # to print anything that gw send
+                    print(rd._data)  # to print anything that gw send
                     print(str(rd))  # to print anything that gw send
                     p.reply = None
             except Exception as e:
