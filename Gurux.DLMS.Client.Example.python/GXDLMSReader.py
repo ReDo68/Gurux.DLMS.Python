@@ -176,8 +176,9 @@ class GXDLMSReader:
                         # print("Data send failed.  Try to resend " + str(pos) + "/3")
                         # self.gwWrapper SHOULD BE ADDED HERE
                         # self.media.send(data, None)
+                    rd._data = rd._data[1:]
                     rd.set(p.reply)
-                    print(rd._data[1:])  # to print anything that gw send
+                    # print(rd)  # to print anything that gw send
                     print(str(rd))  # to print anything that gw send
                     p.reply = None
             except Exception as e:
