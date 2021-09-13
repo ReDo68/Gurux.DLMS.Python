@@ -159,7 +159,6 @@ class GXDLMSReader:
                     self.media.send(data)
             pos = 0
             try:
-                rd._data = rd._data[1:]
                 while not self.client.getData(rd, reply, notify):
                     if notify.data.size != 0:
                         if not notify.isMoreData():
@@ -178,9 +177,9 @@ class GXDLMSReader:
                         # print("Data send failed.  Try to resend " + str(pos) + "/3")
                         # self.gwWrapper SHOULD BE ADDED HERE
                         # self.media.send(data, None)
-                    # rd._data = rd._data[1:]
+                    rd._data = rd._data[1:]
                     rd.set(p.reply)
-                    # print(rd)  # to print anything that gw send
+                    print(rd._data)  # to print anything that gw send
                     print(str(rd))  # to print anything that gw send
                     p.reply = None
             except Exception as e:
