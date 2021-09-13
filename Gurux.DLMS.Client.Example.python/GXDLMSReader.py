@@ -53,7 +53,7 @@ class GXDLMSReader:
         #pylint: disable=too-many-arguments
         self.gwWrapper = gwWrapper
         self.replyBuff = bytearray(8 + 1024)
-        self.waitTime = 20000
+        self.waitTime = 15000
         self.logFile = open("logFile.txt", "w")
         self.trace = trace
         self.media = media
@@ -170,15 +170,15 @@ class GXDLMSReader:
                     if not p.eop:
                         p.count = self.client.getFrameSize(rd)
                     while not self.media.receive(p):
-                        pos += 1
-                        if pos == 3:
-                            raise TimeoutException("Failed to receive reply from the device in given time. pos3")
-                        print("Data send failed.  Try to resend " + str(pos) + "/3")
+                        # pos += 1
+                        # if pos == 3:
+                        raise TimeoutException("Failed to receive reply from the device in given time. pos3")
+                        # print("Data send failed.  Try to resend " + str(pos) + "/3")
                         # self.gwWrapper SHOULD BE ADDED HERE
                         # self.media.send(data, None)
                     rd.set(p.reply)
                     print(str(rd))  # to print anything that gw send
-                    p.reply = None
+                    # p.reply = None
             except Exception as e:
                 self.writeTrace("RXgw: " + self.now() + "\t" + str(rd), TraceLevel.ERROR)  # R374-change it to gw
                 raise e
