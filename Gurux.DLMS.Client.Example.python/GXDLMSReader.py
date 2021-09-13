@@ -159,7 +159,7 @@ class GXDLMSReader:
                     self.media.send(data)
             pos = 0
             try:
-                while not self.client.getData(rd[2:], reply, notify):
+                while not self.client.getData(rd, reply, notify):
                     if notify.data.size != 0:
                         if not notify.isMoreData():
                             t = GXDLMSTranslator()
@@ -177,8 +177,8 @@ class GXDLMSReader:
                         # self.gwWrapper SHOULD BE ADDED HERE
                         # self.media.send(data, None)
                     rd.set(p.reply)
+                    print(type(rd))  # to print anything that gw send
                     print(str(rd))  # to print anything that gw send
-                    print(str(rd[2:]))  # to print anything that gw send
                     p.reply = None
             except Exception as e:
                 self.writeTrace("RXgw: " + self.now() + "\t" + str(rd), TraceLevel.ERROR)  # R374-change it to gw
