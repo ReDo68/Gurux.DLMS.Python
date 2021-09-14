@@ -78,7 +78,7 @@ class sampleclient():
             ret = settings.getParameters(args)
             if ret != 0:
                 return
-            print(ret)
+            print(settings.outputFile.split(".")[0])
             # //////////////////////////////////////
             #  Initialize connection settings.
             if not isinstance(settings.media, (GXSerial, GXNet)):
@@ -120,9 +120,10 @@ class sampleclient():
         finally:
             if reader:
                 try:
-                    # if
-                    # reader.close()
-                    reader.disconnect()
+                    if settings.outputFile.split(".")[0] == 'afzar':
+                        reader.disconnect()
+                    else:
+                        reader.close()
                 except Exception:
                     traceback.print_exc()
             print("Ended. Press any key to continue.")
