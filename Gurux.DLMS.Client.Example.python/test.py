@@ -9,7 +9,7 @@ class ReadV4:
         self.server_addr = str(16384+physical)    #'19369'  # 0x4000+physical(1000+sn_last_4digits)
 
         self.client_addr = '1'
-        self.ip = 'localhost'  #'193.105.234.168'  'localhost'
+        self.ip = '193.105.234.168'  #'193.105.234.168'  'localhost'
         self.port = '7370'
         self.usb = "/dev/ttyUSB0"
 
@@ -46,7 +46,7 @@ class ReadV4:
         return arg
 
 # print(read_v4('tfc').read())
-sampleclient.main(ReadV4('afzar', 2985).read())  #1110
+sampleclient.main(ReadV4('afzar', 1110).read())  #1110
 
 # arg_reza = ['Gurux.DLMS.Client.Example.python/main.py', '-S', '/dev/ttyUSB0:19200:8Even1', '-g', '1.0.1.8.0.255:2',
 #             '-c', '1', '-s', '19369', '-a', 'HighGMac', '-t', 'Verbose', '-T', '4D4D4D0000000001', '-v',
