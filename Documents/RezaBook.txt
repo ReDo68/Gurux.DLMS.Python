@@ -240,3 +240,15 @@ prop_baud                5 --> 9600
 response_time            1 --> 200ms
 inter_octet_time_out     25
 inactivity_time_out      180
+
+
+
+------------------------------------------ Speed up modifications
+Server:
+1- Store IC and use it
+2- get with list
+3- retry
+
+Hardware:
+1- 4G
+2- wifi
