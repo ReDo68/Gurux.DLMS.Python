@@ -9,7 +9,7 @@ class ReadV4:
         self.server_addr = str(16384+physical)    #'19369'  # 0x4000+physical(1000+sn_last_4digits)
 
         self.client_addr = '1'
-        self.ip = '193.105.234.168'  #'193.105.234.168'  'localhost'
+        self.ip = 'localhost'  #'193.105.234.168'  'localhost'
         self.port = '7370'
         self.usb = "/dev/ttyUSB0"
 
