@@ -119,7 +119,6 @@ class GXDLMSReader:
     def readDLMSPacket(self, data, reply=None):
         if not reply:
             reply = GXReplyData()
-            print("reply is:", reply)
         if isinstance(data, bytearray):
             self.readDLMSPacket2(data, reply)
         elif data:
@@ -131,7 +130,6 @@ class GXDLMSReader:
         if not data:
             return
         notify = GXReplyData()
-        print("notify is:", notify)
         reply.error = 0
         eop = 0x7E
         #In network connection terminator is not used.
@@ -180,7 +178,7 @@ class GXDLMSReader:
                     # rd._data = rd._data[1:]
                     rd.set(p.reply)
                     print("rd: ", GXByteBuffer.hex(rd._data))  # to print anything that gw send
-                    print("p.reply: ", p.reply)
+                    # print("p.reply: ", p.reply)
                     # print(str(rd))  # to print anything that gw send
                     p.reply = None
             except Exception as e:

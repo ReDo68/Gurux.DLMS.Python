@@ -14,8 +14,9 @@ class ReadV4:
         self.usb = "/dev/ttyUSB0"
 
     def read(self):
-        arg = ['Gurux.DLMS.Client.Example.python/main.py', '-a', 'HighGMac', '-t', 'Verbose',
+        arg = ['Gurux.DLMS.Client.Example.python/main.py', '-c', self.client_addr, '-s', self.server_addr, '-a', 'HighGMac', '-t', 'Verbose',
                '-T', '4D4D4D0000000001', '-v', '0.0.43.1.0.255', '-C', 'AuthenticationEncryption']
+
 
         if self.device == 'gw':
             self.usb = self.usb+":19200:8Even1"
@@ -45,7 +46,7 @@ class ReadV4:
         return arg
 
 # print(read_v4('tfc').read())
-sampleclient.main(ReadV4('afzar', 2985).read()) #1110
+sampleclient.main(ReadV4('afzar', 2985).read())  #1110
 
 # arg_reza = ['Gurux.DLMS.Client.Example.python/main.py', '-S', '/dev/ttyUSB0:19200:8Even1', '-g', '1.0.1.8.0.255:2',
 #             '-c', '1', '-s', '19369', '-a', 'HighGMac', '-t', 'Verbose', '-T', '4D4D4D0000000001', '-v',
@@ -91,3 +92,5 @@ sampleclient.main(ReadV4('afzar', 2985).read()) #1110
 # arg_reza = ['Gurux.DLMS.Client.Example.python/main.py', '-S', '/dev/ttyUSB0:9600:8None1' , '-g', '1.0.15.8.0.255:2;1.0.15.8.0.255:3',
 #             '-c', '1', '-s', '19369', '-a', 'HighGMac', '-t', 'Verbose', '-T', '4D4D4D0000000001', '-v',
 #             '0.0.43.1.0.255', '-C', 'AuthenticationEncryption', '-o', 'afzar.xml']
+
+# sampleclient.main(arg_reza)
