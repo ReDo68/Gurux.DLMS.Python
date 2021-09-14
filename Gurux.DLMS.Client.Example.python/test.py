@@ -4,8 +4,8 @@ class ReadV4:
     def __init__(self, meter_type, physical):
         self.meter_type = meter_type  # 'tfc' 'afzar'
         self.OBIS = '1.0.1.8.0.255:1;1.0.1.8.0.255:2;1.0.1.8.0.255:3'
-        self.device = 'meter'  # 'gw' 'meter'
-        self.media = 'Serial'  # 'TCP' 'Serial'
+        self.device = 'gw'  # 'gw' 'meter'
+        self.media = 'TCP'  # 'TCP' 'Serial'
         self.server_addr = str(16384+physical)    #'19369'  # 0x4000+physical(1000+sn_last_4digits)
 
         self.client_addr = '1'
@@ -46,7 +46,7 @@ class ReadV4:
         return arg
 
 # print(read_v4('tfc').read())
-sampleclient.main(ReadV4('afzar', 2985).read())  # 1110 2985
+sampleclient.main(ReadV4('afzar', 1110).read())  #1110
 
 # arg_reza = ['Gurux.DLMS.Client.Example.python/main.py', '-S', '/dev/ttyUSB0:19200:8Even1', '-g', '1.0.1.8.0.255:2',
 #             '-c', '1', '-s', '19369', '-a', 'HighGMac', '-t', 'Verbose', '-T', '4D4D4D0000000001', '-v',
