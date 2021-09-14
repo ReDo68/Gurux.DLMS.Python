@@ -287,40 +287,40 @@ class GXDLMSReader:
                 time.sleep(1000)
 
     def updateFrameCounter(self):
-        self.client.ciphering.invocationCounter = 540
-        # if self.invocationCounter and self.client.ciphering is not None and self.client.ciphering.security != Security.NONE:
-        #     self.initializeOpticalHead()
-        #     self.client.proposedConformance |= Conformance.GENERAL_PROTECTION
-        #     add = self.client.clientAddress
-        #     auth = self.client.authentication
-        #     security = self.client.ciphering.security
-        #     challenge = self.client.ctoSChallenge
-        #     try:
-        #         self.client.clientAddress = 16
-        #         self.client.authentication = Authentication.NONE
-        #         self.client.ciphering.security = Security.NONE
-        #         reply = GXReplyData()
-        #         data = self.client.snrmRequest()
-        #         if data:
-        #             self.readDLMSPacket(data, reply)
-        #             self.client.parseUAResponse(reply.data)
-        #             size = self.client.limits.maxInfoTX + 40
-        #             self.replyBuff = bytearray(size)
-        #         reply.clear()
-        #         self.readDataBlock(self.client.aarqRequest(), reply)
-        #         self.client.parseAareResponse(reply.data)
-        #         reply.clear()
-        #         d = GXDLMSData(self.invocationCounter)
-        #         self.read(d, 2)
-        #         self.client.ciphering.invocationCounter = 1 + d.value
-        #         print("Invocation counter: " + str(self.client.ciphering.invocationCounter))
-        #         self.disconnect()
-        #         #except Exception as ex:
-        #     finally:
-        #         self.client.clientAddress = add
-        #         self.client.authentication = auth
-        #         self.client.ciphering.security = security
-        #         self.client.ctoSChallenge = challenge
+        # self.client.ciphering.invocationCounter = 100009977  # to eliminate reading IC in public client by storing the IC in DB
+        if self.invocationCounter and self.client.ciphering is not None and self.client.ciphering.security != Security.NONE:
+            self.initializeOpticalHead()
+            self.client.proposedConformance |= Conformance.GENERAL_PROTECTION
+            add = self.client.clientAddress
+            auth = self.client.authentication
+            security = self.client.ciphering.security
+            challenge = self.client.ctoSChallenge
+            try:
+                self.client.clientAddress = 16
+                self.client.authentication = Authentication.NONE
+                self.client.ciphering.security = Security.NONE
+                reply = GXReplyData()
+                data = self.client.snrmRequest()
+                if data:
+                    self.readDLMSPacket(data, reply)
+                    self.client.parseUAResponse(reply.data)
+                    size = self.client.limits.maxInfoTX + 40
+                    self.replyBuff = bytearray(size)
+                reply.clear()
+                self.readDataBlock(self.client.aarqRequest(), reply)
+                self.client.parseAareResponse(reply.data)
+                reply.clear()
+                d = GXDLMSData(self.invocationCounter)
+                self.read(d, 2)
+                self.client.ciphering.invocationCounter = 1 + d.value
+                print("Invocation counter: " + str(self.client.ciphering.invocationCounter))
+                self.disconnect()
+                #except Exception as ex:
+            finally:
+                self.client.clientAddress = add
+                self.client.authentication = auth
+                self.client.ciphering.security = security
+                self.client.ctoSChallenge = challenge
 
     def initializeConnection(self):
         print("Standard: " + str(self.client.standard))
