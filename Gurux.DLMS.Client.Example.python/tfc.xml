@@ -865,10 +865,10 @@
   <GXDLMSIecLocalPortSetup>
     <LN>0.0.20.0.0.255</LN>
     <Description>Ch. 0 IEC optical port setup</Description>
-    <DefaultMode>0</DefaultMode>
+    <DefaultMode>1</DefaultMode>
     <DefaultBaudrate>0</DefaultBaudrate>
-    <ProposedBaudrate>0</ProposedBaudrate>
-    <ResponseTime>0</ResponseTime>
+    <ProposedBaudrate>5</ProposedBaudrate>
+    <ResponseTime>1</ResponseTime>
     <DeviceAddress/>
     <Password1/>
     <Password2/>
@@ -914,8 +914,8 @@
     <WindowSizeRx>1</WindowSizeRx>
     <MaximumInfoLengthTx>128</MaximumInfoLengthTx>
     <MaximumInfoLengthRx>128</MaximumInfoLengthRx>
-    <InterCharachterTimeout>0</InterCharachterTimeout>
-    <InactivityTimeout>120</InactivityTimeout>
+    <InterCharachterTimeout>25</InterCharachterTimeout>
+    <InactivityTimeout>180</InactivityTimeout>
     <DeviceAddress>0</DeviceAddress>
   </GXDLMSIecHdlcSetup>
   <GXDLMSIecHdlcSetup>

@@ -74,10 +74,11 @@ class sampleclient():
         try:
             # //////////////////////////////////////
             #  Handle command line parameters.
-            print(args)
+            # print(args)
             ret = settings.getParameters(args)
             if ret != 0:
                 return
+            print(ret)
             # //////////////////////////////////////
             #  Initialize connection settings.
             if not isinstance(settings.media, (GXSerial, GXNet)):
@@ -119,6 +120,7 @@ class sampleclient():
         finally:
             if reader:
                 try:
+                    # if
                     # reader.close()
                     reader.disconnect()
                 except Exception:

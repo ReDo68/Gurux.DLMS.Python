@@ -37,7 +37,7 @@ def gwWrap(data):
     # 0: 300, 3: 2400, 4: 4800, 5: 9600, 6: 19200
     initBd = 5
     # In ms
-    waitTime = 1500
+    waitTime = 500
     bitNum = 8
     # 0: None, 1: Odd, 2: Even
     parity = 0

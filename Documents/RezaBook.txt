@@ -216,3 +216,27 @@ BE 23 04 21
 # 7C 65 CRC
 # 7E
 
+
+
+
+
+
+----------------------------------- Meter type diff
+Afzar :
+InactivityTimeout - OBIS:120  - Reality: 10
+ResponseTime - 0 - could be 0 or 1 ---->  20ms - 200ms Blue(190)
+Release is not implemented - just dissconnect
+
+Afzar :
+default_mod              0 --> MODE-E  XXXXXX
+prop_baud                5 --> 9600
+response_time            1 --> 200ms   XXXXXX
+inter_octet_time_out     200           ??????
+inactivity_time_out      60            XXXXXX
+
+TFC :
+default_mod              1 --> HDLC
+prop_baud                5 --> 9600
+response_time            1 --> 200ms
+inter_octet_time_out     25
+inactivity_time_out      180

@@ -147,6 +147,7 @@ class GXDLMSReader:
         rd = GXByteBuffer()
         with self.media.getSynchronous():
             if not reply.isStreaming():
+                # time.sleep(65) # to test meter InactivityTimeout - RezaBook
                 if self.gwWrapper:                     # R374-changed it to gw
                     self.writeTrace("TXgw: " + self.now() + "\t" + GXByteBuffer.hex(gwWrap(data)), TraceLevel.VERBOSE)
                     self.writeTrace("TXm: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)
@@ -182,7 +183,7 @@ class GXDLMSReader:
                     # print(str(rd))  # to print anything that gw send
                     p.reply = None
             except Exception as e:
-                self.writeTrace("RXgw: " + self.now() + "\t" + str(rd), TraceLevel.ERROR)  # R374-change it to gw
+                self.writeTrace("RX-ER: " + self.now() + "\t" + str(rd), TraceLevel.ERROR)  # R374-change it to gw
                 gw_err_table = {'30': 'no_response', '31': 'id_syntax', '32': 'id_parity', '33': 'ro_timeout',
                                 '34': 'ro_syntax', '35': 'ro_parity', '36': 'bcc', '37': 'internal',
                                 '38': 'invalid_request', '41': 'ro_overflow', '42': 'ro_crc_mbus', '43': 'id_crc_mbus',

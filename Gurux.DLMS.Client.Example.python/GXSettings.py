@@ -136,7 +136,7 @@ class GXSettings:
 
 
     def getParameters(self, args):
-        parameters = GXSettings.__getParameters(args, "h:p:c:s:r:iIt:a:p:wP:g:S:n:C:v:o:T:A:B:D:d:l:G:")
+        parameters = GXSettings.__getParameters(args, "h:p:c:s:r:i:It:a:p:wP:g:S:n:C:v:o:T:A:B:D:d:l:G:")
         defaultBaudRate = True
         for it in parameters:
             if it.tag == 'w':
