@@ -287,7 +287,7 @@ class GXDLMSReader:
                 time.sleep(1000)
 
     def updateFrameCounter(self):
-        self.client.ciphering.invocationCounter = 500
+        self.client.ciphering.invocationCounter = 520
         # if self.invocationCounter and self.client.ciphering is not None and self.client.ciphering.security != Security.NONE:
         #     self.initializeOpticalHead()
         #     self.client.proposedConformance |= Conformance.GENERAL_PROTECTION
