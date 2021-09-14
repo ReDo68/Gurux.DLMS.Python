@@ -227,7 +227,7 @@ InactivityTimeout - OBIS:120  - Reality: 10
 ResponseTime - 0 - could be 0 or 1 ---->  20ms - 200ms Blue(190)
 Release is not implemented - just dissconnect
 
-Afzar :
+Afzar : pice of shit
 default_mod              0 --> MODE-E  XXXXXX
 prop_baud                5 --> 9600
 response_time            1 --> 200ms   XXXXXX
