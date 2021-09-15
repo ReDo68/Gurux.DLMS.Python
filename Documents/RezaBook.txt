@@ -182,7 +182,7 @@ BE 23 04 21
 # 00 18 data length
 # 32 F7 Inok id
 # 01 port num
-# 00 00 reserved
+# 00 00 Server Invoke
 # 05 baudrate
 # 02 BC wait time
 # 08 bit num
@@ -190,7 +190,7 @@ BE 23 04 21
 # 01 F4 rcv length
 
 
-# 7E A0 0A 00 02 2E 53 21 93 D1 D0 7E  date
+# 7E A0 0A 00 02 2E 53 21 93 D1 D0 7E  data
 
 # 00 00 00 00  z-fill
 #

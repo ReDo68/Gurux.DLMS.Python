@@ -49,9 +49,12 @@ from gwTransFunc import calCrc, gwWrap, gwUnwrap
 
 class GXDLMSReader:
     #pylint: disable=too-many-public-methods, too-many-instance-attributes
-    def __init__(self, client, media, trace, invocationCounter, useOpticalHead, gwWrapper):
+    def __init__(self, client, media, trace, invocationCounter,
+                 useOpticalHead, gwWrapper, port_num, server_invoke):
         #pylint: disable=too-many-arguments
         self.gwWrapper = gwWrapper
+        self.server_invoke = server_invoke
+        self.port_num = port_num
         self.replyBuff = bytearray(8 + 1024)
         self.waitTime = 30000   # Timeout
         self.logFile = open("logFile.txt", "w")
@@ -149,9 +152,9 @@ class GXDLMSReader:
             if not reply.isStreaming():
                 # time.sleep(65) # to test meter InactivityTimeout - RezaBook
                 if self.gwWrapper:                     # R374-changed it to gw
-                    self.writeTrace("TXgw: " + self.now() + "\t" + GXByteBuffer.hex(gwWrap(data)), TraceLevel.VERBOSE)
+                    self.writeTrace("TXgw: " + self.now() + "\t" + GXByteBuffer.hex(gwWrap(data, self.port_num, self.server_invoke)), TraceLevel.VERBOSE)
                     self.writeTrace("TXm: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)
-                    self.media.send(gwWrap(data))
+                    self.media.send(gwWrap(data, self.port_num, self.server_invoke))
                 else:
                     # print(gwWrap(data))
                     self.writeTrace("TXm: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)
@@ -178,7 +181,7 @@ class GXDLMSReader:
                         # self.media.send(data, None)
                     # rd._data = rd._data[1:]
                     rd.set(p.reply)
-                    print("rd: ", GXByteBuffer.hex(rd._data))  # to print anything that gw send
+                    # print("rd: ", GXByteBuffer.hex(rd._data))  # to print anything that gw send
                     # print("p.reply: ", p.reply)
                     # print(str(rd))  # to print anything that gw send
                     p.reply = None

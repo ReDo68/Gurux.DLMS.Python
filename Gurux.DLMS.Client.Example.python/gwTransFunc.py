@@ -29,11 +29,11 @@ def calCrc(inStr, inLen):
     crc ^= 0xFFFF
     return bytes([int(crc / 256) & 0xFF, crc & 0xFF])
 
-def gwWrap(data):
+def gwWrap(data, port_num, server_invoke):
     dataL = len(data) + 12
     totLen = math.ceil((dataL + 4) / 16) * 16
     totLen += 3
-    port = 1
+    port = int(port_num)
     # 0: 300, 3: 2400, 4: 4800, 5: 9600, 6: 19200
     initBd = 5
     # In ms
@@ -41,14 +41,14 @@ def gwWrap(data):
     bitNum = 8
     # 0: None, 1: Odd, 2: Even
     parity = 0
-    recLen = 200
+    recLen = 1000
     sendStr = b'\x7E'
     sendStr += bytes([int(totLen / 256), totLen % 256])
     sendStr += b'\x00\x05'
     sendStr += bytes([int(dataL / 256), dataL % 256])
     sendStr += b'\x32\xF7'
     sendStr += bytes([port])
-    sendStr += bytes(2)
+    sendStr += bytes([int(int(server_invoke) / 256), int(server_invoke) % 256])
     sendStr += bytes([initBd])
     sendStr += bytes([int(waitTime / 256), waitTime % 256])
     sendStr += bytes([bitNum, parity])
@@ -59,10 +59,16 @@ def gwWrap(data):
     sendStr += b'\x7E'
     return sendStr
 
-
 def gwUnwrap(str):
     if len(str) < 22:
         return None
     length = str[5]*256 + str[6] - 12
     return str[19:19+length]
     # return codecs.getencoder('hex')(str[19:19+length])[0]
+
+
+# def gw_enc():
+    # encryptor = AES.new(b'6841654163243084', AES.MODE_ECB)
+    # rcvData = rcvData[:3] + encryptor.decrypt(rcvData[3:int((len(rcvData) - 6) / 16) * 16 + 3]) + rcvData[int((len(rcvData) - 6) / 16) * 16 + 3:]
+    # encryptor = AES.new(b'6841654163243084', AES.MODE_ECB)
+    # rcvData = encryptor.decrypt(rcvData)
