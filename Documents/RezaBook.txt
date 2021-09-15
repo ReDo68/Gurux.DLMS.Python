@@ -75,6 +75,9 @@ C5 01// SET.response normal, success
 C3 01// Action.request normal
 C7 01// Action.response normal
 
+C8 1E// GET.request.normal with encryption   C 1000
+CC 82// GET.response.normal with encryption  C 1100
+
 CB 31// ????   f(StoC) - Action.request ciphered
 CF 2A// ????   f(CtoS) - Action.response ciphered
 
