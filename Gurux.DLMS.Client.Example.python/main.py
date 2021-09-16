@@ -113,7 +113,20 @@ class sampleclient():
                     val = reader.read(obj, v)
                     print("value is: ", val)
                     reader.showValue(v, val)
-                    readout_str += b'%b(%b)\r\n' % (k.encode(), str(val).encode())
+                    try:
+                        val = bytes(val)
+                    except:
+                        val = str(val).encode()
+
+                    # print(val)
+                    readout_str += b'%b(%b)\r\n' % (k.encode(), val)
+                    # if isinstance(val, (bytes, bytearray)):
+                    #     readout_str += b'%b(%b)\r\n' % (k.encode(), str(val).encode())
+                    # elif isinstance(val, list):
+                    #     readout_str += b'%b(%b)\r\n' % (k.encode(), bytearray.fromhex(str(val)))
+                    # else:
+                    #     print("else")
+
                 readout_str += b'IDMSG(%b)\r\n' % (settings.outputFile.split(".")[0]).encode()
                 print(readout_str)
                 if settings.outputFile:
@@ -143,7 +156,7 @@ class sampleclient():
 class ReadV4:
     def __init__(self, meter_type, physical, port_num=1 , server_invoke=0):
         self.meter_type = meter_type  # 'tfc' 'eaa'
-        self.OBIS = '0.0.96.1.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
+        self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
         # self.OBIS = '0.0.20.0.0.255:2;0.0.20.0.0.255:3;0.0.20.0.0.255:4;0.0.20.0.0.255:5;' \
         #             '0.2.22.0.0.255:7;0.2.22.0.0.255:8'   Timming
         self.device = 'gw'  # 'gw' 'meter'

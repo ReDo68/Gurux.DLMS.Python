@@ -221,7 +221,7 @@
   <GXDLMSData>
     <LN>0.0.96.1.0.255</LN>
     <Description>Ch. 0 Device ID 1, manufacturing number</Description>
-    <Value/>
+    <Value Type="9">30 32 34 38 31 39 38 35</Value>
   </GXDLMSData>
   <GXDLMSData>
     <LN>0.0.96.1.3.255</LN>
@@ -443,7 +443,7 @@
   <GXDLMSData>
     <LN>1.0.0.0.0.255</LN>
     <Description>Ch. 0 Electricity ID  #1</Description>
-    <Value/>
+    <Value Type="9">31 31 30 37 30 30 30 32 34 38 31 39 38 35</Value>
   </GXDLMSData>
   <GXDLMSData>
     <LN>1.0.0.2.0.255</LN>
