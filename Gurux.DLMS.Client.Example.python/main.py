@@ -143,7 +143,7 @@ class sampleclient():
 class ReadV4:
     def __init__(self, meter_type, physical, port_num=1 , server_invoke=0):
         self.meter_type = meter_type  # 'tfc' 'eaa'
-        self.OBIS = '1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
+        self.OBIS = '0.0.96.1.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
         # self.OBIS = '0.0.20.0.0.255:2;0.0.20.0.0.255:3;0.0.20.0.0.255:4;0.0.20.0.0.255:5;' \
         #             '0.2.22.0.0.255:7;0.2.22.0.0.255:8'   Timming
         self.device = 'gw'  # 'gw' 'meter'
