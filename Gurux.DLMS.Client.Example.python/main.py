@@ -179,6 +179,8 @@ class ReadV4:
 
         return arg
 
+def callreadv4(company, physical, port, serverinvoke):
+    sampleclient.main(ReadV4(company, physical, port, serverinvoke).read())
 # print(read_v4('tfc').read())
 # sampleclient.main(ReadV4('tfc', 2985, 1, 0).read())  #1110
 
