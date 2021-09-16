@@ -113,9 +113,9 @@ class sampleclient():
                     val = reader.read(obj, v)
                     print("value is: ", val)
                     reader.showValue(v, val)
-                    try:
+                    if str(val).find('bytearray') != -1:
                         val = bytes(val)
-                    except:
+                    else:
                         val = str(val).encode()
 
                     # print(val)
