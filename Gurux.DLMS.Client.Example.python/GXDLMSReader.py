@@ -107,7 +107,7 @@ class GXDLMSReader:
                 #  All meters don't support release.
             reply.clear()
             self.readDLMSPacket(self.client.disconnectRequest(), reply)
-            self.media.close()
+            # self.media.close()
 
     @classmethod
     def now(cls):
