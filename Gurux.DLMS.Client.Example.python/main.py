@@ -113,19 +113,14 @@ class sampleclient():
                     val = reader.read(obj, v)
                     print("value is: ", val)
                     reader.showValue(v, val)
-                    if str(str(val).encode()).find('bytearray') != -1:
+                    # print(b'%b' % str(val).encode())
+                    try:
+                        val = val._data
                         val = bytes(val)
-                    else:
+                    except:
                         val = str(val).encode()
 
-                    # print(val)
                     readout_str += b'%b(%b)\r\n' % (k.encode(), val)
-                    # if isinstance(val, (bytes, bytearray)):
-                    #     readout_str += b'%b(%b)\r\n' % (k.encode(), str(val).encode())
-                    # elif isinstance(val, list):
-                    #     readout_str += b'%b(%b)\r\n' % (k.encode(), bytearray.fromhex(str(val)))
-                    # else:
-                    #     print("else")
 
                 readout_str += b'IDMSG(%b)\r\n' % (settings.outputFile.split(".")[0]).encode()
                 print(readout_str)
