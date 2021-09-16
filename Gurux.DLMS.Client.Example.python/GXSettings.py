@@ -134,7 +134,7 @@ class GXSettings:
                         c.missing = True
                     c.value = args[1 + index]
         for l in list_:
-            print(l.tag, l.value)
+            print(l.tag, ' : ', l.value)
         return list_
 
 

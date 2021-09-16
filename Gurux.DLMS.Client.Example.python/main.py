@@ -47,6 +47,8 @@ import locale
 from gurux_dlms.GXDateTime import GXDateTime
 from gurux_dlms.internal._GXCommon import _GXCommon
 from gurux_dlms import GXDLMSException, GXDLMSExceptionResponse, GXDLMSConfirmedServiceError
+from gwTransFunc import calCrc, gwWrap, gwUnwrap
+
 
 try:
     import pkg_resources
@@ -68,17 +70,19 @@ class sampleclient():
             #It's OK if this fails.
             print("pkg_resources not found")
 
+
+        readout_str = b'READOUT\r\n'
         # args: the command line arguments
         reader = None
         settings = GXSettings()
         try:
             # //////////////////////////////////////
             #  Handle command line parameters.
-            print(args)
+            # print(args)
             ret = settings.getParameters(args)
             if ret != 0:
                 return
-            print(settings.outputFile.split(".")[0])
+            # print(settings.outputFile.split(".")[0])
             # //////////////////////////////////////
             #  Initialize connection settings.
             if not isinstance(settings.media, (GXSerial, GXNet)):
@@ -109,6 +113,9 @@ class sampleclient():
                     val = reader.read(obj, v)
                     print("value is: ", val)
                     reader.showValue(v, val)
+                    readout_str += b'%b(%b)\r\n' % (k.encode(), str(val).encode())
+                readout_str += b'IDMSG(%b)\r\n' % (settings.outputFile.split(".")[0]).encode()
+                print(readout_str)
                 if settings.outputFile:
                     settings.client.objects.save(settings.outputFile)
             else:
@@ -126,6 +133,9 @@ class sampleclient():
                         reader.disconnect()
                     else:
                         reader.close()
+
+                    settings.media.send(gwWrap(readout_str, 0, 0))
+                    settings.media.close()
                 except Exception:
                     traceback.print_exc()
             print("Ended. Press any key to continue.")
@@ -133,7 +143,7 @@ class sampleclient():
 class ReadV4:
     def __init__(self, meter_type, physical, port_num=1 , server_invoke=0):
         self.meter_type = meter_type  # 'tfc' 'eaa'
-        self.OBIS = '1.0.1.8.0.255:1;1.0.1.8.0.255:2;1.0.1.8.0.255:3'
+        self.OBIS = '1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
         # self.OBIS = '0.0.20.0.0.255:2;0.0.20.0.0.255:3;0.0.20.0.0.255:4;0.0.20.0.0.255:5;' \
         #             '0.2.22.0.0.255:7;0.2.22.0.0.255:8'   Timming
         self.device = 'gw'  # 'gw' 'meter'
@@ -179,6 +189,8 @@ class ReadV4:
 
         return arg
 
+def callreadv4(company, physical, port, serverinvoke):
+    sampleclient.main(ReadV4(company, physical, port, serverinvoke).read())
 # print(read_v4('tfc').read())
 # sampleclient.main(ReadV4('tfc', 2985, 1, 0).read())  #1110
 

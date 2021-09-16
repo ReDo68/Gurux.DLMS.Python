@@ -481,21 +481,21 @@
     <Description>Ch. 0 Sum Li Active power+ (QI+QIV) Time integral 1 Rate 1 (0 is total)</Description>
     <Unit>0</Unit>
     <Scaler>1.0</Scaler>
-    <Value/>
+    <Value Type="6">0</Value>
   </GXDLMSRegister>
   <GXDLMSRegister>
     <LN>1.0.1.8.2.255</LN>
     <Description>Ch. 0 Sum Li Active power+ (QI+QIV) Time integral 1 Rate 2 (0 is total)</Description>
     <Unit>0</Unit>
     <Scaler>1.0</Scaler>
-    <Value/>
+    <Value Type="6">1131</Value>
   </GXDLMSRegister>
   <GXDLMSRegister>
     <LN>1.0.1.8.3.255</LN>
     <Description>Ch. 0 Sum Li Active power+ (QI+QIV) Time integral 1 Rate 3 (0 is total)</Description>
     <Unit>0</Unit>
     <Scaler>1.0</Scaler>
-    <Value/>
+    <Value Type="6">0</Value>
   </GXDLMSRegister>
   <GXDLMSRegister>
     <LN>1.0.1.8.4.255</LN>

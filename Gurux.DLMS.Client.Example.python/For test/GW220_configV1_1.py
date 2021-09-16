@@ -19,7 +19,7 @@ class preGui:
         self.passVar = StringVar()
         self.passVar.set(' admintap')
         self.ekeyVar = StringVar()
-        self.ekeyVar.set(' 1234567812345678')
+        self.ekeyVar.set(' 6841654163243084')
         self.ekeyEnVar = IntVar()
         self.ekeyEnVar.set(1)
 

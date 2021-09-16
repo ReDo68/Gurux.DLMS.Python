@@ -180,7 +180,7 @@ BE 23 04 21
 # 00 23 length
 # 00 05 format transparent
 # 00 18 data length
-# 32 F7 Inok id
+# 04 dd Inok id
 # 01 port num
 # 00 00 Server Invoke
 # 05 baudrate
@@ -208,7 +208,7 @@ BE 23 04 21
 # 00 43 lenght
 # 00 04 transparent resp = 06
 # 00 2D data lenght
-# 32 F7 invokid
+# 04 dd invokid
 # 01 port num
 # 00
 # FF FF rcv time
@@ -255,3 +255,10 @@ Server:
 Hardware:
 1- 4G
 2- wifi
+
+
+
+
+------------------------------------------ Reference
+
+http://www.gurux.fi/Gurux.DLMS.Client
