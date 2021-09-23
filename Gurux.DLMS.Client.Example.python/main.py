@@ -67,9 +67,8 @@ class sampleclient():
             # print("gurux_net version: " + pkg_resources.get_distribution("gurux_net").version)
             # print("gurux_serial version: " + pkg_resources.get_distribution("gurux_serial").version)
         except Exception:
-            #It's OK if this fails.
+            # It's OK if this fails.
             print("pkg_resources not found")
-
 
         readout_str = b'READOUT\r\n'
         # args: the command line arguments
@@ -90,7 +89,8 @@ class sampleclient():
             # //////////////////////////////////////
             reader = GXDLMSReader(settings.client, settings.media, settings.trace,
                                   settings.invocationCounter, settings.iec,
-                                  settings.gwWrapper, settings.port_num, settings.server_invoke)
+                                  settings.gwWrapper, settings.port_num, settings.server_invoke,
+                                  settings.frame_counter, settings.get_with_list)
             settings.media.open()
             if settings.readObjects:
                 read = False
@@ -105,25 +105,44 @@ class sampleclient():
                         read = False
                 if not read:
                     reader.getAssociationView()
-                for k, v in settings.readObjects:
-                    print("------------>", k, v)
-                    obj = settings.client.objects.findByLN(ObjectType.NONE, k)
-                    if obj is None:
-                         raise Exception("Unknown logical name:" + k)
-                    val = reader.read(obj, v)
-                    print("value is: ", val)
-                    reader.showValue(v, val)
-                    # print(b'%b' % str(val).encode())
-                    try:
-                        val = val._data
-                        val = bytes(val)
-                    except:
-                        val = str(val).encode()
 
-                    readout_str += b'%b(%b)\r\n' % (k.encode(), val)
+                if settings.get_with_list == 100 :
+                    list_arr = []
+                    for k, v in settings.readObjects:
+                        obj = settings.client.objects.findByLN(ObjectType.NONE, k)
+                        if obj is None:
+                            raise Exception("Unknown logical name:" + k)
+                        list_arr += (obj, v)
+
+                    list_arr = [x for x in zip(*[iter(list_arr)] * 2)]
+                    val_list = reader.readList(list_arr)
+                    for i in range(list_arr):
+                        print(list_arr[i], val_list[i])
+                    print(val_list)
+                    # readout_str += b'%b(%b)\r\n' % (k.encode(), val)
+
+                else:
+                    for k, v in settings.readObjects:
+                        print("------------>", k, v)
+                        obj = settings.client.objects.findByLN(ObjectType.NONE, k)
+                        if obj is None:
+                             raise Exception("Unknown logical name:" + k)
+                        val = reader.read(obj, v)
+                        print("value is: ", val)
+                        reader.showValue(v, val)
+                        # print(b'%b' % str(val).encode())
+                        try:
+                            val = val._data
+                            val = bytes(val)
+                        except:
+                            val = str(val).encode()
+
+                        readout_str += b'%b(%b)\r\n' % (k.encode(), val)
+
 
                 readout_str += b'IDMSG(%b)\r\n' % (settings.outputFile.split(".")[0]).encode()
                 print(readout_str)
+
                 if settings.outputFile:
                     settings.client.objects.save(settings.outputFile)
             else:
@@ -146,10 +165,11 @@ class sampleclient():
                     settings.media.close()
                 except Exception:
                     traceback.print_exc()
-            print("Ended. Press any key to continue.")
+            print("Ended!")
 
 class ReadV4:
-    def __init__(self, meter_type, physical, port_num=1 , server_invoke=0):
+    def __init__(self, meter_type, physical, port_num=1 ,
+                 server_invoke=0, frame_counter=0, get_with_list=False):
         self.meter_type = meter_type  # 'tfc' 'eaa'
         self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
         # self.OBIS = '0.0.20.0.0.255:2;0.0.20.0.0.255:3;0.0.20.0.0.255:4;0.0.20.0.0.255:5;' \
@@ -164,11 +184,14 @@ class ReadV4:
         self.usb = "/dev/ttyUSB0"
         self.port_num = str(port_num)
         self.server_invoke = str(server_invoke)
+        self.frame_counter = str(frame_counter)
+        self.get_with_list = 0 if get_with_list is False else 1
 
     def read(self):
         arg = ['Gurux.DLMS.Client.Example.python/main.py', '-c', self.client_addr, '-s', self.server_addr, '-a', 'HighGMac', '-t', 'Verbose',
                '-T', '4D4D4D0000000001', '-v', '0.0.43.1.0.255', '-C', 'AuthenticationEncryption',
-               '-N', self.port_num, '-V', self.server_invoke]
+               '-N', self.port_num, '-V', self.server_invoke,
+               '-F', self.frame_counter, '-L', self.get_with_list]
 
         if self.device == 'gw':
             self.usb = self.usb+":19200:8Even1"
@@ -197,8 +220,8 @@ class ReadV4:
 
         return arg
 
-def callreadv4(company, physical, port, serverinvoke):
-    sampleclient.main(ReadV4(company, physical, port, serverinvoke).read())
+def callreadv4(company, physical, port, serverinvoke, framecounter, getwithlist):
+    sampleclient.main(ReadV4(company, physical, port, serverinvoke, framecounter, getwithlist).read())
 # print(read_v4('tfc').read())
 # sampleclient.main(ReadV4('tfc', 2985, 1, 0).read())  #1110
 

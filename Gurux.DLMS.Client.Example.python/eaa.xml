@@ -114,7 +114,7 @@
       <ContextId>1</ContextId>
     </ApplicationContextName>
     <XDLMSContextInfo>
-      <Conformance>0</Conformance>
+      <Conformance>1</Conformance>
       <MaxReceivePduSize>0</MaxReceivePduSize>
       <MaxSendPduSize>0</MaxSendPduSize>
       <DlmsVersionNumber>0</DlmsVersionNumber>
@@ -150,7 +150,7 @@
       <ContextId>1</ContextId>
     </ApplicationContextName>
     <XDLMSContextInfo>
-      <Conformance>0</Conformance>
+      <Conformance>1</Conformance>
       <MaxReceivePduSize>0</MaxReceivePduSize>
       <MaxSendPduSize>0</MaxSendPduSize>
       <DlmsVersionNumber>0</DlmsVersionNumber>
@@ -443,7 +443,7 @@
   <GXDLMSData>
     <LN>1.0.0.0.0.255</LN>
     <Description>Ch. 0 Electricity ID  #1</Description>
-    <Value Type="9">31 31 30 37 30 30 30 32 34 38 31 39 38 35</Value>
+    <Value Type="9">31 38 30 37 39 38 32 31 30 30 30 30 31 37</Value>
   </GXDLMSData>
   <GXDLMSData>
     <LN>1.0.0.2.0.255</LN>
@@ -474,21 +474,21 @@
     <Description>Ch. 0 Sum Li Active power+ (QI+QIV) Time integral 1 Rate 0 (0 is total)</Description>
     <Unit>30</Unit>
     <Scaler>1.0</Scaler>
-    <Value Type="6">1131</Value>
+    <Value Type="6">55</Value>
   </GXDLMSRegister>
   <GXDLMSRegister>
     <LN>1.0.1.8.1.255</LN>
     <Description>Ch. 0 Sum Li Active power+ (QI+QIV) Time integral 1 Rate 1 (0 is total)</Description>
     <Unit>0</Unit>
     <Scaler>1.0</Scaler>
-    <Value Type="6">0</Value>
+    <Value Type="6">55</Value>
   </GXDLMSRegister>
   <GXDLMSRegister>
     <LN>1.0.1.8.2.255</LN>
     <Description>Ch. 0 Sum Li Active power+ (QI+QIV) Time integral 1 Rate 2 (0 is total)</Description>
     <Unit>0</Unit>
     <Scaler>1.0</Scaler>
-    <Value Type="6">1131</Value>
+    <Value Type="6">0</Value>
   </GXDLMSRegister>
   <GXDLMSRegister>
     <LN>1.0.1.8.3.255</LN>

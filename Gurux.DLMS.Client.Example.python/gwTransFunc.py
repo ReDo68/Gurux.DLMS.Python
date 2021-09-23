@@ -1,4 +1,5 @@
 import math, codecs
+from Crypto.Cipher import AES
 
 def calCrc(inStr, inLen):
     dnpCrcTable = [
@@ -68,7 +69,20 @@ def gwUnwrap(str):
 
 
 # def gw_enc():
-    # encryptor = AES.new(b'6841654163243084', AES.MODE_ECB)
-    # rcvData = rcvData[:3] + encryptor.decrypt(rcvData[3:int((len(rcvData) - 6) / 16) * 16 + 3]) + rcvData[int((len(rcvData) - 6) / 16) * 16 + 3:]
-    # encryptor = AES.new(b'6841654163243084', AES.MODE_ECB)
-    # rcvData = encryptor.decrypt(rcvData)
+#     encryptor = AES.new(b'6841654163243084', AES.MODE_ECB)
+#     rcvData = rcvData[:3] + encryptor.decrypt(rcvData[3:int((len(rcvData) - 6) / 16) * 16 + 3]) + rcvData[int((len(rcvData) - 6) / 16) * 16 + 3:]
+#     encryptor = AES.new(b'6841654163243084', AES.MODE_ECB)
+#     rcvData = encryptor.decrypt(rcvData)
+def gw_encryption(rcvData):
+    encryptor = AES.new(b'6841654163243084', AES.MODE_ECB)
+    rcvData = rcvData[:3] + encryptor.encrypt(rcvData[3:])
+    rcvData += calCrc(rcvData[3:], len(rcvData) - 3)
+    rcvData += b'\x7E'
+
+    return rcvData
+
+def gw_decryption(rcvData):
+    encryptor = AES.new(b'6841654163243084', AES.MODE_ECB)
+    rcvData = rcvData[:3] + encryptor.decrypt(rcvData[3:-3]) + rcvData[-3:]
+
+    return rcvData

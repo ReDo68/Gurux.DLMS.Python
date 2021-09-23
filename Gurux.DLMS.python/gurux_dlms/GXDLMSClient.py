@@ -979,6 +979,7 @@ class GXDLMSClient(object):
         if not list_:
             raise ValueError("Invalid parameter.")
         if self.negotiatedConformance & Conformance.MULTIPLE_REFERENCES == 0:
+            print(self.negotiatedConformance, Conformance.MULTIPLE_REFERENCES)
             raise ValueError("Meter doesn't support multiple objects reading with one request.")
 
         messages = list()

@@ -54,6 +54,8 @@ class GXSettings:
         self.gwWrapper = False
         self.server_invoke = 0
         self.port_num = 1
+        self.frame_counter = 0
+        self.get_with_list = 0
         self.invocationCounter = None
         self.client = GXDLMSSecureClient(True)
         #  Objects to read.
@@ -139,7 +141,7 @@ class GXSettings:
 
 
     def getParameters(self, args):
-        parameters = GXSettings.__getParameters(args, "h:p:c:s:r:i:I:t:a:p:w:P:g:S:n:C:v:o:T:A:B:D:d:l:G:N:V:")
+        parameters = GXSettings.__getParameters(args, "h:p:c:s:r:i:I:t:a:p:w:P:g:S:n:C:v:o:T:A:B:D:d:l:G:N:V:F:L:")
         defaultBaudRate = True
         for it in parameters:
             if it.tag == 'w':
@@ -192,6 +194,10 @@ class GXSettings:
                 self.port_num = it.value
             elif it.tag == 'V':
                 self.server_invoke = it.value
+            elif it.tag == 'F':
+                self.frame_counter = it.value
+            elif it.tag == 'L':
+                self.get_with_list = it.value
             elif it.tag == 'i':
                 #  IEC.
                 self.iec = True

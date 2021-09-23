@@ -50,7 +50,8 @@ from gwTransFunc import calCrc, gwWrap, gwUnwrap
 class GXDLMSReader:
     #pylint: disable=too-many-public-methods, too-many-instance-attributes
     def __init__(self, client, media, trace, invocationCounter,
-                 useOpticalHead, gwWrapper, port_num, server_invoke):
+                 useOpticalHead, gwWrapper, port_num, server_invoke,
+                 frame_counter, get_with_list):
         #pylint: disable=too-many-arguments
         self.gwWrapper = gwWrapper
         self.server_invoke = server_invoke
@@ -63,6 +64,8 @@ class GXDLMSReader:
         self.invocationCounter = invocationCounter
         self.useOpticalHead = useOpticalHead
         self.client = client
+        self.frame_counter = frame_counter
+        self.get_with_list = get_with_list
         if self.trace > TraceLevel.WARNING:
             print("Authentication: " + str(self.client.authentication))
             print("invocationCounter: " + str(invocationCounter))
@@ -287,43 +290,48 @@ class GXDLMSReader:
                 self.media.baudRate = bitrate
                 self.media.open()
                 #This sleep make sure that all meters can be read.
-                time.sleep(1000)
+                time.sleep(100) #1000
 
     def updateFrameCounter(self):
-        # self.client.ciphering.invocationCounter = 100009977  # to eliminate reading IC in public client by storing the IC in DB
-        if self.invocationCounter and self.client.ciphering is not None and self.client.ciphering.security != Security.NONE:
-            self.initializeOpticalHead()
-            self.client.proposedConformance |= Conformance.GENERAL_PROTECTION
-            add = self.client.clientAddress
-            auth = self.client.authentication
-            security = self.client.ciphering.security
-            challenge = self.client.ctoSChallenge
-            try:
-                self.client.clientAddress = 16
-                self.client.authentication = Authentication.NONE
-                self.client.ciphering.security = Security.NONE
-                reply = GXReplyData()
-                data = self.client.snrmRequest()
-                if data:
-                    self.readDLMSPacket(data, reply)
-                    self.client.parseUAResponse(reply.data)
-                    size = self.client.limits.maxInfoTX + 40
-                    self.replyBuff = bytearray(size)
-                reply.clear()
-                self.readDataBlock(self.client.aarqRequest(), reply)
-                self.client.parseAareResponse(reply.data)
-                reply.clear()
-                d = GXDLMSData(self.invocationCounter)
-                self.read(d, 2)
-                self.client.ciphering.invocationCounter = 1 + d.value
-                print("Invocation counter: " + str(self.client.ciphering.invocationCounter))
-                self.disconnect()
-                #except Exception as ex:
-            finally:
-                self.client.clientAddress = add
-                self.client.authentication = auth
-                self.client.ciphering.security = security
-                self.client.ctoSChallenge = challenge
+        print("========================>", self.frame_counter)
+        if self.frame_counter == '0':
+            if self.invocationCounter and self.client.ciphering is not None and self.client.ciphering.security != Security.NONE:
+                self.initializeOpticalHead()
+                self.client.proposedConformance |= Conformance.GENERAL_PROTECTION
+                add = self.client.clientAddress
+                auth = self.client.authentication
+                security = self.client.ciphering.security
+                challenge = self.client.ctoSChallenge
+                try:
+                    self.client.clientAddress = 16
+                    self.client.authentication = Authentication.NONE
+                    self.client.ciphering.security = Security.NONE
+                    reply = GXReplyData()
+                    data = self.client.snrmRequest()
+                    if data:
+                        self.readDLMSPacket(data, reply)
+                        self.client.parseUAResponse(reply.data)
+                        size = self.client.limits.maxInfoTX + 40
+                        self.replyBuff = bytearray(size)
+                    reply.clear()
+                    self.readDataBlock(self.client.aarqRequest(), reply)
+                    self.client.parseAareResponse(reply.data)
+                    reply.clear()
+                    d = GXDLMSData(self.invocationCounter)
+                    self.read(d, 2)
+                    self.client.ciphering.invocationCounter = 1 + d.value
+                    print("Invocation counter: " + str(self.client.ciphering.invocationCounter))
+                    # self.client.ciphering.invocationCounter = 200 #100001980
+                    # print("Invocation counter: " + str(self.client.ciphering.invocationCounter))
+                    self.disconnect()
+                    #except Exception as ex:
+                finally:
+                    self.client.clientAddress = add
+                    self.client.authentication = auth
+                    self.client.ciphering.security = security
+                    self.client.ctoSChallenge = challenge
+        else:
+            self.client.ciphering.invocationCounter = int(self.frame_counter)  # 100001980
 
     def initializeConnection(self):
         print("Standard: " + str(self.client.standard))
@@ -378,6 +386,7 @@ class GXDLMSReader:
             if len(values) != len(list_):
                 raise ValueError("Invalid reply. Read items count do not match.")
             self.client.updateValues(list_, values)
+            return values
 
     def write(self, item, attributeIndex):
         data = self.client.write(item, attributeIndex)
