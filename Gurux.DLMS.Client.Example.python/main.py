@@ -148,7 +148,8 @@ class sampleclient():
 
                         readout_str += b'%b(%b)\r\n' % (k.encode(), val)
 
-
+                fc_val = str(settings.client.ciphering.invocationCounter).encode()
+                readout_str += b'fc(%b)\r\n' % fc_val
                 readout_str += b'IDMSG(%b)\r\n' % (settings.outputFile.split(".")[0]).encode()
                 print(readout_str)
 
@@ -180,7 +181,9 @@ class ReadV4:
     def __init__(self, meter_type, physical, port_num=1 ,
                  server_invoke=0, frame_counter=0, get_with_list=False):
         self.meter_type = meter_type  # 'tfc' 'eaa'
-        self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
+        # self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
+        self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2;1.0.1.8.4.255:2;' \
+                    '1.0.32.7.0.255:2;1.0.31.7.0.255:2;1.0.2.8.0.255:2'
         # self.OBIS = '0.0.20.0.0.255:2;0.0.20.0.0.255:3;0.0.20.0.0.255:4;0.0.20.0.0.255:5;' \
         #             '0.2.22.0.0.255:7;0.2.22.0.0.255:8'   Timming
         self.device = 'gw'  # 'gw' 'meter'

@@ -290,7 +290,7 @@ class GXDLMSReader:
                 self.media.baudRate = bitrate
                 self.media.open()
                 #This sleep make sure that all meters can be read.
-                time.sleep(100) #1000
+                time.sleep(10) #1000
 
     def updateFrameCounter(self):
         print("========================>", self.frame_counter)
