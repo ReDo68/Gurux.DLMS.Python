@@ -266,9 +266,18 @@ Hardware:
 1- 4G
 2- wifi
 
-
-
-
 ------------------------------------------ Reference
 
 http://www.gurux.fi/Gurux.DLMS.Client
+
+
+------------------------------------------ Install on VPS server
+
+nano /usr/local/lib/python3.8/dist-packages/gurux_dlms/GXDLMSClient.py
+on line 982:
+
+if self.negotiatedConformance & Conformance.MULTIPLE_REFERENCES == 0:
+
+Change to :
+
+if self.negotiatedConformance == 0:

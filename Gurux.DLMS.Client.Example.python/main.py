@@ -121,13 +121,15 @@ class sampleclient():
                     i = 0
                     for k, v in settings.readObjects:
                         val = val_list[i]
+                        print("val:", val)
                         i += 1
                         try:
                             val = val._data
+                            print("val_data:", val)
                             val = bytes(val)
                         except:
                             val = str(val).encode()
-                        readout_str += b'%b(%b)\r\n' % (k.encode(), val_list)
+                        readout_str += b'%b(%b)\r\n' % (k.encode(), val)
 
                     # for i in range(list_arr):
                     #     print(list_arr[i], val_list[i])
