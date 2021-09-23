@@ -122,11 +122,12 @@ class sampleclient():
                     for k, v in settings.readObjects:
                         val = val_list[i]
                         i += 1
-                        try:
-                            print("val_data:", val)
+                        if isinstance(val, (bytearray, bytes)):
                             val = bytes(val)
-                        except:
+                            print("val_try:", val)
+                        else:
                             val = str(val).encode()
+                            print("val_:", val)
                         readout_str += b'%b(%b)\r\n' % (k.encode(), val)
 
                 else:
