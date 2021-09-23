@@ -106,7 +106,8 @@ class sampleclient():
                 if not read:
                     reader.getAssociationView()
 
-                if settings.get_with_list == 100 :
+                if settings.get_with_list == 1 :
+                    print('+++++++++++++++++++ GETTTTTTTING WITH LIIIIIIIIIIIIIIIST +++++++++++')
                     list_arr = []
                     for k, v in settings.readObjects:
                         obj = settings.client.objects.findByLN(ObjectType.NONE, k)
@@ -116,9 +117,21 @@ class sampleclient():
 
                     list_arr = [x for x in zip(*[iter(list_arr)] * 2)]
                     val_list = reader.readList(list_arr)
-                    for i in range(list_arr):
-                        print(list_arr[i], val_list[i])
-                    print(val_list)
+
+                    i = 0
+                    for k, v in settings.readObjects:
+                        val = val_list[i]
+                        i += 1
+                        try:
+                            val = val._data
+                            val = bytes(val)
+                        except:
+                            val = str(val).encode()
+                        readout_str += b'%b(%b)\r\n' % (k.encode(), val_list)
+
+                    # for i in range(list_arr):
+                    #     print(list_arr[i], val_list[i])
+                    # print(val_list)
                     # readout_str += b'%b(%b)\r\n' % (k.encode(), val)
 
                 else:
