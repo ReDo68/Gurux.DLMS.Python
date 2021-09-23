@@ -159,8 +159,10 @@ class sampleclient():
                 reader.readAll(settings.outputFile)
         except (ValueError, GXDLMSException, GXDLMSExceptionResponse, GXDLMSConfirmedServiceError) as ex:
             print(ex)
+            print("-------------------------------------Ex0")
         except (KeyboardInterrupt, SystemExit, Exception) as ex:
             traceback.print_exc()
+            print("-------------------------------------Ex1")
             settings.media.close()
             reader = None
         finally:
@@ -172,9 +174,12 @@ class sampleclient():
                         reader.close()
 
                     settings.media.send(gwWrap(readout_str, 0, 0))
+                    print("-------------------------------------reader")
                     settings.media.close()
                 except Exception:
+                    print("-------------------------------------Ex2")
                     traceback.print_exc()
+
             print("Ended!")
 
 class ReadV4:
