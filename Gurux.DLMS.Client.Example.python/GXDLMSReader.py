@@ -178,13 +178,16 @@ class GXDLMSReader:
                         continue
                     if not p.eop:
                         p.count = self.client.getFrameSize(rd)
+
+                    if str(rd)[33:47] == '45 52 52 4F 52':
+                        gw_err = str(rd)[51:53]
+                        raise Exception("GW-Error: ", gw_err, " - ", gw_err_table[gw_err])
+
                     while not self.media.receive(p):
                         # pos += 1
                         # if pos == 3:
 
-                        if str(rd)[33:47] == '45 52 52 4F 52':
-                            gw_err = str(rd)[51:53]
-                            raise Exception("GW-Error: ", gw_err, " - ", gw_err_table[gw_err])
+
                         print("----------------TimeOut-----------------")
                         raise TimeoutException("Failed to receive reply from the device in given time.")
                         # print("Data send failed.  Try to resend " + str(pos) + "/3")
