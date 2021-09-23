@@ -121,15 +121,21 @@ class sampleclient():
                     i = 0
                     for k, v in settings.readObjects:
                         val = val_list[i]
-                        print("val:", val)
                         i += 1
                         try:
-                            val = val._data
                             print("val_data:", val)
                             val = bytes(val)
                         except:
                             val = str(val).encode()
                         readout_str += b'%b(%b)\r\n' % (k.encode(), val)
+
+                    b"READOUT\r\n" \
+                    b"1.0.0.0.0.255(bytearray(b'18079821000017'))\r\n" \
+                    b"1.0.1.8.0.255(55)\r\n" \
+                    b"1.0.1.8.1.255(55)\r\n" \
+                    b"1.0.1.8.2.255(0)\r\n" \
+                    b"1.0.1.8.3.255(0)\r\n" \
+                    b"IDMSG(tfc)\r\n"
 
                     # for i in range(list_arr):
                     #     print(list_arr[i], val_list[i])
