@@ -151,6 +151,10 @@ class GXDLMSReader:
             p.Count = 5
         self.media.eop = eop
         rd = GXByteBuffer()
+        gw_err_table = {'30': 'no_response', '31': 'id_syntax', '32': 'id_parity', '33': 'ro_timeout',
+                        '34': 'ro_syntax', '35': 'ro_parity', '36': 'bcc', '37': 'internal',
+                        '38': 'invalid_request', '41': 'ro_overflow', '42': 'ro_crc_mbus',
+                        '43': 'id_crc_mbus', '44': 'ro_mbus_timeout', '50': 'format', '51': 'password', '52': 'data'}
         with self.media.getSynchronous():
             if not reply.isStreaming():
                 # time.sleep(65) # to test meter InactivityTimeout - RezaBook
@@ -177,6 +181,10 @@ class GXDLMSReader:
                     while not self.media.receive(p):
                         # pos += 1
                         # if pos == 3:
+
+                        if str(rd)[33:47] == '45 52 52 4F 52':
+                            gw_err = str(rd)[51:53]
+                            raise Exception("GW-Error: ", gw_err, " - ", gw_err_table[gw_err])
                         print("----------------TimeOut-----------------")
                         raise TimeoutException("Failed to receive reply from the device in given time.")
                         # print("Data send failed.  Try to resend " + str(pos) + "/3")
@@ -190,13 +198,6 @@ class GXDLMSReader:
                     p.reply = None
             except Exception as e:
                 self.writeTrace("RX-ER: " + self.now() + "\t" + str(rd), TraceLevel.ERROR)  # R374-change it to gw
-                gw_err_table = {'30': 'no_response', '31': 'id_syntax', '32': 'id_parity', '33': 'ro_timeout',
-                                '34': 'ro_syntax', '35': 'ro_parity', '36': 'bcc', '37': 'internal',
-                                '38': 'invalid_request', '41': 'ro_overflow', '42': 'ro_crc_mbus', '43': 'id_crc_mbus',
-                                '44': 'ro_mbus_timeout', '50': 'format', '51': 'password', '52': 'data'}
-                if str(rd)[33:47] == '45 52 52 4F 52':
-                    gw_err = str(rd)[51:53]
-                    print("GW-Error: ", gw_err, " - ", gw_err_table[gw_err])
                 raise e
 
             if self.gwWrapper:      # R374-changed it to gw
