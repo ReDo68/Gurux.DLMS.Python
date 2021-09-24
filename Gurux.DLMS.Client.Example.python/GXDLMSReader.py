@@ -158,7 +158,7 @@ class GXDLMSReader:
                         '43': 'id_crc_mbus', '44': 'ro_mbus_timeout', '50': 'format', '51': 'password', '52': 'data'}
         with self.media.getSynchronous():
             if not reply.isStreaming():
-                time.sleep(300)  # to test meter InactivityTimeout - RezaBook
+                time.sleep(0.3)  # to test meter InactivityTimeout - RezaBook
                 if self.gwWrapper:  # R374-changed it to gw
                     self.writeTrace("TXgw: " + self.now() + "\t" + GXByteBuffer.hex(
                         gwWrap(data, self.port_num, self.server_invoke, self.gw_frame_counter)), TraceLevel.VERBOSE)
