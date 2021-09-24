@@ -174,7 +174,7 @@ class sampleclient():
                     except:
                         reader.close()
 
-                    settings.media.send(gwWrap(readout_str, 0, 0))
+                    settings.media.send(gwWrap(readout_str, 0, 0, settings.gw_frame_counter))
                     if settings.media:
                         settings.media.close()
                 except Exception:
