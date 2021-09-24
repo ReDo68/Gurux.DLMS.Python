@@ -87,8 +87,7 @@ class sampleclient():
             if not isinstance(settings.media, (GXSerial, GXNet)):
                 raise Exception("Unknown media type.")
             # //////////////////////////////////////
-            reader = GXDLMSReader(settings.client, settings.media, settings.trace,
-                                  settings.invocationCounter, settings.iec,
+            reader = GXDLMSReader(settings.client, settings.media, settings.trace, settings.invocationCounter,
                                   settings.gwWrapper, settings.port_num, settings.server_invoke,
                                   settings.frame_counter, settings.get_with_list)
             settings.media.open()
@@ -161,18 +160,23 @@ class sampleclient():
             print(ex)
         except (KeyboardInterrupt, SystemExit, Exception) as ex:
             traceback.print_exc()
-            settings.media.close()
+            if settings.media:
+                settings.media.close()
             reader = None
         finally:
             if reader:
                 try:
-                    if settings.outputFile.split(".")[0] == 'eaa':
-                        reader.disconnect()
-                    else:
+                    try:
+                        if settings.outputFile.split(".")[0] == 'eaa':
+                            reader.disconnect()
+                        else:
+                            reader.close()
+                    except:
                         reader.close()
 
                     settings.media.send(gwWrap(readout_str, 0, 0))
-                    settings.media.close()
+                    if settings.media:
+                        settings.media.close()
                 except Exception:
                     traceback.print_exc()
 
@@ -182,8 +186,8 @@ class ReadV4:
     def __init__(self, meter_type, physical, port_num=1 ,
                  server_invoke=0, frame_counter=0, get_with_list=False):
         self.meter_type = meter_type  # 'tfc' 'eaa'
-        self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
-        # self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2;1.0.1.8.4.255:2;1.0.32.7.0.255:2;1.0.31.7.0.255:2'
+        # self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
+        self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2;1.0.1.8.4.255:2;1.0.32.7.0.255:2;1.0.31.7.0.255:2'
         #             '1.0.32.7.0.255:2;1.0.31.7.0.255:2;1.0.2.8.0.255:2'
         # self.OBIS = '0.0.20.0.0.255:2;0.0.20.0.0.255:3;0.0.20.0.0.255:4;0.0.20.0.0.255:5;' \
         #             '0.2.22.0.0.255:7;0.2.22.0.0.255:8'   Timming

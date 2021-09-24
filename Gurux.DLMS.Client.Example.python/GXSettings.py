@@ -31,6 +31,8 @@
 #  This code is licensed under the GNU General Public License v2.
 #  Full text may be retrieved at http://www.gnu.org/licenses/gpl-2.0.txt
 # ---------------------------------------------------------------------------
+from locale import atoi
+
 from gurux_dlms.enums import InterfaceType, Authentication, Security, Standard
 from gurux_dlms import GXDLMSClient
 from gurux_dlms.secure import GXDLMSSecureClient
@@ -50,7 +52,7 @@ class GXSettings:
     def __init__(self):
         self.media = None
         self.trace = TraceLevel.INFO
-        self.iec = False
+        # self.iec = False
         self.gwWrapper = False
         self.server_invoke = 0
         self.port_num = 1
@@ -73,7 +75,7 @@ class GXSettings:
         # print(" -h \t host name or IP address.")
         # print(" -p \t port number or name (Example: 1000).")
         # print(" -S \t serial port. (Example: COM1 or COM1:9600:8None1)")
-        # print(" -i IEC is a start protocol.")
+        # print("-i \t Used communication interface. Ex. -i WRAPPER.") before 14000702 ==> -i IEC is a start protocol.
         # print(" -a \t Authentication (None, Low, High).")
         # print(" -P \t ASCII password for authentication. Use 0x prefix if hex value is used. Ex. 0x00000000.")
         # print(" -c \t Client address. (Default: 16)")
@@ -141,8 +143,8 @@ class GXSettings:
 
 
     def getParameters(self, args):
-        parameters = GXSettings.__getParameters(args, "h:p:c:s:r:i:I:t:a:p:w:P:g:S:n:C:v:o:T:A:B:D:d:l:G:N:V:F:L:")
-        defaultBaudRate = True
+        parameters = GXSettings.__getParameters(args, "h:p:c:s:r:i:It:a:p:w:P:g:S:n:C:v:o:T:A:B:D:d:l:G:N:V:F:L:")
+        modeEDefaultValues = True  # defaultBaudRate = True
         for it in parameters:
             if it.tag == 'w':
                 self.client.interfaceType = InterfaceType.WRAPPER
@@ -200,8 +202,22 @@ class GXSettings:
                 self.get_with_list = it.value
             elif it.tag == 'i':
                 #  IEC.
-                self.iec = True
-                if defaultBaudRate:
+                # self.iec = True
+                # if defaultBaudRate:
+                if it.value == "HDLC":
+                    self.client.interfaceType = InterfaceType.HDLC
+                elif it.value == "WRAPPER":
+                    self.client.interfaceType = InterfaceType.WRAPPER
+                elif it.value == "HdlcWithModeE":
+                    self.client.interfaceType = InterfaceType.HDLC_WITH_MODE_E
+                elif it.value == "Plc":
+                    self.clientinterfaceType = InterfaceType.PLC
+                elif it.value == "PlcHdlc":
+                    self.clientinterfaceType = InterfaceType.PLC_HDLC
+                else:
+                    raise ValueError(
+                        "Invalid interface type option." + it.value + " (HDLC, WRAPPER, HdlcWithModeE, Plc, PlcHdlc)")
+                if modeEDefaultValues and self.client.interfaceType == InterfaceType.HDLC_WITH_MODE_E:
                     self.media.baudrate = BaudRate.BAUD_RATE_300
                     self.media.bytesize = 7
                     self.media.parity = Parity.EVEN
@@ -224,7 +240,7 @@ class GXSettings:
                 tmp = it.value.split(':')
                 self.media.port = tmp[0]
                 if len(tmp) > 1:
-                    defaultBaudRate = False
+                    modeEDefaultValues = False  # defaultBaudRate = False
                     self.media.baudRate = int(tmp[1])
                     self.media.dataBits = int(tmp[2][0: 1])
                     self.media.parity = Parity[tmp[2][1: len(tmp[2]) - 1].upper()]
@@ -293,7 +309,8 @@ class GXSettings:
                 self.client.clientAddress = int(it.value)
             elif it.tag == 's':
                 if self.client.serverAddress != 1:
-                    self.client.serverAddress = GXDLMSClient.getServerAddress(serverAddress, atoi(optarg))
+                    # self.client.serverAddress = GXDLMSClient.getServerAddress(serverAddress, atoi(optarg))
+                    self.client.serverAddress = GXDLMSClient.getServerAddress(self.client.serverAddress, int(it.value))
                 else:
                     self.client.serverAddress = int(it.value)
             elif it.tag == 'l':

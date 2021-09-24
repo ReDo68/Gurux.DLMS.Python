@@ -50,8 +50,7 @@ from gwTransFunc import calCrc, gwWrap, gwUnwrap
 class GXDLMSReader:
     #pylint: disable=too-many-public-methods, too-many-instance-attributes
     def __init__(self, client, media, trace, invocationCounter,
-                 useOpticalHead, gwWrapper, port_num, server_invoke,
-                 frame_counter, get_with_list):
+                 gwWrapper, port_num, server_invoke, frame_counter, get_with_list):
         #pylint: disable=too-many-arguments
         self.gwWrapper = gwWrapper
         self.server_invoke = server_invoke
@@ -228,6 +227,7 @@ class GXDLMSReader:
                     self.readDLMSPacket(data, reply)
 
     def initializeOpticalHead(self):
+        # if self.client.interfaceType == InterfaceType.HDLC_WITH_MODE_E:
         if self.useOpticalHead and isinstance(self.media, GXSerial):
             p = ReceiveParameters()
             p.allData = False
@@ -463,7 +463,9 @@ class GXDLMSReader:
         for pg in profileGenerics:
             self.writeTrace("Profile Generic " + str(pg.name) + "Columns:", TraceLevel.INFO)
             try:
-                self.read(pg, 3)
+                # self.read(pg, 3)
+                if pg.canRead(3):
+                    self.read(pg, 3)
                 if self.trace > TraceLevel.WARNING:
                     sb = ""
                     for k, _ in pg.captureObjects:
