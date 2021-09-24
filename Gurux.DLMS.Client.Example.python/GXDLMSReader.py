@@ -62,6 +62,7 @@ class GXDLMSReader:
         self.media = media
         self.invocationCounter = invocationCounter
         # self.useOpticalHead = useOpticalHead
+        self.useOpticalHead = False
         self.client = client
         self.frame_counter = frame_counter
         self.get_with_list = get_with_list
@@ -227,8 +228,8 @@ class GXDLMSReader:
                     self.readDLMSPacket(data, reply)
 
     def initializeOpticalHead(self):
-        if self.client.interfaceType == InterfaceType.HDLC_WITH_MODE_E:
-        # if self.useOpticalHead and isinstance(self.media, GXSerial):
+        # if self.client.interfaceType == InterfaceType.HDLC_WITH_MODE_E:
+        if self.useOpticalHead and isinstance(self.media, GXSerial):
             p = ReceiveParameters()
             p.allData = False
             p.eop = '\n'
