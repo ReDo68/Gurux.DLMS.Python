@@ -201,7 +201,7 @@ class ReadV4:
         self.usb = "/dev/ttyUSB0"
         self.port_num = str(port_num)
         self.server_invoke = str(server_invoke)
-        self.gw_frame_counter = str(gw_frame_counter)
+        self.gw_frame_counter = gw_frame_counter.decode("utf-8")
         self.frame_counter = str(frame_counter)
         self.get_with_list = 0 if get_with_list is False else 1
 
