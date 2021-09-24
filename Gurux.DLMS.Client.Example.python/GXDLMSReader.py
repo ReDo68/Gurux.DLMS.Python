@@ -50,7 +50,7 @@ from gwTransFunc import calCrc, gwWrap, gwUnwrap
 class GXDLMSReader:
     #pylint: disable=too-many-public-methods, too-many-instance-attributes
     def __init__(self, client, media, trace, invocationCounter,
-                 gwWrapper, port_num, server_invoke, frame_counter, get_with_list):
+                 gwWrapper, port_num, server_invoke, frame_counter, get_with_list, gw_frame_counter):
         #pylint: disable=too-many-arguments
         self.gwWrapper = gwWrapper
         self.server_invoke = server_invoke
@@ -65,6 +65,7 @@ class GXDLMSReader:
         self.useOpticalHead = False
         self.client = client
         self.frame_counter = frame_counter
+        self.gw_frame_counter = gw_frame_counter
         self.get_with_list = get_with_list
         if self.trace > TraceLevel.WARNING:
             print("Authentication: " + str(self.client.authentication))
@@ -157,11 +158,12 @@ class GXDLMSReader:
                         '43': 'id_crc_mbus', '44': 'ro_mbus_timeout', '50': 'format', '51': 'password', '52': 'data'}
         with self.media.getSynchronous():
             if not reply.isStreaming():
-                # time.sleep(65) # to test meter InactivityTimeout - RezaBook
-                if self.gwWrapper:                     # R374-changed it to gw
-                    self.writeTrace("TXgw: " + self.now() + "\t" + GXByteBuffer.hex(gwWrap(data, self.port_num, self.server_invoke)), TraceLevel.VERBOSE)
+                time.sleep(300)  # to test meter InactivityTimeout - RezaBook
+                if self.gwWrapper:  # R374-changed it to gw
+                    self.writeTrace("TXgw: " + self.now() + "\t" + GXByteBuffer.hex(
+                        gwWrap(data, self.port_num, self.server_invoke, self.gw_frame_counter)), TraceLevel.VERBOSE)
                     self.writeTrace("TXm: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)
-                    self.media.send(gwWrap(data, self.port_num, self.server_invoke))
+                    self.media.send(gwWrap(data, self.port_num, self.server_invoke, self.gw_frame_counter))
                 else:
                     # print(gwWrap(data))
                     self.writeTrace("TXm: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)
@@ -295,7 +297,7 @@ class GXDLMSReader:
                 self.media.baudRate = bitrate
                 self.media.open()
                 #This sleep make sure that all meters can be read.
-                time.sleep(10) #1000
+                time.sleep(1000)
 
     def updateFrameCounter(self):
         print("========================>", self.frame_counter)

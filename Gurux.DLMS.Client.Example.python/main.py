@@ -89,7 +89,7 @@ class sampleclient():
             # //////////////////////////////////////
             reader = GXDLMSReader(settings.client, settings.media, settings.trace, settings.invocationCounter,
                                   settings.gwWrapper, settings.port_num, settings.server_invoke,
-                                  settings.frame_counter, settings.get_with_list)
+                                  settings.frame_counter, settings.get_with_list, settings.gw_frame_counter)
             settings.media.open()
             if settings.readObjects:
                 read = False
@@ -184,7 +184,7 @@ class sampleclient():
 
 class ReadV4:
     def __init__(self, meter_type, physical, port_num=1 ,
-                 server_invoke=0, frame_counter=0, get_with_list=False):
+                 server_invoke=0, frame_counter=0, get_with_list=False, gw_frame_counter=b'\x04\xdd'):
         self.meter_type = meter_type  # 'tfc' 'eaa'
         # self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
         self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2;1.0.1.8.4.255:2;1.0.32.7.0.255:2;1.0.31.7.0.255:2'
@@ -201,13 +201,14 @@ class ReadV4:
         self.usb = "/dev/ttyUSB0"
         self.port_num = str(port_num)
         self.server_invoke = str(server_invoke)
+        self.gw_frame_counter = gw_frame_counter
         self.frame_counter = str(frame_counter)
         self.get_with_list = 0 if get_with_list is False else 1
 
     def read(self):
         arg = ['Gurux.DLMS.Client.Example.python/main.py', '-c', self.client_addr, '-s', self.server_addr, '-a', 'HighGMac', '-t', 'Verbose',
                '-T', '4D4D4D0000000001', '-v', '0.0.43.1.0.255', '-C', 'AuthenticationEncryption',
-               '-N', self.port_num, '-V', self.server_invoke,
+               '-N', self.port_num, '-V', self.server_invoke, '-W', self.gw_frame_counter,
                '-F', self.frame_counter, '-L', self.get_with_list]
 
         if self.device == 'gw':
@@ -237,8 +238,8 @@ class ReadV4:
 
         return arg
 
-def callreadv4(company, physical, port, serverinvoke, framecounter, getwithlist):
-    sampleclient.main(ReadV4(company, physical, port, serverinvoke, framecounter, getwithlist).read())
+def callreadv4(company, physical, port, serverinvoke, framecounter, getwithlist, gwfc):
+    sampleclient.main(ReadV4(company, physical, port, serverinvoke, framecounter, getwithlist, gwfc).read())
 # print(read_v4('tfc').read())
 # sampleclient.main(ReadV4('tfc', 2985, 1, 0).read())  #1110
 

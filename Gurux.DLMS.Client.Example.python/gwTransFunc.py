@@ -30,7 +30,7 @@ def calCrc(inStr, inLen):
     crc ^= 0xFFFF
     return bytes([int(crc / 256) & 0xFF, crc & 0xFF])
 
-def gwWrap(data, port_num, server_invoke):
+def gwWrap(data, port_num, server_invoke, gw_frame_counter):
     dataL = len(data) + 12
     totLen = math.ceil((dataL + 4) / 16) * 16
     totLen += 3
@@ -47,7 +47,7 @@ def gwWrap(data, port_num, server_invoke):
     sendStr += bytes([int(totLen / 256), totLen % 256])
     sendStr += b'\x00\x05'
     sendStr += bytes([int(dataL / 256), dataL % 256])
-    sendStr += b'\x04\xdd'
+    sendStr += gw_frame_counter  # b'\x04\xdd'  # Frame Counter
     sendStr += bytes([port])
     sendStr += bytes([int(int(server_invoke) / 256), int(server_invoke) % 256])
     sendStr += bytes([initBd])
