@@ -123,10 +123,10 @@ class sampleclient():
                         i += 1
                         if isinstance(val, (bytearray, bytes)):
                             val = bytes(val)
-                            print("val_try:", val)
+                            # print("val_try:", val)
                         else:
                             val = str(val).encode()
-                            print("val_:", val)
+                            # print("val_:", val)
                         readout_str += b'%b(%b)\r\n' % (k.encode(), val)
 
                 else:
