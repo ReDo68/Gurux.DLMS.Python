@@ -106,7 +106,7 @@ class sampleclient():
                     reader.getAssociationView()
 
                 if settings.get_with_list == 1 :
-                    print('+++++++++++++++++++ GETTTTTTTING WITH LIIIIIIIIIIIIIIIST +++++++++++')
+                    print('++++++++++++++ GETTTTTTTING WITH LIIIIIIIIIIIIIIIST +++++++++++')
                     list_arr = []
                     for k, v in settings.readObjects:
                         obj = settings.client.objects.findByLN(ObjectType.NONE, k)
@@ -136,7 +136,7 @@ class sampleclient():
                         if obj is None:
                              raise Exception("Unknown logical name:" + k)
                         val = reader.read(obj, v)
-                        print("value is: ", val)
+                        # print("value is: ", val)
                         reader.showValue(v, val)
                         # print(b'%b' % str(val).encode())
                         try:
