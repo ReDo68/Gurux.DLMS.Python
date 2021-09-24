@@ -48,7 +48,7 @@ def gwWrap(data, port_num, server_invoke, gw_frame_counter):
     sendStr += bytes([int(totLen / 256), totLen % 256])
     sendStr += b'\x00\x05'
     sendStr += bytes([int(dataL / 256), dataL % 256])
-    sendStr += bytes.fromhex(gw_frame_counter)  # b'\x04\xdd'  # Frame Counter
+    sendStr += gw_frame_counter  # bytes.fromhex(gw_frame_counter)  # b'\x04\xdd'  # Frame Counter
     sendStr += bytes([port])
     sendStr += bytes([int(int(server_invoke) / 256), int(server_invoke) % 256])
     sendStr += bytes([initBd])
