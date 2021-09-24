@@ -57,7 +57,7 @@ class GXSettings:
         self.server_invoke = 0
         self.port_num = 1
         self.frame_counter = 0
-        self.gw_frame_counter = b'\x04\xdd'.decode("utf-8")
+        self.gw_frame_counter = b'\x04\xdd'.hex()
         self.get_with_list = 0
         self.invocationCounter = None
         self.client = GXDLMSSecureClient(True)
