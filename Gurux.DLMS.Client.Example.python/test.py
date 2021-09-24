@@ -20,7 +20,7 @@ class ReadV4:
         self.port_num = str(port_num)
         self.server_invoke = str(server_invoke)
         self.frame_counter = str(frame_counter)
-        self.gw_frame_counter = str(gw_frame_counter)
+        self.gw_frame_counter = str(gw_frame_counter.hex())
         # self.frame_counter = '300'
         # get_with_list = True
         self.get_with_list = 0 if get_with_list is False else 1
