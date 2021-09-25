@@ -122,6 +122,7 @@ class sampleclient():
                         val = val_list[i]
                         i += 1
                         if isinstance(val, (bytearray, bytes)):
+                            print("val_Btry:", val, type(val))
                             val = bytes(val)
                             print("val_try:", val)
                         else:
