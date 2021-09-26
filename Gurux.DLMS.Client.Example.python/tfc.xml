@@ -828,7 +828,7 @@
       <ContextId>1</ContextId>
     </ApplicationContextName>
     <XDLMSContextInfo>
-      <Conformance>0</Conformance>
+      <Conformance>1</Conformance>
       <MaxReceivePduSize>0</MaxReceivePduSize>
       <MaxSendPduSize>0</MaxSendPduSize>
       <DlmsVersionNumber>0</DlmsVersionNumber>
