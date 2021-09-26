@@ -95,7 +95,6 @@ class sampleclient():
                 read = False
                 reader.initializeConnection()
                 if settings.outputFile and os.path.exists(settings.outputFile):
-                    print("++++++++++++++++++++++++++++++++==================================", settings.outputFile, os.path)
                     try:
                         c = GXDLMSObjectCollection.load(settings.outputFile)
                         settings.client.objects.extend(c)

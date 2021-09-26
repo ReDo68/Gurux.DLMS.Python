@@ -587,12 +587,19 @@ class GXDLMSReader:
                     if self.client.objects:
                         read = True
                 except Exception:
+                    print("Output-Exception")
                     read = False
             if not read:
+                print("Output-getAssociationView")
                 self.getAssociationView()
+                print("Output-readScalerAndUnits")
                 self.readScalerAndUnits()
+                print("Output-getProfileGenericColumns")
                 self.getProfileGenericColumns()
+
+            print("Output-getReadOut")
             self.getReadOut()
+            print("Output-getProfileGenerics")
             self.getProfileGenerics()
             if outputFile:
                 self.client.objects.save(outputFile)
