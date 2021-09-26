@@ -122,12 +122,17 @@ class sampleclient():
                         val = val_list[i]
                         i += 1
                         if isinstance(val, (bytearray, bytes)):
-                            print("val_Btry:", val, type(val))
-                            val = bytes(val)
-                            print("val_try:", val)
+                            if "x" in str(val):
+                                temp = '%04i' % (val[0] * 256 + val[1])
+                                for i in range(5):
+                                    temp += '%02i' % (val[i + 2])
+                                val = temp.encode()
+                            else:
+                                val = bytes(val)
+                                # print("val_try:", val)
                         else:
                             val = str(val).encode()
-                            print("val_:", val)
+                            # print("val_:", val)
                         readout_str += b'%b(%b)\r\n' % (k.encode(), val)
 
                 else:
@@ -137,7 +142,7 @@ class sampleclient():
                         if obj is None:
                              raise Exception("Unknown logical name:" + k)
                         val = reader.read(obj, v)
-                        print("value is: ", val)
+                        # print("value is: ", val)
                         reader.showValue(v, val)
                         # print(b'%b' % str(val).encode())
                         try:
