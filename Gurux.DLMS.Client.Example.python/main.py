@@ -159,7 +159,9 @@ class sampleclient():
                 print(readout_str)
 
                 if settings.outputFile:
-                    settings.client.objects.save(settings.outputFile)
+                    print("Skip saving on the output")
+                    # settings.client.objects.save(settings.outputFile)
+                    pass
             else:
                 reader.readAll(settings.outputFile)
         except (ValueError, GXDLMSException, GXDLMSExceptionResponse, GXDLMSConfirmedServiceError) as ex:
