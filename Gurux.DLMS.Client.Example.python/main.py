@@ -145,11 +145,23 @@ class sampleclient():
                         # print("value is: ", val)
                         reader.showValue(v, val)
                         # print(b'%b' % str(val).encode())
-                        try:
-                            val = val._data
-                            val = bytes(val)
-                        except:
+                        if isinstance(val, (bytearray, bytes)):
+                            if "x" in str(val):
+                                temp = '%04i' % (val[0] * 256 + val[1])
+                                for i in range(5):
+                                    temp += '%02i' % (val[i + 2])
+                                val = temp.encode()
+                            else:
+                                val = bytes(val)
+                                # print("val_try:", val)
+                        else:
                             val = str(val).encode()
+
+                        # try:
+                        #     val = val._data
+                        #     val = bytes(val)
+                        # except:
+                        #     val = str(val).encode()
 
                         readout_str += b'%b(%b)\r\n' % (k.encode(), val)
 
