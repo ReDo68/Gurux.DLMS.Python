@@ -121,18 +121,7 @@ class sampleclient():
                     for k, v in settings.readObjects:
                         val = val_list[m]
                         m += 1
-                        if isinstance(val, (bytearray, bytes)):
-                            if "x" in str(val):
-                                temp = '%04i' % (val[0] * 256 + val[1])
-                                for i in range(5):
-                                    temp += '%02i' % (val[i + 2])
-                                val = temp.encode()
-                            else:
-                                val = bytes(val)
-                                # print("val_try:", val)
-                        else:
-                            val = str(val).encode()
-                            # print("val_:", val)
+                        val =reader.readout_value(val)
                         readout_str += b'%b(%b)\r\n' % (k.encode(), val)
 
                 else:
@@ -142,26 +131,8 @@ class sampleclient():
                         if obj is None:
                              raise Exception("Unknown logical name:" + k)
                         val = reader.read(obj, v)
-                        # print("value is: ", val)
                         reader.showValue(v, val)
-                        # print(b'%b' % str(val).encode())
-                        if isinstance(val, (bytearray, bytes)):
-                            if "x" in str(val):
-                                temp = '%04i' % (val[0] * 256 + val[1])
-                                for i in range(5):
-                                    temp += '%02i' % (val[i + 2])
-                                val = temp.encode()
-                            else:
-                                val = bytes(val)
-                                # print("val_try:", val)
-                        else:
-                            val = str(val).encode()
-
-                        # try:
-                        #     val = val._data
-                        #     val = bytes(val)
-                        # except:
-                        #     val = str(val).encode()
+                        val =reader.readout_value(val)
 
                         readout_str += b'%b(%b)\r\n' % (k.encode(), val)
 

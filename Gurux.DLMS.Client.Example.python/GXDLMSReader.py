@@ -521,6 +521,21 @@ class GXDLMSReader:
             val = str_
         self.writeTrace("Index: " + str(pos) + " Value: " + str(val), TraceLevel.INFO)
 
+    def readout_value(self, val):
+        if isinstance(val, (bytearray, bytes)):
+            if "x" in str(val):
+                temp = '%04i' % (val[0] * 256 + val[1])
+                for i in range(5):
+                    temp += '%02i' % (val[i + 2])
+                val = temp.encode()
+            else:
+                val = bytes(val)
+                # print("val_try:", val)
+        else:
+            val = str(val).encode()
+            # print("val_:", val)
+        return val
+
     def getProfileGenerics(self):
         #pylint: disable=broad-except,too-many-nested-blocks
         cells = []
