@@ -203,7 +203,7 @@ class ReadV4:
         arg = ['Gurux.DLMS.Client.Example.python/main.py', '-c', self.client_addr, '-s', self.server_addr,
                '-a', 'Low', '-P', '87654321',   #'-a', 'HighGMac',
                '-t', 'Verbose',
-               '-T', '4D4D4D0000000001', '-v', '0.0.43.1.0.255', '-C', 'AuthenticationEncryption',
+               '-T', '4D4D4D0000000001', '-v', '0.0.43.1.0.255', '-C', 'Encryption', #'AuthenticationEncryption',
                '-B', '00000000000000000000000000000000', '-A', '00000000000000000000000000000000',
                '-N', self.port_num, '-V', self.server_invoke, '-W', self.gw_frame_counter,
                '-F', self.frame_counter, '-L', self.get_with_list]
