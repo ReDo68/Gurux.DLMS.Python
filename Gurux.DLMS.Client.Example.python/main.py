@@ -103,10 +103,11 @@ class sampleclient():
                     except Exception:
                         read = False
                 if not read:
+                    print("getAssociationView in the main")
                     reader.getAssociationView()
 
                 if settings.get_with_list == 1 :
-                    print('++++++++++++++ GETTTTTTTING WITH LIIIIIIIIIIIIIIIST +++++++++++')
+                    print('+++++++++++++++ GETTTING WITH LIIIST +++++++++++++++')
                     list_arr = []
                     for k, v in settings.readObjects:
                         obj = settings.client.objects.findByLN(ObjectType.NONE, k)
@@ -117,22 +118,24 @@ class sampleclient():
                     list_arr = [x for x in zip(*[iter(list_arr)] * 2)]
                     val_list = reader.readList(list_arr)
 
+                    # sending readout
                     m = 0
                     for k, v in settings.readObjects:
                         val = val_list[m]
                         m += 1
-                        val =reader.readout_value(val)
+                        val = reader.readout_value(val)
+                        print(k, v, " = ", val)
                         readout_str += b'%b(%b)\r\n' % (k.encode(), val)
 
                 else:
                     for k, v in settings.readObjects:
-                        print("------------>", k, v)
                         obj = settings.client.objects.findByLN(ObjectType.NONE, k)
                         if obj is None:
                              raise Exception("Unknown logical name:" + k)
                         val = reader.read(obj, v)
+                        print("------------>", k, v)
                         reader.showValue(v, val)
-                        val =reader.readout_value(val)
+                        val = reader.readout_value(val)
 
                         readout_str += b'%b(%b)\r\n' % (k.encode(), val)
 
@@ -199,6 +202,7 @@ class ReadV4:
     def read(self):
         arg = ['Gurux.DLMS.Client.Example.python/main.py', '-c', self.client_addr, '-s', self.server_addr, '-a', 'HighGMac', '-t', 'Verbose',
                '-T', '4D4D4D0000000001', '-v', '0.0.43.1.0.255', '-C', 'AuthenticationEncryption',
+               '-B', '00000000000000000000000000000000', '-A', '00000000000000000000000000000000',
                '-N', self.port_num, '-V', self.server_invoke, '-W', self.gw_frame_counter,
                '-F', self.frame_counter, '-L', self.get_with_list]
 
@@ -231,9 +235,6 @@ class ReadV4:
 
 def callreadv4(company, physical, port, serverinvoke, framecounter, getwithlist, gwfc):
     sampleclient.main(ReadV4(company, physical, port, serverinvoke, framecounter, getwithlist, gwfc).read())
-# print(read_v4('tfc').read())
-# sampleclient.main(ReadV4('tfc', 2985, 1, 0).read())  #1110
-
 
 # if __name__ == '__main__':
 #     arg_reza = ['Gurux.DLMS.Client.Example.python/main.py', '-S', '/dev/ttyUSB0:19200:8Even1', '-g', '1.0.1.8.0.255:2',
