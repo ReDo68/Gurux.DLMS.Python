@@ -200,22 +200,22 @@ class ReadV4:
         self.get_with_list = 0 if get_with_list is False else 1
 
     def read(self):
-        arg = ['Gurux.DLMS.Client.Example.python/main.py',
-               '-c', self.client_addr, '-s', self.server_addr,
-               '-a', 'HighGMac',
-               '-t', 'Verbose',
-               '-T', '4D4D4D0000000001', '-v', '0.0.43.1.0.255', '-C', 'AuthenticationEncryption',
-               # '-B', '00000000000000000000000000000000', '-A', '00000000000000000000000000000000',
-               '-N', self.port_num, '-V', self.server_invoke, '-W', self.gw_frame_counter,
-               '-F', self.frame_counter, '-L', self.get_with_list]
-
-        # arg = ['Gurux.DLMS.Client.Example.python/main.py', '-c', self.client_addr, '-s', self.server_addr,
-        #        '-a', 'Low', '-P', '87654321',  # '-a', 'HighGMac',
+        # arg = ['Gurux.DLMS.Client.Example.python/main.py',
+        #        '-c', self.client_addr, '-s', self.server_addr,
+        #        '-a', 'HighGMac',
         #        '-t', 'Verbose',
-        #        '-T', '4D4D4D0000000001', '-v', '0.0.43.1.0.255', '-C', 'Encryption',  # 'AuthenticationEncryption',
-        #        '-B', '00000000000000000000000000000000', '-A', '00000000000000000000000000000000',
+        #        '-T', '4D4D4D0000000001', '-v', '0.0.43.1.0.255', '-C', 'AuthenticationEncryption',
+        #        # '-B', '00000000000000000000000000000000', '-A', '00000000000000000000000000000000',
         #        '-N', self.port_num, '-V', self.server_invoke, '-W', self.gw_frame_counter,
         #        '-F', self.frame_counter, '-L', self.get_with_list]
+
+        arg = ['Gurux.DLMS.Client.Example.python/main.py', '-c', self.client_addr, '-s', self.server_addr,
+               '-a', 'Low', '-P', '87654321',  # '-a', 'HighGMac',
+               '-t', 'Verbose',
+               '-T', '4D4D4D0000000001', '-v', '0.0.43.1.0.255', '-C', 'None',  # Encryption 'AuthenticationEncryption',
+               '-B', '00000000000000000000000000000000', '-A', '00000000000000000000000000000000',
+               '-N', self.port_num, '-V', self.server_invoke, '-W', self.gw_frame_counter,
+               '-F', self.frame_counter, '-L', self.get_with_list]
 
         if self.device == 'gw':
             self.usb = self.usb+":19200:8Even1"
