@@ -37,7 +37,7 @@ def gwWrap(data, port_num, server_invoke, gw_frame_counter):
     totLen += 3
     port = int(port_num)
     # 0: 300, 3: 2400, 4: 4800, 5: 9600, 6: 19200
-    initBd = 3
+    initBd = 4
     # In ms
     waitTime = 500
     bitNum = 8
