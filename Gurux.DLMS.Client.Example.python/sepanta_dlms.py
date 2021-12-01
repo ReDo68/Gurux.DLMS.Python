@@ -61,7 +61,7 @@ class RezaV4:
 
         self.device             = 'gw'                    # 'gw' 'meter'
         self.media              = 'TCP'                   # 'TCP' 'Serial'
-        self.client_addr        = '1'
+        self.client_addr        = 1
         self.ip                 = 'localhost'             # ***mandatory-1*** '193.105.234.168'  'localhost'
         self.port               = '7370'                  # ***mandatory-1***
         self.usb                = "/dev/ttyUSB0"          # ***mandatory-1***
