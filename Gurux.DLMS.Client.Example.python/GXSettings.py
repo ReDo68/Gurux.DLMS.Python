@@ -237,6 +237,7 @@ class GXSettings:
                 self.trace = TraceLevel.VERBOSE
         else:
             self.trace = TraceLevel.OFF
+
         return 0
         # For more Settings check GXSettings2
 

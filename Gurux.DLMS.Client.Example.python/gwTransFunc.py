@@ -32,7 +32,8 @@ def calCrc(inStr, inLen):
 
 def gwWrap(data, port_num, server_invoke, gw_frame_counter):
     # print(gw_frame_counter)
-    dataL = len(data) + 12
+    print(data, port_num, server_invoke, gw_frame_counter )
+    dataL = len(data) + 10
     totLen = math.ceil((dataL + 4) / 16) * 16
     totLen += 5
     port = int(port_num)
