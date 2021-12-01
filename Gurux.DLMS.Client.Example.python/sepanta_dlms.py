@@ -32,6 +32,7 @@
 #  Full text may be retrieved at http://www.gnu.org/licenses/gpl-2.0.txt
 # ---------------------------------------------------------------------------
 import os
+import math
 import sys
 import traceback
 import pandas as pd
@@ -125,30 +126,30 @@ class RezaV4:
                     print("------ CSV not found! -----")
 
                 try:
-                    if df['meter_baud'][0] is not None:
-                        server_args['meter_baud'] = df['meter_baud']
-                    if df['server_addr'][0] is not None:
-                        server_args['server_addr'] = df['server_addr']
-                    if df['client_addr'][0] is not None:
-                        server_args['client_addr'] = df['client_addr']
-                    if df['authentication'][0] is not None:
-                        server_args['authentication'] = df['authentication']
-                    if df['policy'][0] is not None:
-                        server_args['policy'] = df['policy']
-                    if df['EKey'][0] is not None:
-                        server_args['EKey'] = df['EKey']
-                    if df['AKey'][0] is not None:
-                        server_args['AKey'] = df['AKey']
-                    if df['obis'][0] is not None:
-                        server_args['obis'] = df['obis']
-                    if df['password'][0] is not None:
-                        server_args['password'] = df['password']
-                    if df['port_num'][0] is not None:
-                        server_args['port_num'] = df['port_num']
-                    if df['system_title'][0] is not None:
-                        server_args['system_title'] = df['system_title']
-                    if df['fc_obis'][0] is not None:
-                        server_args['fc_obis'] = df['fc_obis']
+                    if math.isnan(df['meter_baud'][0]):
+                        server_args['meter_baud'] = int(df['meter_baud'][0])
+                    if math.isnan(df['server_addr'][0]):
+                        server_args['server_addr'] = int(df['server_addr'][0])
+                    if math.isnan(df['client_addr'][0]):
+                        server_args['client_addr'] = int(df['client_addr'][0])
+                    if math.isnan(df['authentication'][0]):
+                        server_args['authentication'] = df['authentication'][0]
+                    if math.isnan(df['policy'][0]):
+                        server_args['policy'] = df['policy'][0]
+                    if math.isnan(df['EKey'][0]):
+                        server_args['EKey'] = df['EKey'][0]
+                    if math.isnan(df['AKey'][0]):
+                        server_args['AKey'] = df['AKey'][0]
+                    if math.isnan(df['obis'][0]):
+                        server_args['obis'] = df['obis'][0]
+                    if math.isnan(df['password'][0]):
+                        server_args['password'] = df['password'][0]
+                    if math.isnan(df['port_num'][0]):
+                        server_args['port_num'] = int(df['port_num'][0])
+                    if math.isnan(df['system_title'][0]):
+                        server_args['system_title'] = df['system_title'][0]
+                    if math.isnan(df['fc_obis'][0]):
+                        server_args['fc_obis'] = df['fc_obis'][0]
 
                 except:
                     print("------ CSV not applied! -----")
