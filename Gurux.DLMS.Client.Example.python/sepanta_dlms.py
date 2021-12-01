@@ -118,6 +118,7 @@ class RezaV4:
         if 'com_test' in server_args:
             if server_args['com_test'] == 1:
                 try:
+                    print(os.getcwd())
                     df = pd.read_csv('/root/ct.csv')
                     print(df)
                     print(df[0])
