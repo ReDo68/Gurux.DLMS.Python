@@ -283,5 +283,5 @@ Change to :
 if self.negotiatedConformance == 0:
 
 
-sys.path.append('GW-Server/Gurux.DLMS.Python/Gurux.DLMS.Client.Example.python')
+sys.path.append('/home/reza/PycharmProjects/Gurux.DLMS.Python/Gurux.DLMS.Client.Example.python')
 from sepanta_dlms import RezaV4

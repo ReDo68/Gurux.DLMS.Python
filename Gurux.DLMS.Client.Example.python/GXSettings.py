@@ -34,7 +34,7 @@ class GXSettings:
         self.server_invoke = 0
         self.port_num = 1
         self.frame_counter = 0
-        self.meter_baud = 5
+        self.meter_baud = 5  #9600
         self.gw_frame_counter = b'\x04\xdd'
         self.get_with_list = 0
 
@@ -43,6 +43,7 @@ class GXSettings:
         self.outputFile = None
         self.invocationCounter = None
         self.client = GXDLMSSecureClient(True)
+        # self.serverAddressSize = 0
         self.client.clientAddress = 16                      # public client by default
         self.client.serverAddress = 1                       # public client by default
         self.invocationCounter = '0.0.43.1.0.255'
@@ -55,13 +56,14 @@ class GXSettings:
 
         self.use_wrapper = False
         self.use_LogicalNameReferencing = True
+
         if self.use_wrapper:
             self.client.interfaceType = InterfaceType.WRAPPER
         else:
             if self.use_LogicalNameReferencing:
-                self.client.useLogicalNameReferencing = False
-            else:
                 self.client.useLogicalNameReferencing = True
+            else:
+                self.client.useLogicalNameReferencing = False
 
     def get_parameters(self, args):
         print("settings-->", args)

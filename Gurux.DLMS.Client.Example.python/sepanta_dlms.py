@@ -198,7 +198,6 @@ class RezaV4:
             ret = settings.get_parameters(args)
             if ret != 0:
                 return
-
             # Initialize connection settings.
             if not isinstance(settings.media, (GXSerial, GXNet)):
                 raise Exception("Unknown media type.")
