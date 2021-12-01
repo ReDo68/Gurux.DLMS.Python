@@ -101,7 +101,7 @@ class RezaV4:
             server_args['obis'] = self.OBIS
 
         if 'company' in server_args:
-            if server_args['company'] == self.valid_producer:
+            if server_args['company'] in self.valid_producer:
                 arg['output'] = server_args['company'] + '.xml'
             else:
                 print("Please choose a '''correct''' company EX: afzar")
