@@ -1,38 +1,15 @@
 #
 #  --------------------------------------------------------------------------
 #   Gurux Ltd
-#
-#
-#
-#  Filename: $HeadURL$
-#
-#  Version: $Revision$,
-#                   $Date$
-#                   $Author$
-#
+
 #  Copyright (c) Gurux Ltd
-#
-# ---------------------------------------------------------------------------
-#
-#   DESCRIPTION
-#
-#  This file is a part of Gurux Device Framework.
-#
-#  Gurux Device Framework is Open Source software; you can redistribute it
-#  and/or modify it under the terms of the GNU General Public License
-#  as published by the Free Software Foundation; version 2 of the License.
-#  Gurux Device Framework is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-#  See the GNU General Public License for more details.
-#
+
 #  More information of Gurux products: http://www.gurux.org
 #
 #  This code is licensed under the GNU General Public License v2.
 #  Full text may be retrieved at http://www.gnu.org/licenses/gpl-2.0.txt
 # ---------------------------------------------------------------------------
 from locale import atoi
-
 from gurux_dlms.enums import InterfaceType, Authentication, Security, Standard
 from gurux_dlms import GXDLMSClient
 from gurux_dlms.secure import GXDLMSSecureClient
@@ -45,7 +22,222 @@ from gurux_net import GXNet
 from gurux_serial.GXSerial import GXSerial
 from GXCmdParameter import GXCmdParameter
 
+
 class GXSettings:
+    # Constructor.
+    def __init__(self):
+
+        self.media = None
+        self.trace = TraceLevel.INFO
+        # self.iec = False
+        self.gwWrapper = False
+        self.server_invoke = 0
+        self.port_num = 1
+        self.frame_counter = 0
+        self.gw_frame_counter = b'\x04\xdd'
+        self.get_with_list = 0
+
+        #  Objects to read.
+        self.readObjects = []
+        self.outputFile = None
+        self.invocationCounter = None
+        self.client = GXDLMSSecureClient(True)
+        self.client.clientAddress = 16                      # public client by default
+        self.client.serverAddress = 1                       # public client by default
+        self.invocationCounter = '0.0.43.1.0.255'
+        self.client.authentication = Authentication.NONE
+        self.client.ciphering.security = Security.NONE
+        self.client.ciphering.systemTitle = GXByteBuffer.hexToBytes('4D4D4D0000000001')
+        self.client.ciphering.authenticationKey = GXByteBuffer.hexToBytes('D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF')
+        self.client.ciphering.blockCipherKey = GXByteBuffer.hexToBytes('000102030405060708090A0B0C0D0E0F')
+        self.client.ciphering.dedicatedKey = GXByteBuffer.hexToBytes('00112233445566778899AABBCCDDEEFF')
+
+        self.use_wrapper = False
+        self.use_LogicalNameReferencing = True
+        if self.use_wrapper:
+            self.client.interfaceType = InterfaceType.WRAPPER
+        else:
+            if self.use_LogicalNameReferencing:
+                self.client.useLogicalNameReferencing = False
+            else:
+                self.client.useLogicalNameReferencing = True
+
+    def get_parameters(self, args):
+        # DLMS Paraneters
+        mode_e_default = True
+        if 'client_addr' in args:
+            self.client.clientAddress = int(args['client_addr'])
+
+        if 'server_addr' in args:
+            if self.client.serverAddress != 1:
+                # self.client.serverAddress = GXDLMSClient.getServerAddress(serverAddress, atoi(optarg))
+                self.client.serverAddress = GXDLMSClient.getServerAddress(self.client.serverAddress,  int(args['server_addr']))
+            else:
+                self.client.serverAddress = int(args['server_addr'])
+
+        if 'authentication' in args:
+            it = args['authentication']
+            if it == "None":
+                self.client.authentication = Authentication.NONE
+            elif it == "Low":
+                self.client.authentication = Authentication.LOW
+            elif it == "High":
+                self.client.authentication = Authentication.HIGH
+            elif it == "HighMd5":
+                self.client.authentication = Authentication.HIGH_MD5
+            elif it == "HighSha1":
+                self.client.authentication = Authentication.HIGH_SHA1
+            elif it == "HighGMac":
+                self.client.authentication = Authentication.HIGH_GMAC
+            elif it == "HighSha256":
+                self.client.authentication = Authentication.HIGH_SHA256
+            else:
+                print("Invalid Authentication option: '" + it + "'. (None, Low, High, HighMd5, HighSha1, HighGMac, HighSha256)")
+                self.client.authentication = Authentication.NONE
+
+        if 'policy' in args:
+            it = args['policy']
+            if it == "None":
+                self.client.ciphering.security = Security.NONE
+            elif it == "Authentication":
+                self.client.ciphering.security = Security.AUTHENTICATION
+            elif it == "Encryption":
+                self.client.ciphering.security = Security.ENCRYPTION
+            elif it == "AuthenticationEncryption":
+                self.client.ciphering.security = Security.AUTHENTICATION_ENCRYPTION
+            else:
+                raise ValueError("Invalid Ciphering option: '" + it + "'. (None, Authentication, Encryption, AuthenticationEncryption)")
+
+        if 'system_title' in args:
+            self.client.ciphering.systemTitle = GXByteBuffer.hexToBytes(args['system_title'])
+        if 'AKey' in args:
+            self.client.ciphering.authenticationKey = GXByteBuffer.hexToBytes(args['AKey'])
+        if 'EKey' in args:
+            self.client.ciphering.blockCipherKey = GXByteBuffer.hexToBytes(args['EKey'])
+        if 'Mkey' == args:
+            self.client.ciphering.dedicatedKey = GXByteBuffer.hexToBytes(args['Mkey'])
+        elif 'output' == args:
+            self.outputFile = args['output']
+
+        if 'password' in args:
+            #  Password
+            if args['password'].startswith("0x"):
+                self.client.password = GXByteBuffer.hexToBytes(args['password'][2:])
+            else:
+                self.client.password = args['password']
+
+        if 'fc_obis' in args:
+            self.invocationCounter = args['fc_obis']
+            GXDLMSObject.validateLogicalName(self.invocationCounter)
+
+        if 'frame_counter' in args:
+            self.frame_counter = args['frame_counter']
+
+        # Connection Parameters
+        if 'host' in args:
+            if not self.media:
+                self.media = GXNet(NetworkType.TCP, args['host'] , 0)
+            else:
+                self.media.hostName = args['host']
+
+        if 'port' in args:
+            if not self.media:
+                self.media = GXNet(NetworkType.TCP, None, int(args['port']))
+            else:
+                self.media.port = int(args['port'])
+
+        if 'usb' in args:
+            self.media = GXSerial(None)
+            tmp = args['usb'].split(':')
+            self.media.port = tmp[0]
+            if len(tmp) > 1:
+                mode_e_default = False  # defaultBaudRate = False
+                self.media.baudRate = int(tmp[1])
+                self.media.dataBits = int(tmp[2][0: 1])
+                self.media.parity = Parity[tmp[2][1: len(tmp[2]) - 1].upper()]
+                self.media.stopBits = int(tmp[2][len(tmp[2]) - 1:]) - 1
+            else:
+                self.media.baudrate = BaudRate.BAUD_RATE_9600
+                self.media.bytesize = 8
+                self.media.parity = Parity.NONE
+                self.media.stopbits = StopBits.ONE
+
+        if 'obis' in args:
+            #  Get (read) selected objects.
+            for o in args['obis'].split(";"):
+                tmp = o.split(":")
+                if len(tmp) != 2:
+                    raise ValueError("Invalid Logical name or attribute index.")
+                self.readObjects.append((tmp[0].strip(), int(tmp[1].strip())))
+
+        if 'get_with_list' in args:
+            self.get_with_list = args['get_with_list']
+
+        # Gateway parameters
+        if 'gateway' in args:
+            if args['gateway'] == "sepanta":
+                self.gwWrapper = True
+            else:
+                self.gwWrapper = False
+
+        if 'port_num' in args:
+            self.port_num = args['port_num']
+
+        if 'server_invoke' in args:
+            self.server_invoke = args['server_invoke']
+
+        if 'gw_frame_counter' in args:
+            self.gw_frame_counter = args['gw_frame_counter']
+
+        # other parameters
+        if 'mode' in args:
+            #  IEC.
+            # self.iec = True
+            # if defaultBaudRate:
+            it = args['mode']
+            if it == "HDLC":
+                self.client.interfaceType = InterfaceType.HDLC
+            elif it == "WRAPPER":
+                self.client.interfaceType = InterfaceType.WRAPPER
+            elif it == "HdlcWithModeE":
+                self.client.interfaceType = InterfaceType.HDLC_WITH_MODE_E
+            elif it == "Plc":
+                self.clientinterfaceType = InterfaceType.PLC
+            elif it == "PlcHdlc":
+                self.clientinterfaceType = InterfaceType.PLC_HDLC
+            else:
+                raise ValueError(
+                    "Invalid interface type option." + it.value + " (HDLC, WRAPPER, HdlcWithModeE, Plc, PlcHdlc)")
+
+            if mode_e_default and self.client.interfaceType == InterfaceType.HDLC_WITH_MODE_E:
+                self.media.baudrate = BaudRate.BAUD_RATE_300
+                self.media.bytesize = 7
+                self.media.parity = Parity.EVEN
+                self.media.stopbits = StopBits.ONE
+
+        if 'autoIncreaseInvokeID' in args:
+            #AutoIncreaseInvokeID.
+            self.client.autoIncreaseInvokeID = True
+
+        if 'loging' in args:
+            it = args['loging']
+            if it == "Off":
+                self.trace = TraceLevel.OFF
+            elif it == "Error":
+                self.trace = TraceLevel.ERROR
+            elif it == "Warning":
+                self.trace = TraceLevel.WARNING
+            elif it == "Info":
+                self.trace = TraceLevel.INFO
+            elif it == "Verbose":
+                self.trace = TraceLevel.VERBOSE
+        else:
+            self.trace = TraceLevel.OFF
+
+        # For more Settings check GXSettings2
+
+
+class GXSettings2:
     #
     # Constructor.
     #

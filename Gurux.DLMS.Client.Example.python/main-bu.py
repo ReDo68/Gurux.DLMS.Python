@@ -52,87 +52,13 @@ from gwTransFunc import calCrc, gwWrap, gwUnwrap
 
 try:
     import pkg_resources
-except Exception as e:
-    print("pkg_resources not found", e)
+    #pylint: disable=broad-except
+except Exception:
+    #It's OK if this fails.
+    print("pkg_resources not found")
 
-
-class RezaV4:
-    def __init__(self):
-
-        self.device             = 'gw'                    # 'gw' 'meter'
-        self.media              = 'TCP'                   # 'TCP' 'Serial'
-        self.client_addr        = '1'
-        self.ip                 = 'localhost'             # ***mandatory-1*** '193.105.234.168'  'localhost'
-        self.port               = '7370'                  # ***mandatory-1***
-        self.usb                = "/dev/ttyUSB0"          # ***mandatory-1***
-        self.valid_producer     = ['tfc', 'eaa']
-
-        # Default OBIS
-        # self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
-        self.OBIS = '0.0.1.0.0.255:2;1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;' \
-                    '1.0.1.8.3.255:2;1.0.1.8.4.255:2;1.0.32.7.0.255:2;1.0.31.7.0.255:2'
-        #             '1.0.32.7.0.255:2;1.0.31.7.0.255:2;1.0.2.8.0.255:2'
-        # self.OBIS = '0.0.20.0.0.255:2;0.0.20.0.0.255:3;0.0.20.0.0.255:4;0.0.20.0.0.255:5;' \
-        #             '0.2.22.0.0.255:7;0.2.22.0.0.255:8'   Timming
-
-    def read_def(self, server_args):
-
-        # Create system arg
-        arg = {'loging': 'Verbose'}
-
-        if self.device == 'gw':
-            self.usb = self.usb+":19200:8Even1"
-            arg['gateway'] = 'sepanta'
-        elif self.device == 'meter':
-            self.usb = self.usb + ":9600:8None1"
-        else:
-            print("Please choose between 'gw' and 'meter' mode in device")
-
-        if self.media == 'TCP':
-            arg['host'] = self.ip
-            arg['port'] = self.port
-        elif self.media == 'Serial':
-            arg['usb'] = self.usb
-        else:
-            print("Please choose between 'TCP' and 'Serial' mode in media")
-
-        # updating server_args
-        if 'obis' not in server_args:
-            server_args['obis'] = self.OBIS
-
-        if 'company' in server_args:
-            if server_args['company'] == self.valid_producer:
-                arg['output'] = server_args['company'] + '.xml'
-            else:
-                print("Please choose a '''correct''' company EX: afzar")
-        else:
-            print("Please choose a company EX: afzar")
-
-        if 'server_addr' in server_args:
-            server_args['client_addr'] = self.client_addr
-            # '19369'  # 0x4000+physical(1000+sn_last_4digits)
-            server_args['server_addr'] = 16384+server_args['server_addr']
-
-        # consider server_args as:
-        #     Name            default                           type    choices          check by
-        # company*            -                                 str    ['eaa', 'tfc']    valid_producer
-        # server_addr*        miss means: public client         int
-        # authentication     'None'                             str    [None Low High HighMd5 HighSha1 HighGMac HighSha256]
-        # policy             'None'                             str    [None Authentication Encryption AuthenticationEncryption]
-        # fc_obis            '0.0.43.1.0.255'                   str
-        # system_title       '4D4D4D0000000001'                 str
-        # EKey               'D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF' str
-        # AKey               '000102030405060708090A0B0C0D0E0F' str
-        # port_num           1                                  int
-        # server_invoke      0                                  int
-        # gw_frame_counter   b'\x04\xdd'                        byte?
-        # frame_counter      0                                  int
-        # get_with_list      0                                  int     [0, 1]
-        # password*          miss means: Not Low level Auth     str
-        # obis               Reza OBIS List                     str     'obis:att;'
-
-        self.main(arg.update(server_args))
-
+#pylint: disable=too-few-public-methods,broad-except
+class sampleclient():
     @classmethod
     def main(cls, args):
         try:
@@ -140,22 +66,27 @@ class RezaV4:
             # print("gurux_dlms version: " + pkg_resources.get_distribution("gurux_dlms").version)
             # print("gurux_net version: " + pkg_resources.get_distribution("gurux_net").version)
             # print("gurux_serial version: " + pkg_resources.get_distribution("gurux_serial").version)
-        except Exception as e:
-            print("pkg_resources not found", e)  # It's OK if this fails.
+        except Exception:
+            # It's OK if this fails.
+            print("pkg_resources not found")
 
         readout_str = b'READOUT\r\n'
+        # args: the command line arguments
         reader = None
         settings = GXSettings()
         try:
-            # Handle  parameters.
-            ret = settings.get_parameters(args)
+            # //////////////////////////////////////
+            #  Handle command line parameters.
+            # print(args)
+            ret = settings.getParameters(args)
             if ret != 0:
                 return
-
-            # Initialize connection settings.
+            # print(settings.outputFile.split(".")[0])
+            # //////////////////////////////////////
+            #  Initialize connection settings.
             if not isinstance(settings.media, (GXSerial, GXNet)):
                 raise Exception("Unknown media type.")
-            # define reader acording to settings
+            # //////////////////////////////////////
             reader = GXDLMSReader(settings.client, settings.media, settings.trace, settings.invocationCounter,
                                   settings.gwWrapper, settings.port_num, settings.server_invoke,
                                   settings.frame_counter, settings.get_with_list, settings.gw_frame_counter)
@@ -172,7 +103,7 @@ class RezaV4:
                     except Exception:
                         read = False
                 if not read:
-                    print("getgetPAssociationView in the main")
+                    print("getAssociationView in the main")
                     reader.getAssociationView()
 
                 if settings.get_with_list == 1 :
@@ -245,6 +176,82 @@ class RezaV4:
 
             print("Ended!")
 
-def callreadv4(server_arg):
-    RezaV4.read_def(server_arg)
-    # SampleClient.main(ReadV4(company, physical, port, serverinvoke, framecounter, getwithlist, gwfc).read())
+class ReadV4:
+    def __init__(self, meter_type, physical, port_num=1 ,
+                 server_invoke=0, frame_counter=0, get_with_list=False, gw_frame_counter=b'\x04\xdd'):
+        self.meter_type = meter_type  # 'tfc' 'eaa'
+        # self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
+        self.OBIS = '0.0.1.0.0.255:2;1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2;1.0.1.8.4.255:2;1.0.32.7.0.255:2;1.0.31.7.0.255:2'
+        #             '1.0.32.7.0.255:2;1.0.31.7.0.255:2;1.0.2.8.0.255:2'
+        # self.OBIS = '0.0.20.0.0.255:2;0.0.20.0.0.255:3;0.0.20.0.0.255:4;0.0.20.0.0.255:5;' \
+        #             '0.2.22.0.0.255:7;0.2.22.0.0.255:8'   Timming
+        self.device = 'gw'  # 'gw' 'meter'
+        self.media = 'TCP'  # 'TCP' 'Serial'
+        self.server_addr = str(16384+physical)    #'19369'  # 0x4000+physical(1000+sn_last_4digits)
+
+        self.client_addr = '1'
+        self.ip = 'localhost'  #'193.105.234.168'  'localhost'
+        self.port = '7370'
+        self.usb = "/dev/ttyUSB0"
+        self.port_num = str(port_num)
+        self.server_invoke = str(server_invoke)
+        self.gw_frame_counter = gw_frame_counter
+        self.frame_counter = str(frame_counter)
+        self.get_with_list = 0 if get_with_list is False else 1
+
+    def read(self):
+        arg = ['Gurux.DLMS.Client.Example.python/main.py',
+               '-c', self.client_addr, '-s', self.server_addr,
+               '-a', 'HighGMac',
+               '-t', 'Verbose',
+               '-T', '4D4D4D0000000001', '-v', '0.0.43.1.0.255', '-C', 'AuthenticationEncryption',
+               # '-B', '00000000000000000000000000000000', '-A', '00000000000000000000000000000000',
+               '-N', self.port_num, '-V', self.server_invoke, '-W', self.gw_frame_counter,
+               '-F', self.frame_counter, '-L', self.get_with_list]
+
+        # arg = ['Gurux.DLMS.Client.Example.python/main.py', '-c', self.client_addr, '-s', self.server_addr,
+        #        '-a', 'Low', '-P', '87654321',  # '-a', 'HighGMac',
+        #        '-t', 'Verbose',
+        #        '-T', '4D4D4D0000000001', '-v', '0.0.43.1.0.255', '-C', 'None',  # Encryption 'AuthenticationEncryption',
+        #        '-B', '00000000000000000000000000000000', '-A', '00000000000000000000000000000000',
+        #        '-N', self.port_num, '-V', self.server_invoke, '-W', self.gw_frame_counter,
+        #        '-F', self.frame_counter, '-L', self.get_with_list]
+
+        if self.device == 'gw':
+            self.usb = self.usb+":19200:8Even1"
+            arg = arg + ['-G', 'sepanta']
+        elif self.device == 'meter':
+            self.usb = self.usb + ":9600:8None1"
+        else:
+            print("Please choose between 'gw' and 'meter' mode in device")
+
+        if self.media == 'TCP':
+            arg = arg + ['-h', self.ip, '-p', self.port]
+        elif self.media == 'Serial':
+            arg = arg + ['-S', self.usb]
+        else:
+            print("Please choose between 'TCP' and 'Serial' mode in media")
+
+        if self.OBIS:
+            arg = arg + ['-g', self.OBIS]
+
+        if self.meter_type == 'tfc':
+            arg = arg + ['-o', 'tfc.xml']
+        elif self.meter_type == 'eaa':
+            arg = arg + ['-o', 'eaa.xml']
+        else:
+            print("Please choose a correct meter_type EX: afzar")
+
+        return arg
+
+def callreadv4(company, physical, port, serverinvoke, framecounter, getwithlist, gwfc):
+    sampleclient.main(ReadV4(company, physical, port, serverinvoke, framecounter, getwithlist, gwfc).read())
+
+# if __name__ == '__main__':
+#     arg_reza = ['Gurux.DLMS.Client.Example.python/main.py', '-S', '/dev/ttyUSB0:19200:8Even1', '-g', '1.0.1.8.0.255:2',
+#                 '-c', '1', '-s', '17493', '-a', 'HighGMac', '-t', 'Verbose', '-T', '4D4D4D0000000001', '-v',
+#                 '0.0.43.1.0.255', '-C', 'AuthenticationEncryption', '-o',
+#                 '/home/reza/Documents/Project/dlms/device.xml', '-G', 'sepanta']
+#
+#     # sampleclient.main(arg_reza)
+#     sampleclient.main(sys.argv)
