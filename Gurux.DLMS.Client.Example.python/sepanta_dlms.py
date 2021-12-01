@@ -119,40 +119,40 @@ class RezaV4:
         if 'com_test' in server_args:
             if server_args['com_test'] == 1:
                 try:
-                    print(os.getcwd())
+                    # print(os.getcwd())
                     df = pd.read_csv('/root/ct.csv')
                     print(df.T)
                 except:
                     print("------ CSV not found! -----")
 
                 try:
-                    if math.isnan(df['meter_baud'][0]):
+                    if not math.isnan(df['meter_baud'][0]):
                         server_args['meter_baud'] = int(df['meter_baud'][0])
-                    if math.isnan(df['server_addr'][0]):
+                    if not math.isnan(df['server_addr'][0]):
                         server_args['server_addr'] = int(df['server_addr'][0])
-                    if math.isnan(df['client_addr'][0]):
+                    if not math.isnan(df['client_addr'][0]):
                         server_args['client_addr'] = int(df['client_addr'][0])
-                    if math.isnan(df['authentication'][0]):
+                    if not math.isnan(df['authentication'][0]):
                         server_args['authentication'] = df['authentication'][0]
-                    if math.isnan(df['policy'][0]):
+                    if not math.isnan(df['policy'][0]):
                         server_args['policy'] = df['policy'][0]
-                    if math.isnan(df['EKey'][0]):
+                    if not math.isnan(df['EKey'][0]):
                         server_args['EKey'] = df['EKey'][0]
-                    if math.isnan(df['AKey'][0]):
+                    if not math.isnan(df['AKey'][0]):
                         server_args['AKey'] = df['AKey'][0]
-                    if math.isnan(df['obis'][0]):
+                    if not math.isnan(df['obis'][0]):
                         server_args['obis'] = df['obis'][0]
-                    if math.isnan(df['password'][0]):
+                    if not math.isnan(df['password'][0]):
                         server_args['password'] = df['password'][0]
-                    if math.isnan(df['port_num'][0]):
+                    if not math.isnan(df['port_num'][0]):
                         server_args['port_num'] = int(df['port_num'][0])
-                    if math.isnan(df['system_title'][0]):
+                    if not math.isnan(df['system_title'][0]):
                         server_args['system_title'] = df['system_title'][0]
-                    if math.isnan(df['fc_obis'][0]):
+                    if not math.isnan(df['fc_obis'][0]):
                         server_args['fc_obis'] = df['fc_obis'][0]
 
-                except:
-                    print("------ CSV not applied! -----")
+                except Exception as e:
+                    print("------ CSV not applied! -----> Exception: ", e)
 
 
         # consider server_args as:
