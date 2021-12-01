@@ -114,12 +114,13 @@ class RezaV4:
         if 'server_addr' in server_args:
             server_args['client_addr'] = self.client_addr
             # '19369'  # 0x4000+physical(1000+sn_last_4digits)
-            server_args['server_addr'] = 16384+server_args['server_addr']
+            server_args['server_addr'] = 16384+int(server_args['server_addr'])
 
         if 'com_test' in server_args:
             if server_args['com_test'] == 1:
                 try:
                     # print(os.getcwd())
+                    pd.options.mode.chained_assignment = None
                     df = pd.read_csv('/root/ct.csv')
                     print(df.T)
                 except:
@@ -129,7 +130,7 @@ class RezaV4:
                     if not self.isNaN(df['meter_baud'][0]):
                         server_args['meter_baud'] = int(df['meter_baud'][0])
                     if not self.isNaN(df['server_addr'][0]):
-                        server_args['server_addr'] = int(df['server_addr'][0])
+                        server_args['server_addr'] = 16384+int(df['server_addr'][0])
                     if not self.isNaN(df['client_addr'][0]):
                         server_args['client_addr'] = int(df['client_addr'][0])
                     if not self.isNaN(df['authentication'][0]):

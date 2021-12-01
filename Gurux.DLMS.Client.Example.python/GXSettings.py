@@ -51,7 +51,7 @@ class GXSettings:
         self.client.ciphering.systemTitle = GXByteBuffer.hexToBytes('4D4D4D0000000001')
         # self.client.ciphering.authenticationKey = GXByteBuffer.hexToBytes('D0D1D2D3D4D5D6D7D8D9DADBDCDDDEDF')
         # self.client.ciphering.blockCipherKey = GXByteBuffer.hexToBytes('000102030405060708090A0B0C0D0E0F')
-        self.client.ciphering.dedicatedKey = GXByteBuffer.hexToBytes('00112233445566778899AABBCCDDEEFF')
+        # self.client.ciphering.dedicatedKey = GXByteBuffer.hexToBytes('00112233445566778899AABBCCDDEEFF')
 
         self.use_wrapper = False
         self.use_LogicalNameReferencing = True
