@@ -50,11 +50,12 @@ from gwTransFunc import calCrc, gwWrap, gwUnwrap
 class GXDLMSReader:
     #pylint: disable=too-many-public-methods, too-many-instance-attributes
     def __init__(self, client, media, trace, invocationCounter,
-                 gwWrapper, port_num, server_invoke, frame_counter, get_with_list, gw_frame_counter):
+                 gwWrapper, port_num, server_invoke, frame_counter, get_with_list, gw_frame_counter, meter_baud):
         #pylint: disable=too-many-arguments
         self.gwWrapper = gwWrapper
         self.server_invoke = server_invoke
         self.port_num = port_num
+        self.meter_baud = meter_baud
         self.replyBuff = bytearray(8 + 1024)
         self.waitTime = 30000   # Timeout
         self.logFile = open("logFile.txt", "w")
@@ -161,9 +162,9 @@ class GXDLMSReader:
                 time.sleep(0.3)  # to test meter InactivityTimeout - RezaBook
                 if self.gwWrapper:  # R374-changed it to gw
                     self.writeTrace("TXgw: " + self.now() + "\t" + GXByteBuffer.hex(
-                        gwWrap(data, self.port_num, self.server_invoke, self.gw_frame_counter)), TraceLevel.VERBOSE)
+                        gwWrap(data, self.port_num, self.server_invoke, self.gw_frame_counter, self.meter_baud)), TraceLevel.VERBOSE)
                     self.writeTrace("TXm: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)
-                    self.media.send(gwWrap(data, self.port_num, self.server_invoke, self.gw_frame_counter))
+                    self.media.send(gwWrap(data, self.port_num, self.server_invoke, self.gw_frame_counter, self.meter_baud))
                 else:
                     # print(gwWrap(data))
                     self.writeTrace("TXm: " + self.now() + "\t" + GXByteBuffer.hex(data), TraceLevel.VERBOSE)

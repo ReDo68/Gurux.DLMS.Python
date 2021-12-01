@@ -34,6 +34,7 @@
 import os
 import sys
 import traceback
+import pandas as pd
 from gurux_serial import GXSerial
 from gurux_net import GXNet
 from gurux_dlms.enums import ObjectType
@@ -77,6 +78,7 @@ class RezaV4:
 
     def read_def(self, server_args):
         # print('read_def --> ', server_args)
+        server_args['com_test'] = 1
         # Create system arg
         arg = {'loging': 'Verbose'}
 
@@ -113,6 +115,39 @@ class RezaV4:
             # '19369'  # 0x4000+physical(1000+sn_last_4digits)
             server_args['server_addr'] = 16384+server_args['server_addr']
 
+        if 'com_test' in server_args:
+            if server_args['com_test'] == 1:
+                try:
+                    df = pd.read_csv('/ct.csv')
+                    if df['meter_baud'][0] is not None:
+                        server_args['meter_baud'] = df['meter_baud']
+                    if df['server_addr'][0] is not None:
+                        server_args['server_addr'] = df['server_addr']
+                    if df['client_addr'][0] is not None:
+                        server_args['client_addr'] = df['client_addr']
+                    if df['authentication'][0] is not None:
+                        server_args['authentication'] = df['authentication']
+                    if df['policy'][0] is not None:
+                        server_args['policy'] = df['policy']
+                    if df['EKey'][0] is not None:
+                        server_args['EKey'] = df['EKey']
+                    if df['AKey'][0] is not None:
+                        server_args['AKey'] = df['AKey']
+                    if df['obis'][0] is not None:
+                        server_args['obis'] = df['obis']
+                    if df['password'][0] is not None:
+                        server_args['password'] = df['password']
+                    if df['port_num'][0] is not None:
+                        server_args['port_num'] = df['port_num']
+                    if df['system_title'][0] is not None:
+                        server_args['system_title'] = df['system_title']
+                    if df['fc_obis'][0] is not None:
+                        server_args['fc_obis'] = df['fc_obis']
+
+                except:
+                    print("------ CSV not found! -----")
+
+
         # consider server_args as:
         #     Name            default                           type    choices          check by
         # company*            -                                 str    ['eaa', 'tfc']    valid_producer
@@ -128,8 +163,10 @@ class RezaV4:
         # gw_frame_counter   b'\x04\xdd'                        byte?
         # frame_counter      0                                  int
         # get_with_list      0                                  int     [0, 1]
+        # meter_baud         5                                  int     [0,3,4,5,6]
         # password*          miss means: Not Low level Auth     str
         # obis               Reza OBIS List                     str     'obis:att;'
+        # com_test           0                                  int     [0, 1]
 
         arg.update(server_args)
         self.main(arg)
@@ -160,7 +197,8 @@ class RezaV4:
             # define reader acording to settings
             reader = GXDLMSReader(settings.client, settings.media, settings.trace, settings.invocationCounter,
                                   settings.gwWrapper, settings.port_num, settings.server_invoke,
-                                  settings.frame_counter, settings.get_with_list, settings.gw_frame_counter)
+                                  settings.frame_counter, settings.get_with_list, settings.gw_frame_counter,
+                                  settings.meter_baud)
             settings.media.open()
             if settings.readObjects:
                 read = False
@@ -239,7 +277,7 @@ class RezaV4:
                     except:
                         reader.close()
 
-                    settings.media.send(gwWrap(readout_str, 0, 0, settings.gw_frame_counter))
+                    settings.media.send(gwWrap(readout_str, 0, 0, settings.gw_frame_counter, settings.meter_baud))
                     if settings.media:
                         settings.media.close()
                 except Exception:

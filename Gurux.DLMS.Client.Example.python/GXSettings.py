@@ -34,6 +34,7 @@ class GXSettings:
         self.server_invoke = 0
         self.port_num = 1
         self.frame_counter = 0
+        self.meter_baud = 5
         self.gw_frame_counter = b'\x04\xdd'
         self.get_with_list = 0
 
@@ -189,6 +190,9 @@ class GXSettings:
 
         if 'gw_frame_counter' in args:
             self.gw_frame_counter = args['gw_frame_counter']
+
+        if 'meter_baud' in args:
+            self.meter_baud = args['meter_baud']
 
         # other parameters
         if 'output' in args:
