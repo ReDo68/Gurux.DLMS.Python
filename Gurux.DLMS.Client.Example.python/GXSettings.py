@@ -123,10 +123,10 @@ class GXSettings:
 
         if 'password' in args:
             #  Password
-            if args['password'].startswith("0x"):
-                self.client.password = GXByteBuffer.hexToBytes(args['password'][2:])
-            else:
-                self.client.password = args['password']
+            # if args['password'].startswith("0x"):
+            #     self.client.password = GXByteBuffer.hexToBytes(args['password'][2:])
+            # else:
+            self.client.password = args['password']
 
         if 'fc_obis' in args:
             self.invocationCounter = args['fc_obis']
