@@ -246,5 +246,6 @@ class RezaV4:
             print("Ended!")
 
 def callreadv4(server_arg):
-    RezaV4.read_def(server_arg)
+    obj = RezaV4()
+    obj.read_def(server_arg)
     # SampleClient.main(ReadV4(company, physical, port, serverinvoke, framecounter, getwithlist, gwfc).read())
