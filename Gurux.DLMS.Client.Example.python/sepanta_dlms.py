@@ -131,7 +131,8 @@ class RezaV4:
         # password*          miss means: Not Low level Auth     str
         # obis               Reza OBIS List                     str     'obis:att;'
 
-        arg = arg.update(server_args)
+        print('arg -->', arg)
+        arg.update(server_args)
         print('updated_arg -->', arg)
         self.main(arg)
 
