@@ -30,20 +30,24 @@ def calCrc(inStr, inLen):
     crc ^= 0xFFFF
     return bytes([int(crc / 256) & 0xFF, crc & 0xFF])
 
-def gwWrap(data, port_num, server_invoke, gw_frame_counter):
+def gwWrap(data, port_num, server_invoke, gw_frame_counter,meter_baud):
     # print(gw_frame_counter)
-    print(data, port_num, server_invoke, gw_frame_counter )
     dataL = len(data) + 12
     totLen = math.ceil((dataL + 4) / 16) * 16
     totLen += 3
     port = int(port_num)
+
     # 0: 300, 3: 2400, 4: 4800, 5: 9600, 6: 19200
-    initBd = 5
+    initBd = int(meter_baud)
+
     # In ms
     waitTime = 500
+
     bitNum = 8
+
     # 0: None, 1: Odd, 2: Even
     parity = 0
+
     recLen = 1000
     sendStr = b'\x7E'
     sendStr += bytes([int(totLen / 256), totLen % 256])
