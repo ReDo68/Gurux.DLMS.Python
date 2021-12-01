@@ -126,29 +126,29 @@ class RezaV4:
                     print("------ CSV not found! -----")
 
                 try:
-                    if not math.isnan(df['meter_baud'][0]):
+                    if not self.isNaN(df['meter_baud'][0]):
                         server_args['meter_baud'] = int(df['meter_baud'][0])
-                    if not math.isnan(df['server_addr'][0]):
+                    if not self.isNaN(df['server_addr'][0]):
                         server_args['server_addr'] = int(df['server_addr'][0])
-                    if not math.isnan(df['client_addr'][0]):
+                    if not self.isNaN(df['client_addr'][0]):
                         server_args['client_addr'] = int(df['client_addr'][0])
-                    if not math.isnan(df['authentication'][0]):
+                    if not self.isNaN(df['authentication'][0]):
                         server_args['authentication'] = df['authentication'][0]
-                    if not math.isnan(df['policy'][0]):
+                    if not self.isNaN(df['policy'][0]):
                         server_args['policy'] = df['policy'][0]
-                    if not math.isnan(df['EKey'][0]):
+                    if not self.isNaN(df['EKey'][0]):
                         server_args['EKey'] = df['EKey'][0]
-                    if not math.isnan(df['AKey'][0]):
+                    if not self.isNaN(df['AKey'][0]):
                         server_args['AKey'] = df['AKey'][0]
-                    if not math.isnan(df['obis'][0]):
+                    if not self.isNaN(df['obis'][0]):
                         server_args['obis'] = df['obis'][0]
-                    if not math.isnan(df['password'][0]):
+                    if not self.isNaN(df['password'][0]):
                         server_args['password'] = df['password'][0]
-                    if not math.isnan(df['port_num'][0]):
+                    if not self.isNaN(df['port_num'][0]):
                         server_args['port_num'] = int(df['port_num'][0])
-                    if not math.isnan(df['system_title'][0]):
+                    if not self.isNaN(df['system_title'][0]):
                         server_args['system_title'] = df['system_title'][0]
-                    if not math.isnan(df['fc_obis'][0]):
+                    if not self.isNaN(df['fc_obis'][0]):
                         server_args['fc_obis'] = df['fc_obis'][0]
 
                 except Exception as e:
@@ -291,6 +291,13 @@ class RezaV4:
                     traceback.print_exc()
 
             print("Ended!")
+
+    @staticmethod
+    def isNaN(num):
+        return num != num
+
+
+
 
 def callreadv4(server_arg):
     obj = RezaV4()
