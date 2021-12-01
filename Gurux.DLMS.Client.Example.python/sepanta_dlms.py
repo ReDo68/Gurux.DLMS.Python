@@ -120,8 +120,11 @@ class RezaV4:
                 try:
                     print(os.getcwd())
                     df = pd.read_csv('/root/ct.csv')
-                    print(df)
-                    print(df[0])
+                    print(df.T)
+                except:
+                    print("------ CSV not found! -----")
+
+                try:
                     if df['meter_baud'][0] is not None:
                         server_args['meter_baud'] = df['meter_baud']
                     if df['server_addr'][0] is not None:
@@ -148,7 +151,7 @@ class RezaV4:
                         server_args['fc_obis'] = df['fc_obis']
 
                 except:
-                    print("------ CSV not found! -----")
+                    print("------ CSV not applied! -----")
 
 
         # consider server_args as:
