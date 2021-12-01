@@ -281,3 +281,7 @@ if self.negotiatedConformance & Conformance.MULTIPLE_REFERENCES == 0:
 Change to :
 
 if self.negotiatedConformance == 0:
+
+
+sys.path.append('GW-Server/Gurux.DLMS.Python/Gurux.DLMS.Client.Example.python')
+from sepanta_dlms import RezaV4
