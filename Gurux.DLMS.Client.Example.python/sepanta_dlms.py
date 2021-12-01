@@ -76,7 +76,7 @@ class RezaV4:
         #             '0.2.22.0.0.255:7;0.2.22.0.0.255:8'   Timming
 
     def read_def(self, server_args):
-
+        print('read_def --> ', server_args)
         # Create system arg
         arg = {'loging': 'Verbose'}
 
@@ -131,10 +131,13 @@ class RezaV4:
         # password*          miss means: Not Low level Auth     str
         # obis               Reza OBIS List                     str     'obis:att;'
 
-        self.main(arg.update(server_args))
+        arg = arg.update(server_args)
+        print('updated_arg -->', arg)
+        self.main(arg)
 
     @classmethod
     def main(cls, args):
+        print('main --> ', args)
         try:
             pass
             # print("gurux_dlms version: " + pkg_resources.get_distribution("gurux_dlms").version)

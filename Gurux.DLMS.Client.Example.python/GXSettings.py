@@ -63,7 +63,7 @@ class GXSettings:
                 self.client.useLogicalNameReferencing = True
 
     def get_parameters(self, args):
-        print(args)
+        print("settings-->", args)
         # DLMS Paraneters
         mode_e_default = True
         if 'client_addr' in args:
