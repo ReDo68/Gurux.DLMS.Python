@@ -191,6 +191,9 @@ class GXSettings:
             self.gw_frame_counter = args['gw_frame_counter']
 
         # other parameters
+        if 'output' in args:
+            self.outputFile = args['output']
+
         if 'mode' in args:
             #  IEC.
             # self.iec = True
