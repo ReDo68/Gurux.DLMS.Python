@@ -144,7 +144,7 @@ class RezaV4:
                     if not self.isNaN(df['obis'][0]):
                         server_args['obis'] = df['obis'][0]
                     if not self.isNaN(df['password'][0]):
-                        server_args['password'] = df['password'][0]
+                        server_args['password'] = str(df['password'][0])
                     if not self.isNaN(df['port_num'][0]):
                         server_args['port_num'] = int(df['port_num'][0])
                     if not self.isNaN(df['system_title'][0]):
