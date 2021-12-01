@@ -118,7 +118,7 @@ class RezaV4:
         if 'com_test' in server_args:
             if server_args['com_test'] == 1:
                 try:
-                    df = pd.read_csv('/ct.csv')
+                    df = pd.read_csv('/root/ct.csv')
                     if df['meter_baud'][0] is not None:
                         server_args['meter_baud'] = df['meter_baud']
                     if df['server_addr'][0] is not None:
