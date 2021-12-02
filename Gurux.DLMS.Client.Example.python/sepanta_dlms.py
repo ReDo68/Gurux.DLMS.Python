@@ -71,7 +71,7 @@ class RezaV4:
 
         # Default OBIS
         # self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
-        self.OBIS = '0.0.1.0.0.255:2;1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;' \
+        self.OBIS = '0.0.1.0.0.255:2;0.0.42.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;' \
                     '1.0.1.8.3.255:2;1.0.1.8.4.255:2;1.0.32.7.0.255:2;1.0.31.7.0.255:2'
         #             '1.0.32.7.0.255:2;1.0.31.7.0.255:2;1.0.2.8.0.255:2'
         # self.OBIS = '0.0.20.0.0.255:2;0.0.20.0.0.255:3;0.0.20.0.0.255:4;0.0.20.0.0.255:5;' \
@@ -201,6 +201,8 @@ class RezaV4:
             # Initialize connection settings.
             if not isinstance(settings.media, (GXSerial, GXNet)):
                 raise Exception("Unknown media type.")
+            # settings.client.serverAddressSize = 1
+            # settings.client.__setserverAddressSize = 1
             # define reader acording to settings
             reader = GXDLMSReader(settings.client, settings.media, settings.trace, settings.invocationCounter,
                                   settings.gwWrapper, settings.port_num, settings.server_invoke,

@@ -24,12 +24,15 @@ Flag Frame format Dest. address Src. address Control HCS Information FCS Flag --
 --------------------------------------------------
 
 ---------------------------------------------------- SNRM
-                                        type length des/server address    client  SNRM  checkSeq
--c 16(publicCl) -s 1          ---->  7E  A0    07       03                 21(16)   93    0F 01     7E
--c 1            -s 17493      ---->  7E  A0    0A       00 02 10 AB        03(1)    93    14 68     7E
-                   19369                                00 02 2E 53
-                    2985                                00 02 2E 53
+                                            type length des/server address      client  SNRM  checkSeq
+-c 16(publicCl) -s 1                 ---->  7E  A0    07       03                 21(16)   93    0F 01     7E
+-c 1            -s 17493             ---->  7E  A0    0A       00 02 10 AB        03(1)    93    14 68     7E
+                   19369                                       00 02 2E 53
+                    2985                                       00 02 2E 53
+-c 1            -s 17 (1 byte addressing)   7E  A0    07       03                 03       93    8C 11      7E
 
+SNRM Request,Logical Address:1    Physical Address:17    Client Address:1     Control code:93
+Send=：7E A0 07 03 03 93 8C 11 7E
 ---------------------------------------------------- Address field structure (four bytes G112)
 LDN: TFC00707  21000020 --->
 Lower HDLC: 17493 --bit--> 100010001010101  --G113-2bytes--> 10001000 0 1010101 1 = 100010000 10101011 --> 0x 10 AB (device detail)
@@ -272,8 +275,10 @@ http://www.gurux.fi/Gurux.DLMS.Client
 
 
 ------------------------------------------ Install on VPS server
-
+python -v
 nano /usr/local/lib/python3.8/dist-packages/gurux_dlms/GXDLMSClient.py
+nano /home/reza/.local/lib/python3.8/site-packages/gurux_dlms/GXDLMSClient.py
+
 on line 982:
 
 if self.negotiatedConformance & Conformance.MULTIPLE_REFERENCES == 0:
@@ -282,6 +287,39 @@ Change to :
 
 if self.negotiatedConformance == 0:
 
+self.settings.serverAddressSize=1 ???????????????????????
+
 
 sys.path.append('/home/reza/PycharmProjects/Gurux.DLMS.Python/Gurux.DLMS.Client.Example.python')
 from sepanta_dlms import RezaV4
+
+
+
+----------------------------------------------  Error and Reason
+To Read public:
+client = 16
+server = 1
+Auth = None
+Policy = None
+OBIS in Public client list
+
+
+
+gw -- ERROR0
+nothing receive by gateway
+if we send anything rather than public client (16, 1) or (1, pyhsica+16384)
+
+
+
+Connection permanently ...
+Logic Referencing
+Invocation counter
+
+
+
+The authentication mechanism name is not recognized.
+
+
+None Auth:
+Connection is permanently rejected
+No reason is given.

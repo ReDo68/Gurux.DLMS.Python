@@ -43,7 +43,6 @@ class GXSettings:
         self.outputFile = None
         self.invocationCounter = None
         self.client = GXDLMSSecureClient(True)
-        # self.serverAddressSize = 0
         self.client.clientAddress = 16                      # public client by default
         self.client.serverAddress = 1                       # public client by default
         self.invocationCounter = '0.0.43.1.0.255'
