@@ -4,7 +4,7 @@ from sepanta_dlms import RezaV4
 obj = RezaV4()
 obj.media = 'Serial'
 obj.device = 'meter'   # gw
-obj.client_addr = 1   # 16 1 DABGER!!!!!!!!!!!!!!!!!!!!
+# obj.client_addr = 1   # 16 1 DABGER!!!!!!!!!!!!!!!!!!!!
 
 # TFC 19200 public
 my_arg = {'company': 'tfc',
@@ -48,7 +48,7 @@ my_arg = {'company': 'tfc',
         # 'com_test':
           }
 
-
+# TFC 19200 Manage without physical :-D
 my_arg = {'company': 'tfc',
         'server_addr': 1-16384 , #?????????
         'authentication': 'HighGMac',  #'HighGMac' ,
@@ -69,7 +69,6 @@ my_arg = {'company': 'tfc',
         # 'com_test':
           }
 
-obj.read_def(my_arg)
 
 
 # SMART HighGMac
@@ -91,6 +90,10 @@ my_arg = {'company': 'tfc',
         'obis':  '0.0.1.0.0.255:2',
         # 'com_test':
           }
+
+obj.read_def(my_arg)
+
+
 # SMART LLS
 
 # my_arg = {'company': 'tfc',

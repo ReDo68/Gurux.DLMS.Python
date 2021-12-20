@@ -23,7 +23,15 @@ G115
 Flag Frame format Dest. address Src. address Control HCS Information FCS Flag ---> HDLC frame format type 3 - G111
 --------------------------------------------------
 
----------------------------------------------------- SNRM
+----------------------------------------------------
+*Note that 1109 is an example!
+
+       Client Addr   Server Addr                         Auth   Policy      Usage           Description
+ manage- 1  (03)     1109 (17493 = 00 02 10 AB)          meter   meter     Normal com       Reading all obis which are mostly in management client if physical addr of meter is known
+ public- 16 (21)     1109 (17493 = 00 02 10 AB)          None    None      FC or LogicDN    Read Frame Counter or Logic with more than 1 meter connected if physical addr of meter is known (more than 1 meter connected )
+ manage- 1  (03)     1  (17 = 03)-All Meter will answer  meter   meter     Find Physical    Reading all obis which are mostly in management client if physical addr of meter is "un"known ( 1 meter connected )
+ public  16 (21)     1  (17 = 03)-All Meter will answer  None    None      Com Test         Read Frame Counter or Logic with 1 meter connected if physical addr of meter is "un"known
+
                                             type length des/server address      client  SNRM  checkSeq
 -c 16(publicCl) -s 1                 ---->  7E  A0    07       03                 21(16)   93    0F 01     7E
 -c 1            -s 17493             ---->  7E  A0    0A       00 02 10 AB        03(1)    93    14 68     7E
@@ -249,6 +257,7 @@ prop_baud                5 --> 9600
 response_time            1 --> 200ms   XXXXXX
 inter_octet_time_out     200           ??????
 inactivity_time_out      60            XXXXXX
+Addressing               only 4 bytes --> means 1,17(1??) or 03 03 is not posible
 
 TFC :
 default_mod              1 --> HDLC
@@ -256,6 +265,7 @@ prop_baud                5 --> 9600
 response_time            1 --> 200ms
 inter_octet_time_out     25
 inactivity_time_out      180
+Addressing               1,4 okey
 
 
 
@@ -302,6 +312,8 @@ server = 1
 Auth = None
 Policy = None
 OBIS in Public client list
+consider that frame counter in DB should not be 0 or None as it will use public client to read or send on None policy
+
 
 
 
