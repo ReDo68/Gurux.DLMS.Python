@@ -1,36 +1,11 @@
-#
-#  --------------------------------------------------------------------------
-#   Gurux Ltd
-#
-#
-#
-#  Filename: $HeadURL$
-#
-#  Version: $Revision$,
-#                   $Date$
-#                   $Author$
-#
-#  Copyright (c) Gurux Ltd
-#
-# ---------------------------------------------------------------------------
-#
-#   DESCRIPTION
-#
-#  This file is a part of Gurux Device Framework.
-#
-#  Gurux Device Framework is Open Source software; you can redistribute it
-#  and/or modify it under the terms of the GNU General Public License
-#  as published by the Free Software Foundation; version 2 of the License.
-#  Gurux Device Framework is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-#  See the GNU General Public License for more details.
-#
-#  More information of Gurux products: http://www.gurux.org
-#
-#  This code is licensed under the GNU General Public License v2.
-#  Full text may be retrieved at http://www.gnu.org/licenses/gpl-2.0.txt
-# ---------------------------------------------------------------------------
+"""
+Note:
+    Please consider reading RezaBook for more information
+    Gurux is a 4 byte addressing that means --> Server address = physical + 16384 or 4+(pysical-HEX) so I'm adding the 16384 to the physical inside code so don't need to do anything else
+        Ex: my TFC smart meter physical is: 14865  --> just put 14865 inside db physical addr
+        Ex:
+
+"""
 import os
 import math
 import sys
@@ -114,7 +89,8 @@ class RezaV4:
         if 'server_addr' in server_args:
             server_args['client_addr'] = self.client_addr
             # '19369'  # 0x4000+physical(1000+sn_last_4digits)
-            server_args['server_addr'] = 16384+int(server_args['server_addr'])
+            if int(server_args['server_addr']) != 1:
+                server_args['server_addr'] = 16384+int(server_args['server_addr'])
 
         if 'com_test' in server_args:
             if server_args['com_test'] == 1:
