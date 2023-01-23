@@ -99,7 +99,7 @@ class RezaV4:
                 try:
                     # print(os.getcwd())
                     pd.options.mode.chained_assignment = None
-                    df = pd.read_csv('/root/ct.csv')
+                    df = pd.read_csv('/root/ct.csv', dtype={'EKey': object,'AKey': object})
                     print(df.T)
                 except:
                     print("------ CSV not found! -----")
