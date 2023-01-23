@@ -4,7 +4,8 @@ Note:
     DANGER: if the comtest is 1 and you are seeing a dataframe on start of DLMS communication that dataframe will overwrite the parameters that are not null
     Gurux is a 4 byte addressing that means --> Server address = physical + 16384 or 4+(pysical-HEX) so I'm adding the 16384 to the physical inside code so don't need to do anything else
         Ex: my TFC smart meter physical is: 14865  --> just put 14865 inside db physical addr
-        Ex: and if the only meter on port 1 or 2 is my tfc smart meter just put -16383 in comtest mode in the ct.csv in db to read without physical
+        Ex: and if the only meter on port 1 or 2 is my tfc smart meter just put
+            -16383 in comtest mode in the ct.csv in db to read without physical
 
 """
 import os
@@ -55,7 +56,7 @@ class RezaV4:
 
     def read_def(self, server_args):
         # print('read_def --> ', server_args)
-        server_args['com_test'] = 0
+        server_args['com_test'] = 1
         # Create system arg
         arg = {'loging': 'Verbose'}
 
