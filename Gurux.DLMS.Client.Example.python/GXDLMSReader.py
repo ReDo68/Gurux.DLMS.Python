@@ -39,25 +39,27 @@ from gurux_common.enums import TraceLevel
 from gurux_common.io import Parity, StopBits
 from gurux_common import ReceiveParameters, GXCommon, TimeoutException
 from gurux_dlms import GXByteBuffer, GXReplyData, GXDLMSTranslator, GXDLMSException, GXDLMSAccessItem
-from gurux_dlms.enums import InterfaceType, ObjectType, Authentication, Conformance, DataType,\
+from gurux_dlms.objects import GXDLMSDisconnectControl
+from gurux_dlms.enums import InterfaceType, ObjectType, Authentication, Conformance, DataType, \
     Security, AssociationResult, SourceDiagnostic, AccessServiceCommandType
-from gurux_dlms.objects import GXDLMSObject, GXDLMSObjectCollection, GXDLMSData, GXDLMSRegister,\
+from gurux_dlms.objects import GXDLMSObject, GXDLMSObjectCollection, GXDLMSData, GXDLMSRegister, \
     GXDLMSDemandRegister, GXDLMSProfileGeneric, GXDLMSExtendedRegister
 from gurux_net import GXNet
 from gurux_serial import GXSerial
 from gwTransFunc import calCrc, gwWrap, gwUnwrap
 
+
 class GXDLMSReader:
-    #pylint: disable=too-many-public-methods, too-many-instance-attributes
+    # pylint: disable=too-many-public-methods, too-many-instance-attributes
     def __init__(self, client, media, trace, invocationCounter,
                  gwWrapper, port_num, server_invoke, frame_counter, get_with_list, gw_frame_counter, meter_baud):
-        #pylint: disable=too-many-arguments
+        # pylint: disable=too-many-arguments
         self.gwWrapper = gwWrapper
         self.server_invoke = server_invoke
         self.port_num = port_num
         self.meter_baud = meter_baud
         self.replyBuff = bytearray(8 + 1024)
-        self.waitTime = 30000   # Timeout
+        self.waitTime = 30000  # Timeout
         self.logFile = open("logFile.txt", "w")
         self.trace = trace
         self.media = media
@@ -75,21 +77,21 @@ class GXDLMSReader:
             print("ServerAddress: " + hex(self.client.serverAddress))
 
     def disconnect(self):
-        #pylint: disable=broad-except
+        # pylint: disable=broad-except
         if self.media and self.media.isOpen():
             print("DisconnectRequest-disconnect")
             reply = GXReplyData()
             self.readDLMSPacket(self.client.disconnectRequest(), reply)
 
     def release(self):
-        #pylint: disable=broad-except
+        # pylint: disable=broad-except
         if self.media and self.media.isOpen():
             print("DisconnectRequest-release")
             reply = GXReplyData()
             try:
-                #Release is call only for secured connections.
-                #All meters are not supporting Release and it's causing
-                #problems.
+                # Release is call only for secured connections.
+                # All meters are not supporting Release and it's causing
+                # problems.
                 if self.client.interfaceType == InterfaceType.WRAPPER or self.client.ciphering.security != Security.NONE:
                     self.readDataBlock(self.client.releaseRequest(), reply)
             except Exception:
@@ -97,14 +99,14 @@ class GXDLMSReader:
                 #  All meters don't support release.
 
     def close(self):
-        #pylint: disable=broad-except
+        # pylint: disable=broad-except
         if self.media and self.media.isOpen():
             print("DisconnectRequest-close(RL+DISC)")
             reply = GXReplyData()
             try:
-                #Release is call only for secured connections.
-                #All meters are not supporting Release and it's causing
-                #problems.
+                # Release is call only for secured connections.
+                # All meters are not supporting Release and it's causing
+                # problems.
                 if self.client.interfaceType == InterfaceType.WRAPPER or self.client.ciphering.security != Security.NONE:
                     self.readDataBlock(self.client.releaseRequest(), reply)
             except Exception:
@@ -140,7 +142,7 @@ class GXDLMSReader:
         notify = GXReplyData()
         reply.error = 0
         eop = 0x7E
-        #In network connection terminator is not used.
+        # In network connection terminator is not used.
         if self.client.interfaceType == InterfaceType.WRAPPER and isinstance(self.media, GXNet):
             eop = None
         p = ReceiveParameters()
@@ -190,7 +192,6 @@ class GXDLMSReader:
                         # pos += 1
                         # if pos == 3:
 
-
                         print("----------------TimeOut-----------------")
                         raise TimeoutException("Failed to receive reply from the device in given time.")
                         # print("Data send failed.  Try to resend " + str(pos) + "/3")
@@ -206,7 +207,7 @@ class GXDLMSReader:
                 self.writeTrace("RX-ER: " + self.now() + "\t" + str(rd), TraceLevel.ERROR)  # R374-change it to gw
                 raise e
 
-            if self.gwWrapper:      # R374-changed it to gw
+            if self.gwWrapper:  # R374-changed it to gw
                 self.writeTrace("RXgw: " + self.now() + "\t" + str(rd), TraceLevel.VERBOSE)
                 # self.writeTrace("RXm: " + self.now() + "\t" + str(rd)[19*3:], TraceLevel.VERBOSE)
             else:
@@ -245,7 +246,7 @@ class GXDLMSReader:
                     raise Exception("Failed to received reply from the media.")
 
                 self.writeTrace("RX: " + self.now() + "\t" + str(p.reply), TraceLevel.VERBOSE)
-                #If echo is used.
+                # If echo is used.
                 replyStr = str(p.reply)
                 if data == replyStr:
                     p.reply = None
@@ -275,14 +276,14 @@ class GXDLMSReader:
                 raise Exception("Unknown baud rate.")
 
             print("Bitrate is : " + bitrate)
-            #Send ACK
-            #Send Protocol control character
+            # Send ACK
+            # Send Protocol control character
             controlCharacter = '2'.encode()
-            #"2" HDLC protocol procedure (Mode E)
-            #Mode control character
-            #"2" //(HDLC protocol procedure) (Binary mode)
+            # "2" HDLC protocol procedure (Mode E)
+            # Mode control character
+            # "2" //(HDLC protocol procedure) (Binary mode)
             modeControlCharacter = '2'.encode()
-            #Set mode E.
+            # Set mode E.
             tmp = bytearray([0x06, controlCharacter, baudrate, modeControlCharacter, 13, 10])
             p.reply = None
             with self.media.getSynchronous():
@@ -297,7 +298,7 @@ class GXDLMSReader:
                 self.media.stopBits = StopBits.ONE
                 self.media.baudRate = bitrate
                 self.media.open()
-                #This sleep make sure that all meters can be read.
+                # This sleep make sure that all meters can be read.
                 time.sleep(1000)
 
     def updateFrameCounter(self):
@@ -333,7 +334,7 @@ class GXDLMSReader:
                     # self.client.ciphering.invocationCounter = 200 #100001980
                     # print("Invocation counter: " + str(self.client.ciphering.invocationCounter))
                     self.disconnect()
-                    #except Exception as ex:
+                    # except Exception as ex:
                 finally:
                     self.client.clientAddress = add
                     self.client.authentication = auth
@@ -370,17 +371,31 @@ class GXDLMSReader:
                     self.readDLMSPacket(it, reply)
                 self.client.parseApplicationAssociationResponse(reply.data)
             except GXDLMSException as ex:
-                #Invalid password.
+                # Invalid password.
                 raise GXDLMSException(AssociationResult.PERMANENT_REJECTED, SourceDiagnostic.AUTHENTICATION_FAILURE)
 
     def read(self, item, attributeIndex):
         data = self.client.read(item, attributeIndex)[0]
         reply = GXReplyData()
         self.readDataBlock(data, reply)
-        #Update data type on read.
+        # Update data type on read.
         if item.getDataType(attributeIndex) == DataType.NONE:
             item.setDataType(attributeIndex, reply.valueType);
         return self.client.updateValue(item, attributeIndex, reply.value)
+
+    def relayDisconnect(self):
+        reply = GXReplyData()
+        dis = GXDLMSDisconnectControl("0.0.96.3.10.255")
+        dis.controlMode = 4
+        self.write(dis, 4)
+        return self.readDataBlock(dis.remoteDisconnect(self.client), reply)
+
+    def relayConnect(self):
+        reply = GXReplyData()
+        dis = GXDLMSDisconnectControl("0.0.96.3.10.255")
+        dis.controlMode = 4
+        self.write(dis, 4)
+        return self.readDataBlock(dis.remoteReconnect(self.client), reply)
 
     def readList(self, list_):
         if list_:
@@ -422,7 +437,7 @@ class GXDLMSReader:
         self.readDataBlock(data, reply)
         return self.client.updateValue(pg, 2, reply.value)
 
-    #Read values using Access request.
+    # Read values using Access request.
     def readByAccess(self, list_):
         if list_:
             reply = GXReplyData()
@@ -431,7 +446,7 @@ class GXDLMSReader:
             self.client.parseAccessResponse(list_, reply.data)
 
     def readScalerAndUnits(self):
-        #pylint: disable=broad-except
+        # pylint: disable=broad-except
         objs = self.client.objects.getObjects([ObjectType.REGISTER, ObjectType.EXTENDED_REGISTER, ObjectType.DEMAND_REGISTER])
         list_ = list()
         if self.client.negotiatedConformance & Conformance.ACCESS != 0:
@@ -463,7 +478,7 @@ class GXDLMSReader:
                     pass
 
     def getProfileGenericColumns(self):
-        #pylint: disable=broad-except
+        # pylint: disable=broad-except
         profileGenerics = self.client.objects.getObjects(ObjectType.PROFILE_GENERIC)
         for pg in profileGenerics:
             self.writeTrace("Profile Generic " + str(pg.name) + "Columns:", TraceLevel.INFO)
@@ -486,7 +501,7 @@ class GXDLMSReader:
                 self.writeTrace("Err! Failed to read columns:" + str(ex), TraceLevel.ERROR)
 
     def getReadOut(self):
-        #pylint: disable=unidiomatic-typecheck, broad-except
+        # pylint: disable=unidiomatic-typecheck, broad-except
         for it in self.client.objects:
             if type(it) == GXDLMSObject:
                 print("Unknown Interface: " + it.objectType.__str__())
@@ -539,7 +554,7 @@ class GXDLMSReader:
         return val
 
     def getProfileGenerics(self):
-        #pylint: disable=broad-except,too-many-nested-blocks
+        # pylint: disable=broad-except,too-many-nested-blocks
         cells = []
         profileGenerics = self.client.objects.getObjects(ObjectType.PROFILE_GENERIC)
         for it in profileGenerics:
@@ -584,7 +599,7 @@ class GXDLMSReader:
         reply = GXReplyData()
         self.readDataBlock(self.client.getObjectsRequest(), reply)
         self.client.parseObjects(reply.data, True, False)
-        #Access rights must read differently when short Name referencing is used.
+        # Access rights must read differently when short Name referencing is used.
         if not self.client.useLogicalNameReferencing:
             sn = self.client.objects.findBySN(0xFA00)
             if sn and sn.version > 0:
@@ -621,9 +636,8 @@ class GXDLMSReader:
             if outputFile:
                 self.client.objects.save(outputFile)
         except (KeyboardInterrupt, SystemExit):
-            #Don't send anything if user is closing the app.
+            # Don't send anything if user is closing the app.
             self.media = None
             raise
         finally:
             self.close()
-
