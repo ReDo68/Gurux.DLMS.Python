@@ -17,6 +17,7 @@ from gurux_serial import GXSerial
 from gurux_net import GXNet
 from gurux_dlms.enums import ObjectType
 from gurux_dlms.objects.GXDLMSObjectCollection import GXDLMSObjectCollection
+from gurux_dlms.objects import GXDLMSDisconnectControl
 from GXSettings import GXSettings
 from GXDLMSReader import GXDLMSReader
 from gurux_dlms.GXDLMSClient import GXDLMSClient
@@ -28,7 +29,6 @@ from gurux_dlms.internal._GXCommon import _GXCommon
 from gurux_dlms import GXDLMSException, GXDLMSExceptionResponse, GXDLMSConfirmedServiceError
 from gwTransFunc import calCrc, gwWrap, gwUnwrap
 
-
 try:
     import pkg_resources
 except Exception as e:
@@ -38,18 +38,22 @@ except Exception as e:
 class RezaV4:
     def __init__(self):
 
-        self.device             = 'gw'                    # 'gw' 'meter'
-        self.media              = 'TCP'                   # 'TCP' 'Serial'
-        self.client_addr        = 1
-        self.ip                 = 'localhost'             # ***mandatory-1*** '193.105.234.168'  'localhost'
-        self.port               = '7370'                  # ***mandatory-1***
-        self.usb                = "/dev/ttyUSB0"          # ***mandatory-1***
-        self.valid_producer     = ['tfc', 'eaa']
+        self.device = 'gw'  # 'gw' 'meter'
+        self.media = 'TCP'  # 'TCP' 'Serial'
+        self.client_addr = 1
+        self.ip = 'localhost'  # ***mandatory-1*** '193.105.234.168'  'localhost'
+        self.port = '7370'  # ***mandatory-1***
+        self.usb = "/dev/ttyUSB0"  # ***mandatory-1***
+        self.valid_producer = ['tfc', 'eaa', 'tfc_new']
 
         # Default OBIS
         # self.OBIS = '1.0.0.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;1.0.1.8.3.255:2'
         self.OBIS = '0.0.1.0.0.255:2;0.0.42.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;' \
                     '1.0.1.8.3.255:2;1.0.1.8.4.255:2;1.0.32.7.0.255:2;1.0.31.7.0.255:2'
+        # self.OBIS = '0.0.96.3.10.255:101'
+        # self.OBIS = '0.2.22.0.0.255:9;0.0.96.3.10.255:2;0.0.96.3.10.255:100;0.0.96.3.10.255:2'
+        # self.OBIS = '0.0.1.0.0.255:2;0.0.42.0.0.255:2;1.0.1.8.0.255:2;1.0.1.8.1.255:2;1.0.1.8.2.255:2;' \
+        #             '1.0.1.8.3.255:2;1.0.1.8.4.255:2;1.0.32.7.0.255:2;1.0.31.7.0.255:2'
         #             '1.0.32.7.0.255:2;1.0.31.7.0.255:2;1.0.2.8.0.255:2'
         # self.OBIS = '0.0.20.0.0.255:2;0.0.20.0.0.255:3;0.0.20.0.0.255:4;0.0.20.0.0.255:5;' \
         #             '0.2.22.0.0.255:7;0.2.22.0.0.255:8'   Timming
@@ -61,7 +65,7 @@ class RezaV4:
         arg = {'loging': 'Verbose'}
 
         if self.device == 'gw':
-            self.usb = self.usb+":19200:8Even1"
+            self.usb = self.usb + ":19200:8Even1"
             arg['gateway'] = 'sepanta'
         elif self.device == 'meter':
             self.usb = self.usb + ":9600:8None1"
@@ -92,14 +96,14 @@ class RezaV4:
             server_args['client_addr'] = self.client_addr
             # '19369'  # 0x4000+physical(1000+sn_last_4digits)
             if int(server_args['server_addr']) != 1:
-                server_args['server_addr'] = 16384+int(server_args['server_addr'])
+                server_args['server_addr'] = 16384 + int(server_args['server_addr'])
 
         if 'com_test' in server_args:
             if server_args['com_test'] == 1:
                 try:
                     # print(os.getcwd())
                     pd.options.mode.chained_assignment = None
-                    df = pd.read_csv('/root/ct.csv', dtype={'EKey': object,'AKey': object})
+                    df = pd.read_csv('/root/ct.csv', dtype={'EKey': object, 'AKey': object})
                     print(df.T)
                 except:
                     print("------ CSV not found! -----")
@@ -108,7 +112,7 @@ class RezaV4:
                     if not self.isNaN(df['meter_baud'][0]):
                         server_args['meter_baud'] = int(df['meter_baud'][0])
                     if not self.isNaN(df['server_addr'][0]):
-                        server_args['server_addr'] = 16384+int(df['server_addr'][0])
+                        server_args['server_addr'] = 16384 + int(df['server_addr'][0])
                     if not self.isNaN(df['client_addr'][0]):
                         server_args['client_addr'] = int(df['client_addr'][0])
                     if not self.isNaN(df['authentication'][0]):
@@ -132,7 +136,6 @@ class RezaV4:
 
                 except Exception as e:
                     print("------ CSV not applied! -----> Exception: ", e)
-
 
         # consider server_args as:
         #     Name            default                           type    choices          check by
@@ -187,6 +190,7 @@ class RezaV4:
                                   settings.frame_counter, settings.get_with_list, settings.gw_frame_counter,
                                   settings.meter_baud)
             settings.media.open()
+
             if settings.readObjects:
                 read = False
                 reader.initializeConnection()
@@ -199,13 +203,20 @@ class RezaV4:
                     except Exception:
                         read = False
                 if not read:
-                    print("getgetPAssociationView in the main")
+                    print("get AssociationView in the main")
                     reader.getAssociationView()
 
-                if settings.get_with_list == 1 :
+                if settings.get_with_list == 1:
                     print('+++++++++++++++ GETTTING WITH LIIIST +++++++++++++++')
                     list_arr = []
                     for k, v in settings.readObjects:
+                        if k == "0.0.96.3.10.255":
+                            if v == 100:
+                                reader.relayConnect()
+                                continue
+                            elif v == 101:
+                                reader.relayDisconnect()
+                                continue
                         obj = settings.client.objects.findByLN(ObjectType.NONE, k)
                         if obj is None:
                             raise Exception("Unknown logical name:" + k)
@@ -217,6 +228,9 @@ class RezaV4:
                     # sending readout
                     m = 0
                     for k, v in settings.readObjects:
+                        if k == "0.0.96.3.10.255":
+                            if v in [100,101]:
+                                continue
                         val = val_list[m]
                         m += 1
                         val = reader.readout_value(val)
@@ -225,20 +239,60 @@ class RezaV4:
 
                 else:
                     for k, v in settings.readObjects:
+                        if k == "0.0.96.3.10.255":
+                            if v == 100:
+                                reader.relayConnect()
+                                continue
+                            elif v == 101:
+                                reader.relayDisconnect()
+                                continue
                         obj = settings.client.objects.findByLN(ObjectType.NONE, k)
+                        # print(f"k: {k}, v: {v}, obj: {obj}")
                         if obj is None:
-                             raise Exception("Unknown logical name:" + k)
+                            raise Exception("Unknown logical name:" + k)
                         val = reader.read(obj, v)
                         print("------------>", k, v)
                         reader.showValue(v, val)
                         val = reader.readout_value(val)
 
                         readout_str += b'%b(%b)\r\n' % (k.encode(), val)
+                    # k = "0.0.96.3.10.255"
+                    # v = "1"
+                    # obj = settings.client.objects.findByLN(ObjectType.NONE, k)
+                    # val = reader.write(obj, v)
 
                 fc_val = str(settings.client.ciphering.invocationCounter + 2).encode()
                 readout_str += b'fc(%b)\r\n' % fc_val
                 readout_str += b'IDMSG(%b)\r\n' % (settings.outputFile.split(".")[0]).encode()
                 print(readout_str)
+
+                # GXDLMSDisconnectControl(ln="0.0.96.3.10.255").remoteDisconnect(client=settings.client)
+                # GXDLMSDisconnectControl(ln="0.0.96.3.10.255").remoteReconnect(client=settings.client)
+                # dis = GXDLMSDisconnectControl("0.0.96.3.10.255")
+                # dis = GXDLMSDisconnectControl()
+
+                #####Read#####
+                # reader.read(dis, 4)
+                # print(dis.controlMode)
+                # reader.read(dis, 2)
+                # print(dis.controlState)
+                #
+                # print(dis.__dict__)
+                # dis.remoteDisconnect(client=settings.client)
+                # dis.remoteReconnect(client=settings.client)
+
+                # reply = GXReplyData()
+                # dis = GXDLMSDisconnectControl("0.0.96.3.10.255")
+                # self.readDataBlock(dc.remoteDisconnect(client), reply)
+
+                # dis.controlMode = 1
+                # reader.write(dis, 4)
+                # dis.controlState = 0
+                # reader.write(dis, 2)
+                # dis.outputState = True
+
+                # reader.read(dis, 4)
+                # print(dis.controlMode)
 
                 if settings.outputFile:
                     print("Skip saving on the output")
@@ -275,8 +329,6 @@ class RezaV4:
     @staticmethod
     def isNaN(num):
         return num != num
-
-
 
 
 def callreadv4(server_arg):
